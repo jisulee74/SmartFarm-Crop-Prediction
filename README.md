@@ -1,4 +1,4 @@
-# AXData
+# SmartFarm-Crop-Prediction
 
 Reproducible regression pipelines and experiment artifacts for predicting crop growth indicators from Smart Farm Korea data.
 
