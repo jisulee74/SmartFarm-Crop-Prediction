@@ -1,0 +1,119 @@
+{
+  "source": "/NHNHOME/WORKSPACE/26mafra001_A/BASE/theimc/jslee/AXData/strawberry_fruit_set_prediction/source_processed_data",
+  "cohort_rule": "2024+ users with valid all-three-truss fruit-set rows and CI/TI/HI sensor logs",
+  "cohort_user_count": 19,
+  "cohort_users": [
+    "PF_0023621",
+    "PF_0002037",
+    "PF_0021351",
+    "PF_0022105",
+    "PF_0000574",
+    "PF_0023732",
+    "PF_0023743",
+    "PF_0023923",
+    "PF_0024357",
+    "PF_0024365",
+    "PF_0024688",
+    "PF_0024654",
+    "PF_0025106",
+    "PF_0024646",
+    "PF_0024657",
+    "PF_0024700",
+    "PF_0025103",
+    "PF_0024651",
+    "PF_0024806"
+  ],
+  "source_user_count": 22,
+  "excluded_source_users": [
+    "PF_0000778",
+    "PF_0024655",
+    "PF_0026933"
+  ],
+  "rule": "within each fruit_column, sort target_date; keep one date intact; choose cumulative-row cutoffs near 70/15/15",
+  "trusses": {
+    "first_fruits_num": {
+      "rows": 299,
+      "train_cutoff": "2024-12-18",
+      "validation_cutoff": "2025-01-06",
+      "splits": {
+        "train": {
+          "rows": 211,
+          "target_min": "2024-10-22",
+          "target_max": "2024-12-18",
+          "users": 9,
+          "crops": 9
+        },
+        "val": {
+          "rows": 47,
+          "target_min": "2024-12-19",
+          "target_max": "2025-01-06",
+          "users": 7,
+          "crops": 7
+        },
+        "test": {
+          "rows": 41,
+          "target_min": "2025-01-07",
+          "target_max": "2026-02-20",
+          "users": 10,
+          "crops": 11
+        }
+      }
+    },
+    "second_fruits_num": {
+      "rows": 315,
+      "train_cutoff": "2025-02-11",
+      "validation_cutoff": "2025-02-22",
+      "splits": {
+        "train": {
+          "rows": 228,
+          "target_min": "2024-11-05",
+          "target_max": "2025-02-11",
+          "users": 19,
+          "crops": 19
+        },
+        "val": {
+          "rows": 43,
+          "target_min": "2025-02-12",
+          "target_max": "2025-02-22",
+          "users": 12,
+          "crops": 12
+        },
+        "test": {
+          "rows": 44,
+          "target_min": "2025-02-24",
+          "target_max": "2026-04-15",
+          "users": 10,
+          "crops": 12
+        }
+      }
+    },
+    "third_fruits_num": {
+      "rows": 348,
+      "train_cutoff": "2025-03-18",
+      "validation_cutoff": "2026-02-25",
+      "splits": {
+        "train": {
+          "rows": 258,
+          "target_min": "2024-12-10",
+          "target_max": "2025-03-18",
+          "users": 19,
+          "crops": 19
+        },
+        "val": {
+          "rows": 39,
+          "target_min": "2025-03-20",
+          "target_max": "2026-02-25",
+          "users": 12,
+          "crops": 13
+        },
+        "test": {
+          "rows": 51,
+          "target_min": "2026-03-05",
+          "target_max": "2026-05-05",
+          "users": 5,
+          "crops": 5
+        }
+      }
+    }
+  }
+}

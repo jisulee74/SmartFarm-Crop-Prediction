@@ -1,0 +1,83 @@
+{
+  "selected_learning_model": "tft",
+  "selection_metric": "validation_rmse",
+  "features": [
+    "current_fruit_count",
+    "fruit_count_delta",
+    "fruit_count_roll2_std",
+    "fruit_count_roll2_min",
+    "fruit_count_roll3_min",
+    "fruit_count_roll4_std",
+    "days_since_previous",
+    "days_since_first_measurement",
+    "days_since_first_positive",
+    "history_count",
+    "week_of_year_sin",
+    "week_of_year_cos",
+    "sensor_EI__TI_7d_mean"
+  ],
+  "facility_split": {
+    "truss": "third_fruits_num",
+    "active_user_count": 19,
+    "cohort_user_count": 19,
+    "cohort_users_without_valid_rows": [],
+    "splits": {
+      "train": {
+        "users": [
+          "PF_0022105",
+          "PF_0023743",
+          "PF_0023923",
+          "PF_0024357",
+          "PF_0024365",
+          "PF_0024646",
+          "PF_0024651",
+          "PF_0024654",
+          "PF_0024657",
+          "PF_0024688",
+          "PF_0024700",
+          "PF_0025103",
+          "PF_0025106"
+        ],
+        "user_count": 13,
+        "rows": 244,
+        "row_ratio": 0.7011494252873564,
+        "target_date_min": "2024-12-10",
+        "target_date_max": "2026-04-29"
+      },
+      "validation": {
+        "users": [
+          "PF_0000574",
+          "PF_0023621",
+          "PF_0024806"
+        ],
+        "user_count": 3,
+        "rows": 52,
+        "row_ratio": 0.14942528735632185,
+        "target_date_min": "2025-01-22",
+        "target_date_max": "2026-05-05"
+      },
+      "test": {
+        "users": [
+          "PF_0002037",
+          "PF_0021351",
+          "PF_0023732"
+        ],
+        "user_count": 3,
+        "rows": 52,
+        "row_ratio": 0.14942528735632185,
+        "target_date_min": "2024-12-10",
+        "target_date_max": "2026-04-29"
+      }
+    }
+  },
+  "tft_params": {
+    "attention_head_size": 1,
+    "batch_size": 64,
+    "dropout": 0.1,
+    "hidden_continuous_size": 8,
+    "hidden_size": 8,
+    "learning_rate": 0.01,
+    "max_epochs": 80
+  },
+  "tft_fixed_epochs": 26
+}

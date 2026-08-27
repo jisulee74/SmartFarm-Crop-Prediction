@@ -1,0 +1,52 @@
+{
+  "target": "tomato_total_flower_count",
+  "stage": "test_once",
+  "train_rows": 988,
+  "validation_rows": 198,
+  "test_path": "/NHNHOME/WORKSPACE/26mafra001_A/BASE/theimc/jslee/AXData/tomato_flower_count_prediction/artifacts/total_flower_count_v1_sample_key_retry3/processed_data/test.parquet",
+  "test_accessed": true,
+  "selected_feature_set": "history+environment",
+  "features": [
+    "current_total_flower_count",
+    "previous_total_flower_count",
+    "total_flower_delta",
+    "current_max_truss_number",
+    "positive_truss_count",
+    "observed_truss_count",
+    "days_since_previous",
+    "days_since_crop_start",
+    "week_of_year_sin",
+    "week_of_year_cos",
+    "indoor_temperature_7d_mean",
+    "indoor_humidity_7d_mean",
+    "indoor_co2_7d_mean"
+  ],
+  "selected_learning_model": "poisson",
+  "params": {
+    "alpha": 1.0,
+    "max_iter": 2000
+  },
+  "fixed_epochs": null,
+  "seeds": [
+    42,
+    52,
+    62,
+    72,
+    82
+  ],
+  "test_sha256_before_access": "5d4be56b633cd06614af868bbb911da91d2d79cd88bd076417dac067882d4660",
+  "persistence_baseline": "persistence",
+  "final": {
+    "rmse": 1.429825829789866,
+    "mae": 1.2953436658117505,
+    "r2": -0.016418658951769638,
+    "ccc": 0.19795923799757495
+  },
+  "persistence": {
+    "rmse": 1.4666666666666668,
+    "mae": 0.9244444444444444,
+    "r2": -0.06947145129927534,
+    "ccc": 0.48672266055824215
+  },
+  "baseline_beaten_on_test": true
+}

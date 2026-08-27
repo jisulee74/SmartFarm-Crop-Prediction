@@ -1,0 +1,3 @@
+params_json,mean_rmse,mean_mae,std_rmse
+"{""attention_head_size"": 1, ""batch_size"": 64, ""dropout"": 0.1, ""hidden_continuous_size"": 8, ""hidden_size"": 8, ""learning_rate"": 0.01, ""max_epochs"": 80}",1.9150094976278007,1.4407852509139498,0.3042193906190895
+"{""attention_head_size"": 2, ""batch_size"": 64, ""dropout"": 0.1, ""hidden_continuous_size"": 8, ""hidden_size"": 16, ""learning_rate"": 0.003, ""max_epochs"": 80}",1.9386777603656111,1.4432071801191149,0.4109628158798399

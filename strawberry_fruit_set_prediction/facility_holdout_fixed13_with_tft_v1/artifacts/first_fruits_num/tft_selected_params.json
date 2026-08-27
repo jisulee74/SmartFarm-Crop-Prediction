@@ -1,0 +1,12 @@
+{
+  "params": {
+    "attention_head_size": 1,
+    "batch_size": 64,
+    "dropout": 0.1,
+    "hidden_continuous_size": 8,
+    "hidden_size": 8,
+    "learning_rate": 0.01,
+    "max_epochs": 80
+  },
+  "fixed_epochs": 30
+}

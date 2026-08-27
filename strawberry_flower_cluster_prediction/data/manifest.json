@@ -1,0 +1,110 @@
+{
+  "source_tables": [
+    "sfkr_pvsn_grow",
+    "sfkr_pvsn_crop"
+  ],
+  "filter": "fruit_cluster_num IS NOT NULL within four selected crop-cycle windows; each entity-cycle is truncated from the first decrease after positive fruit_cluster_num as a post-cultivation discontinuity",
+  "selected_cycles": [
+    {
+      "user_id": "PF_0000574",
+      "cropping_serl_no": "212",
+      "selected_cycle_order": 1,
+      "observed_start": "2016-10-16",
+      "observed_end": "2017-05-07"
+    },
+    {
+      "user_id": "PF_0000574",
+      "cropping_serl_no": "512",
+      "selected_cycle_order": 3,
+      "observed_start": "2018-10-02",
+      "observed_end": "2019-06-04"
+    },
+    {
+      "user_id": "PF_0000778",
+      "cropping_serl_no": "234",
+      "selected_cycle_order": 1,
+      "observed_start": "2016-10-23",
+      "observed_end": "2017-05-28"
+    },
+    {
+      "user_id": "PF_0000778",
+      "cropping_serl_no": "513",
+      "selected_cycle_order": 3,
+      "observed_start": "2018-10-03",
+      "observed_end": "2019-06-03"
+    }
+  ],
+  "entity_key_for_future_features": [
+    "user_id",
+    "crop_cycle_id",
+    "sample_num"
+  ],
+  "features_engineered": false,
+  "output_columns": [
+    "sn",
+    "user_id",
+    "item_code",
+    "sample_num",
+    "meas_date",
+    "leaves_length",
+    "leaves_num",
+    "petiole_length",
+    "theca_diameter",
+    "fruit_cluster_num",
+    "first_flower_num",
+    "second_flower_num",
+    "third_flower_num",
+    "first_fruits_num",
+    "second_fruits_num",
+    "third_fruits_num",
+    "crop_sn",
+    "cropping_serl_no",
+    "cropping_season_name",
+    "crop_start_date",
+    "crop_end_date",
+    "selected_cycle_order",
+    "crop_cycle_id"
+  ],
+  "ordering": [
+    "user_id",
+    "meas_date",
+    "sn"
+  ],
+  "split_rule": "per user, by unique meas_date: train dates [0, floor(0.70*n)), val dates [floor(0.70*n), floor(0.85*n)), test remainder; a date is never divided",
+  "ratios": {
+    "train": 0.7,
+    "val": 0.15,
+    "test": 0.15
+  },
+  "rows": {
+    "train": 356,
+    "val": 76,
+    "test": 74
+  },
+  "users": {
+    "train": 2,
+    "val": 2,
+    "test": 2
+  },
+  "per_user_rows": [
+    {
+      "user_id": "PF_0000574",
+      "train": 172,
+      "val": 36,
+      "test": 39,
+      "total": 247
+    },
+    {
+      "user_id": "PF_0000778",
+      "train": 184,
+      "val": 40,
+      "test": 35,
+      "total": 259
+    }
+  ],
+  "postcultivation_tail_policy": "per entity-cycle, truncate from the first decrease after a positive fruit_cluster_num",
+  "rows_before_current_decline_filter": 511,
+  "decline_tail_rows_removed_current_run": 5,
+  "original_rows_before_all_postcultivation_filters": 516,
+  "total_postcultivation_rows_removed": 10
+}

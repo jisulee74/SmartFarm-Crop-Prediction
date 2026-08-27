@@ -1,0 +1,90 @@
+{
+  "partition": {
+    "train": [
+      "PF_0020209_01",
+      "PF_0024693_01",
+      "PF_0024696_01",
+      "PF_0024697_01"
+    ],
+    "validation": [
+      "PF_0002529_01"
+    ],
+    "test": [
+      "PF_0024689_01"
+    ]
+  },
+  "train_medians": {
+    "indoor_temperature_7d_mean": 11.606442679105022,
+    "indoor_humidity_7d_mean": 84.24022582921666,
+    "indoor_co2_7d_mean": 473.90625
+  },
+  "control_quality": {
+    "heating_7d_duty": {
+      "installed_facility_ratio": 0.0,
+      "train_missing_rate": 1.0,
+      "selected": false
+    },
+    "co2_control_7d_duty": {
+      "installed_facility_ratio": 0.5,
+      "train_missing_rate": 0.5516194331983806,
+      "selected": "False"
+    },
+    "ventilation_7d_duty": {
+      "installed_facility_ratio": 0.5,
+      "train_missing_rate": 0.8360323886639676,
+      "selected": "False"
+    },
+    "shade_curtain_7d_duty": {
+      "installed_facility_ratio": 0.5,
+      "train_missing_rate": 0.5809716599190283,
+      "selected": "False"
+    }
+  },
+  "feature_sets": {
+    "history": [
+      "current_total_flower_count",
+      "previous_total_flower_count",
+      "total_flower_delta",
+      "current_max_truss_number",
+      "positive_truss_count",
+      "observed_truss_count",
+      "days_since_previous",
+      "days_since_crop_start",
+      "week_of_year_sin",
+      "week_of_year_cos"
+    ],
+    "history+environment": [
+      "current_total_flower_count",
+      "previous_total_flower_count",
+      "total_flower_delta",
+      "current_max_truss_number",
+      "positive_truss_count",
+      "observed_truss_count",
+      "days_since_previous",
+      "days_since_crop_start",
+      "week_of_year_sin",
+      "week_of_year_cos",
+      "indoor_temperature_7d_mean",
+      "indoor_humidity_7d_mean",
+      "indoor_co2_7d_mean"
+    ]
+  },
+  "crop_policy": {
+    "rules": [
+      "PF_0025108_crop205_after_2025_05_31",
+      "PF_0025108_crop207",
+      "PF_0026456_all",
+      "PF_0024696_crop176",
+      "PF_0024697_crop178_2025_09_24"
+    ],
+    "removed_raw_rows": {
+      "PF_0025108_crop205_after_2025_05_31": 250,
+      "PF_0025108_crop207": 35,
+      "PF_0026456_all": 441,
+      "PF_0024696_crop176": 617,
+      "PF_0024697_crop178_2025_09_24": 84
+    },
+    "total_removed_raw_rows": 1427
+  },
+  "sensor_population_policy": "complete TI/HI/CI ratio >= 0.50 per facility-crop"
+}

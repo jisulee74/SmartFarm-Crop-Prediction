@@ -1,0 +1,32 @@
+{
+  "sets": {
+    "history": [
+      "current_total_flower_count",
+      "previous_total_flower_count",
+      "total_flower_delta",
+      "current_max_truss_number",
+      "positive_truss_count",
+      "observed_truss_count",
+      "days_since_previous",
+      "days_since_crop_start",
+      "week_of_year_sin",
+      "week_of_year_cos"
+    ],
+    "history+environment": [
+      "current_total_flower_count",
+      "previous_total_flower_count",
+      "total_flower_delta",
+      "current_max_truss_number",
+      "positive_truss_count",
+      "observed_truss_count",
+      "days_since_previous",
+      "days_since_crop_start",
+      "week_of_year_sin",
+      "week_of_year_cos",
+      "indoor_temperature_7d_mean",
+      "indoor_humidity_7d_mean",
+      "indoor_co2_7d_mean"
+    ]
+  },
+  "selected": "history+environment"
+}

@@ -1,0 +1,4 @@
+split,facility_count,facilities,rows,target_date_min,target_date_max,crop_count
+train,4,"PF_0020209_01,PF_0024693_01,PF_0024696_01,PF_0024697_01",988,2024-10-08,2025-10-20,7
+validation,1,PF_0002529_01,198,2024-10-07,2025-03-10,1
+test,1,PF_0024689_01,225,2024-10-03,2025-04-30,1

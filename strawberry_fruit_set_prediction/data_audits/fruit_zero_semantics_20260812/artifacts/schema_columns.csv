@@ -1,0 +1,51 @@
+﻿table_name,column_name,column_type,column_comment
+sfkr_pvsn_crop,sn,int(11),
+sfkr_pvsn_crop,user_id,varchar(100),
+sfkr_pvsn_crop,cropping_serl_no,varchar(100),작기 일련번호
+sfkr_pvsn_crop,cropping_season_name,varchar(100),작기명
+sfkr_pvsn_crop,item_code,varchar(100),품목코드
+sfkr_pvsn_crop,cropping_date,varchar(100),작기 시작 일자
+sfkr_pvsn_crop,cropping_end_date,varchar(100),작기 종료 일자
+sfkr_pvsn_crop,cropping_system,varchar(100),"재배방식 코드(1:토경, 2:수경)"
+sfkr_pvsn_crop,cultivation_area,varchar(100),재배 면적(평)
+sfkr_pvsn_crop,cal_cultivation_area,varchar(100),재배 면적(㎡)
+sfkr_pvsn_crop,plant_num,varchar(100),재식수량
+sfkr_pvsn_crop,cal_plant_num,varchar(100),1㎡당 재식수량
+sfkr_pvsn_crop,stem_slab_num,varchar(100),배지 1개당 작물의 줄기 수
+sfkr_pvsn_crop,plan_slab_num,varchar(100),배지 1개당 작물의 수
+sfkr_pvsn_crop,plant_density,varchar(100),재식밀도
+sfkr_pvsn_crop,standard_plant_density,varchar(100),기준 재식밀도
+sfkr_pvsn_crop,floodlight_dec,varchar(100),투광율
+sfkr_pvsn_crop,leaf_area,varchar(100),엽면적기준
+sfkr_pvsn_crop,stnd_temp,varchar(100),기준온도
+sfkr_pvsn_crop,stnd_weight,varchar(100),기준과중
+sfkr_pvsn_crop,stnd_solar,varchar(100),기준광
+sfkr_pvsn_crop,stnd_meta,varchar(100),기초대사
+sfkr_pvsn_grow,sn,int(11),
+sfkr_pvsn_grow,user_id,varchar(100),사용자ID
+sfkr_pvsn_grow,item_code,varchar(100),품목코드
+sfkr_pvsn_grow,sample_num,varchar(100),표본번호
+sfkr_pvsn_grow,meas_date,datetime,측정 일자
+sfkr_pvsn_grow,leaves_length,varchar(100),엽장
+sfkr_pvsn_grow,leaves_num,varchar(100),엽수
+sfkr_pvsn_grow,leaves_width,varchar(100),엽폭
+sfkr_pvsn_grow,petiole_length,varchar(100),엽병장
+sfkr_pvsn_grow,stem_diameter,varchar(100),줄기 직경
+sfkr_pvsn_grow,theca_diameter,varchar(100),관부 직경
+sfkr_pvsn_grow,flower_length,varchar(100),초장
+sfkr_pvsn_grow,grow_length,varchar(100),생장 길이
+sfkr_pvsn_grow,flower_top,varchar(100),화방 높이
+sfkr_pvsn_grow,fruit_cluster_num,varchar(100),화방수
+sfkr_pvsn_grow,first_flower_num,varchar(100),1화방 꽃수
+sfkr_pvsn_grow,second_flower_num,varchar(100),2화방 꽃수
+sfkr_pvsn_grow,third_flower_num,varchar(100),3화방 꽃수
+sfkr_pvsn_grow,first_fruits_num,varchar(100),1화방 착과수
+sfkr_pvsn_grow,second_fruits_num,varchar(100),2화방 착과수
+sfkr_pvsn_grow,third_fruits_num,varchar(100),3화방 착과수
+sfkr_pvsn_grow,flower_position,varchar(100),개화군
+sfkr_pvsn_grow,fruits_position,varchar(100),착화군
+sfkr_pvsn_grow,fruits_num,varchar(100),열매수
+sfkr_pvsn_grow,harvest_position,varchar(100),수확군
+sfkr_pvsn_grow,ped,varchar(100),PED
+sfkr_pvsn_grow,solar_correction,varchar(100),수광량
+sfkr_pvsn_grow,fruits_weight,varchar(100),평균과중

@@ -1,0 +1,57 @@
+{
+  "status": "complete",
+  "stage": "test_once",
+  "selection_uses_test": false,
+  "test_is_historical_reused_holdout": true,
+  "selected": {
+    "prediction_contract": "current_count + binary_increment_event",
+    "allowed_increment": [
+      0,
+      1
+    ],
+    "features": [
+      "fruit_cluster_num",
+      "fruit_cluster_num_lag1",
+      "fruit_cluster_num_change",
+      "fruit_cluster_num_daily_change",
+      "fruit_cluster_num_roll4_mean",
+      "fruit_cluster_num_roll4_std",
+      "fruit_cluster_num_roll4_slope_per_day",
+      "days_since_previous",
+      "days_since_crop_start",
+      "leaves_length",
+      "leaves_num",
+      "petiole_length",
+      "theca_diameter",
+      "first_flower_num",
+      "second_flower_num",
+      "third_flower_num",
+      "first_fruits_num",
+      "second_fruits_num",
+      "third_fruits_num"
+    ],
+    "feature_count": 19,
+    "selected_learning_model": "random_forest",
+    "settings": {
+      "threshold": 0.4000000000000001,
+      "cv_mae": 0.2152777777777778,
+      "fixed_epochs": null
+    },
+    "selection_uses_test": false,
+    "fruit_set_pipeline_changed": false
+  },
+  "test": {
+    "random_forest": {
+      "rmse": 0.5198752449100363,
+      "mae": 0.2702702702702703,
+      "r2": 0.7780776728145149,
+      "ccc": 0.8830778954021171
+    },
+    "persistence": {
+      "rmse": 0.532713603903433,
+      "mae": 0.28378378378378377,
+      "r2": 0.7669815564552407,
+      "ccc": 0.8782322519981196
+    }
+  }
+}

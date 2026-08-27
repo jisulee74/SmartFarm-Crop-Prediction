@@ -1,0 +1,49 @@
+{
+  "params": {
+    "catboost": {
+      "depth": 6,
+      "early_stopping_rounds": 150,
+      "iterations": 2000,
+      "l2_leaf_reg": 3,
+      "learning_rate": 0.03
+    },
+    "mlp": {
+      "batch_size": 128,
+      "dropout": 0.1,
+      "early_stopping_rounds": 50,
+      "hidden": [
+        128,
+        64
+      ],
+      "learning_rate": 0.0003,
+      "max_epochs": 500
+    },
+    "poisson": {
+      "alpha": 1.0,
+      "max_iter": 2000
+    },
+    "random_forest": {
+      "max_depth": 8,
+      "max_features": 0.7,
+      "min_samples_leaf": 8,
+      "n_estimators": 500
+    },
+    "tabm": {
+      "batch_size": 64,
+      "dropout": 0.0,
+      "early_stopping_rounds": 50,
+      "k": 32,
+      "learning_rate": 0.002,
+      "max_epochs": 500,
+      "n_blocks": 3,
+      "weight_decay": 0.0003
+    }
+  },
+  "fixed_epochs": {
+    "catboost": 1095,
+    "mlp": 61,
+    "poisson": null,
+    "random_forest": null,
+    "tabm": 21
+  }
+}

@@ -1,0 +1,5 @@
+﻿pattern,sample_sequences
+zero_to_positive,162
+positive_to_zero,188
+positive_zero_positive,62
+all_zero,58

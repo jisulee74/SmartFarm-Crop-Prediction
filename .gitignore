@@ -1,0 +1,20 @@
+# Python caches and local environments
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+venv/
+
+# IDE and operating-system files
+.idea/
+.vscode/
+.DS_Store
+
+# Local secrets
+.env
+.env.*
+!.env.example
+
+# Rebuildable raw database cache exceeding GitHub's single-file limit
+tomato_flower_count_prediction/data/raw/environment.parquet
+

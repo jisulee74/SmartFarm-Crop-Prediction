@@ -1,0 +1,10 @@
+{
+  "candidate_rows_before_sensor_eligibility": 2129,
+  "audits": {
+    "ambiguous_crop_assignments": 29606,
+    "outside_crop": 0,
+    "outside_truss_1_34": 33318,
+    "conflicting_duplicates": 8,
+    "incomplete_truss_dates": 1701
+  }
+}

@@ -1,0 +1,71 @@
+{
+  "selected_feature_set": "history+environment",
+  "selected_features": [
+    "current_total_flower_count",
+    "previous_total_flower_count",
+    "total_flower_delta",
+    "current_max_truss_number",
+    "positive_truss_count",
+    "observed_truss_count",
+    "days_since_previous",
+    "days_since_crop_start",
+    "week_of_year_sin",
+    "week_of_year_cos",
+    "indoor_temperature_7d_mean",
+    "indoor_humidity_7d_mean",
+    "indoor_co2_7d_mean"
+  ],
+  "selected_learning_model": "poisson",
+  "candidate_models": [
+    "poisson",
+    "random_forest",
+    "catboost",
+    "mlp",
+    "tabm",
+    "tft"
+  ],
+  "crop_policy": {
+    "rules": [
+      "PF_0025108_crop205_after_2025_05_31",
+      "PF_0025108_crop207",
+      "PF_0026456_all",
+      "PF_0024696_crop176",
+      "PF_0024697_crop178_2025_09_24"
+    ],
+    "removed_raw_rows": {
+      "PF_0025108_crop205_after_2025_05_31": 250,
+      "PF_0025108_crop207": 35,
+      "PF_0026456_all": 441,
+      "PF_0024696_crop176": 617,
+      "PF_0024697_crop178_2025_09_24": 84
+    },
+    "total_removed_raw_rows": 1427
+  },
+  "sensor_population_policy": "complete TI/HI/CI ratio >= 0.50 per facility-crop",
+  "tft_params": {
+    "attention_head_size": 1,
+    "batch_size": 64,
+    "dropout": 0.1,
+    "hidden_continuous_size": 8,
+    "hidden_size": 8,
+    "learning_rate": 0.01,
+    "max_epochs": 80
+  },
+  "tft_fixed_epochs": 19,
+  "test": {
+    "final": {
+      "rmse": 1.429825829789866,
+      "mae": 1.2953436658117505,
+      "r2": -0.016418658951769638,
+      "ccc": 0.19795923799757495
+    },
+    "persistence": {
+      "rmse": 1.4666666666666668,
+      "mae": 0.9244444444444444,
+      "r2": -0.06947145129927534,
+      "ccc": 0.48672266055824215
+    },
+    "baseline_beaten_on_test": true
+  },
+  "test_access_count": 1
+}

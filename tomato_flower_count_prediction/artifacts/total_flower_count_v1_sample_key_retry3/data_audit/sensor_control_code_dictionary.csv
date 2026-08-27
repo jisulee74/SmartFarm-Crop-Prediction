@@ -1,0 +1,12 @@
+sect_code,fatr_code,rows,facilities,planned_feature
+CR,CC01_1_L_V,55855,6,ventilation_7d_duty
+CR,CC01_1_R_V,33658,5,ventilation_7d_duty
+CR,CC01_2_L_V,46630,5,ventilation_7d_duty
+CR,CC03_1_L_V,33658,5,ventilation_7d_duty
+CR,CC03_1_R_V,33658,5,ventilation_7d_duty
+CR,CC03_2_R_V,24433,4,ventilation_7d_duty
+CR,CC0403,4749772,3,shade_curtain_7d_duty
+CR,CC1403,242762,6,co2_control_7d_duty
+EI,CI,2117741,10,indoor_co2_7d_mean
+EI,HI,2975985,10,indoor_humidity_7d_mean
+EI,TI,5098177,9,indoor_temperature_7d_mean

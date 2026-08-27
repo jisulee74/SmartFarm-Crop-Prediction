@@ -1,0 +1,10 @@
+pandas==2.3.3
+numpy>=1.26
+pyarrow==22.0.0
+scikit-learn==1.7.2
+catboost>=1.2.8,<2
+torch==2.10.0
+tabm>=0.0.3,<0.1
+PyYAML>=6,<7
+joblib>=1.4,<2
+pytest>=8,<9

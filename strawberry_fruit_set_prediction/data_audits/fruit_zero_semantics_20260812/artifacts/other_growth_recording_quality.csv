@@ -1,0 +1,17 @@
+﻿target_group,column,rows,non_null_count,non_null_rate,positive_count,positive_rate,median_non_null
+positive,leaves_length,2211,2211,1.0,2211,1.0,109.0
+positive,leaves_num,2211,2211,1.0,2208,0.9986431478968792,9.0
+positive,leaves_width,2211,0,0.0,0,0.0,
+positive,petiole_length,2211,0,0.0,0,0.0,
+positive,stem_diameter,2211,0,0.0,0,0.0,
+positive,theca_diameter,2211,2211,1.0,2211,1.0,22.3
+positive,flower_length,2211,0,0.0,0,0.0,
+positive,grow_length,2211,0,0.0,0,0.0,
+all_zero,leaves_length,3266,3263,0.9990814451928965,3221,0.9862216778934476,105.0
+all_zero,leaves_num,3266,3263,0.9990814451928965,3224,0.9871402327005512,8.0
+all_zero,leaves_width,3266,0,0.0,0,0.0,
+all_zero,petiole_length,3266,0,0.0,0,0.0,
+all_zero,stem_diameter,3266,0,0.0,0,0.0,
+all_zero,theca_diameter,3266,3263,0.9990814451928965,3220,0.9859154929577465,19.1
+all_zero,flower_length,3266,0,0.0,0,0.0,
+all_zero,grow_length,3266,0,0.0,0,0.0,

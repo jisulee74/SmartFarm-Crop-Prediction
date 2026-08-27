@@ -1,0 +1,12 @@
+{
+  "target": "fruit_set_second_fruits_num",
+  "stage": "external_validation",
+  "train_rows": 221,
+  "validation_rows": 47,
+  "test_path": "/NHNHOME/WORKSPACE/26mafra001_A/BASE/theimc/jslee/AXData/strawberry_fruit_set_prediction/facility_holdout_fixed13_with_tft_v1/processed_data/second_fruits_num/test.parquet",
+  "test_accessed": false,
+  "selected_feature_set": "fixed_13",
+  "selected_learning_model": "poisson",
+  "persistence_baseline": "persistence",
+  "baseline_beaten_on_validation": true
+}

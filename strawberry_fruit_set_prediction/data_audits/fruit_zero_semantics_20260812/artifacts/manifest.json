@@ -1,0 +1,38 @@
+{
+  "source_tables": [
+    "sfkr_pvsn_grow",
+    "sfkr_pvsn_crop"
+  ],
+  "read_only": true,
+  "dataset_split_performed": false,
+  "date_filter": "meas_date >= 2024-05-02",
+  "target_columns": [
+    "first_fruits_num",
+    "second_fruits_num",
+    "third_fruits_num"
+  ],
+  "files": [
+    "all_samples_zero_dates.csv",
+    "ambiguous_crop_assignments.csv",
+    "analysis_rows.csv",
+    "crop_cycles_source.csv",
+    "crop_phase_summary.csv",
+    "duplicate_audit.csv",
+    "elapsed_30d_summary.csv",
+    "excluded_conflict_date_rows.csv",
+    "facility_survey_date_summary.csv",
+    "figures/crop_phase_target_distribution.png",
+    "figures/crop_phase_zero_rate.png",
+    "figures/elapsed_zero_rate_and_target.png",
+    "figures/temporal_sequence_patterns.png",
+    "figures/user_cycle_zero_rate.png",
+    "other_growth_recording_quality.csv",
+    "overall_summary.csv",
+    "report.md",
+    "sample_sequence_details.csv",
+    "sample_sequence_summary.csv",
+    "schema_columns.csv",
+    "unmatched_crop_assignments.csv",
+    "user_crop_cycle_summary.csv"
+  ]
+}

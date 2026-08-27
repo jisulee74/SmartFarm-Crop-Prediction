@@ -1,0 +1,50 @@
+{
+  "split_unit": "user_id",
+  "target_row_ratio": [
+    0.7,
+    0.15,
+    0.15
+  ],
+  "active_facility_counts": {
+    "first_fruits_num": [
+      10,
+      3,
+      3
+    ],
+    "second_fruits_num": [
+      13,
+      3,
+      3
+    ],
+    "third_fruits_num": [
+      13,
+      3,
+      3
+    ]
+  },
+  "features": [
+    "current_fruit_count",
+    "fruit_count_delta",
+    "fruit_count_roll2_std",
+    "fruit_count_roll2_min",
+    "fruit_count_roll3_min",
+    "fruit_count_roll4_std",
+    "days_since_previous",
+    "days_since_first_measurement",
+    "days_since_first_positive",
+    "history_count",
+    "week_of_year_sin",
+    "week_of_year_cos",
+    "sensor_EI__TI_7d_mean"
+  ],
+  "learning_models": [
+    "poisson",
+    "random_forest",
+    "catboost",
+    "mlp",
+    "tabm",
+    "tft"
+  ],
+  "baseline": "persistence",
+  "test_policy": "access once after Validation selection"
+}
