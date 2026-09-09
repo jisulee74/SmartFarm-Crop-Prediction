@@ -16,9 +16,9 @@ venv/
 !.env.example
 
 # Rebuildable raw database cache exceeding GitHub's single-file limit
-tomato_flower_count_prediction/data/raw/environment.parquet
+AXData/tomato_flower_count_prediction/data/raw/environment.parquet
 
 
 # Rebuildable training weights and verbose local logs
-ax_catalog_experiments/outputs/**/*.log
-ax_catalog_experiments/outputs/**/model.bin
+AXData/ax_catalog_experiments/outputs/**/*.log
+AXData/ax_catalog_experiments/outputs/**/model.bin

@@ -1,86 +1,40 @@
-# SmartFarm-Crop-Prediction
+# SmartFarm Crop Prediction
 
-Reproducible regression pipelines and experiment artifacts for predicting crop growth indicators from Smart Farm Korea data.
+토마토 꽃 수·딸기 착과수 관측 대시보드와 예측 실험 코드 및 결과를 관리하는 저장소입니다.
 
-## Projects
-
-| Directory | Task |
-|---|---|
-| `common_regression/` | Shared data contracts, preprocessing, model adapters, metrics, temporal validation, and selection utilities. |
-| `strawberry_flower_cluster_prediction/` | Predicts the next strawberry flower-cluster count from growth history and crop context. |
-| `tomato_flower_count_prediction/` | Predicts the next total tomato flower count across observed trusses using flower history, truss structure, crop context, and recent indoor environment data. |
-| `strawberry_fruit_set_prediction/` | Predicts the next fruit-set count independently for the first, second, and third strawberry trusses. |
-
-## Candidate models
-
-The experiments compare Poisson Regression, Random Forest, CatBoost, MLP, and TabM. Persistence is evaluated as a separate baseline. The tomato flower-count and strawberry fruit-set experiments additionally include Temporal Fusion Transformer (TFT).
-
-## Evaluation protocol
-
-- Input features only use information available at or before the prediction date.
-- Feature selection and hyperparameter tuning use training and validation data.
-- Test data are reserved for evaluation after the configuration is fixed.
-- Reported regression metrics are RMSE, MAE, R-squared, and concordance correlation coefficient (CCC).
-
-## Repository layout
-
-Each prediction project contains its pipeline code, configuration, required processed data, and retained validation/test artifacts. Historical plans and data-quality audits are stored under the relevant project's `docs/` or `data_audits/` directory.
-
-## Environment
-
-Python 3.11 is recommended. Install the shared requirements with:
-
-```bash
-python3.11 -m venv .venv
-source .venv/bin/activate
-pip install -r common_regression/requirements-v1.3.txt
-```
-
-Database credentials are not stored in this repository. Database extraction commands read connection settings from environment variables such as `FARMSTOM_DB_HOST`, `FARMSTOM_DB_USER`, and `FARMSTOM_DB_PASSWORD`.
-
-## Rebuilding the tomato environment cache
-
-The following rebuildable raw cache is intentionally excluded because it exceeds GitHub's 100 MB single-file limit:
+## 폴더 구성
 
 ```text
-tomato_flower_count_prediction/data/raw/environment.parquet
+flower_fruit_prediction/                  웹 대시보드와 관측 CSV 두 파일
+AXData/
+  common_regression/                      공통 모델·전처리·검증 코드
+  ax_catalog_experiments/                 변수 사전·범주 조합 실험·통합 결과
+  tomato_flower_count_prediction/         토마토 전체 꽃 수 예측
+  strawberry_fruit_set_prediction/        딸기 화방별 착과수 예측
+  strawberry_flower_cluster_prediction/   기존 딸기 화방수 예측
 ```
 
-With valid database environment variables, regenerate it through the tomato pipeline:
+## 웹 대시보드 실행
+
+저장소 루트에서 실행합니다.
 
 ```bash
-python tomato_flower_count_prediction/run_pipeline.py \
-  --run-id total_flower_count_v1_sample_key_retry3 \
-  --rebuild-cache
+python flower_fruit_prediction/server.py
 ```
 
-The retained processed train/validation/test datasets already contain the aggregated recent-environment features, so existing experiment results can be inspected without rebuilding this raw cache.
+터미널에 표시된 localhost 주소로 접속합니다. 상세 기능은 [웹사이트 README](flower_fruit_prediction/README.md)를 참고하세요. 로컬 서버 실행 자체가 외부 배포를 의미하지는 않습니다.
 
-## Retained experiment results
+## 관측 데이터
 
-- Strawberry flower-cluster count: `strawberry_flower_cluster_prediction/artifacts/final_v1_3/`
-- Tomato total flower count: `tomato_flower_count_prediction/artifacts/total_flower_count_v1_sample_key_retry3/`
-- Strawberry fruit set: `strawberry_fruit_set_prediction/facility_holdout_fixed13_with_tft_v1/artifacts/`
+- [토마토 개체별 관측 CSV](AXData/ax_catalog_experiments/outputs/timeseries/tomato_observed_counts_by_crop_cycle.csv)
+- [딸기 개체별 관측 CSV](AXData/ax_catalog_experiments/outputs/timeseries/strawberry_observed_counts_by_crop_cycle.csv)
 
-## Data notice
+두 CSV는 유지하며 웹사이트 폴더에도 동일한 사본을 둡니다. 데이터를 갱신할 때에는 웹사이트 사본도 함께 갱신하세요. 개체는 시설·작기·sample_num을 함께 사용해 구분합니다. 관측값은 예측값과 다르며, 토마토 전체 꽃 수는 1~3화방만의 합으로 대체하지 않습니다.
 
-This repository contains derived datasets and experiment artifacts originating from Smart Farm Korea data. Access and redistribution must follow the applicable data-use agreement and organizational policy.
+## 실험 코드와 결과
 
+환경 설치·실행은 [AXData 안내](AXData/README.md), 범주 조합 실험은 [실험 안내](AXData/ax_catalog_experiments/README.md)를 참고하세요.
 
-## Observation dashboard and experiment catalog
+[통합 Excel 보고서](AXData/ax_catalog_experiments/outputs/AX_Experiment_Report.xlsx)와 CSV·행별 예측·실행 기록은 실험 폴더의 outputs에 보관합니다. 과거 manifest와 실행 기록에 남은 경로는 당시 환경의 기록입니다.
 
-- [Web dashboard](flower_fruit_prediction/README.md): eight tomato flower / strawberry fruit-set observation charts with facility, crop-cycle and individual filters.
-- [Experiment catalog](ax_catalog_experiments/README.md): category definitions, staged experiments, CSV/Excel exports and reproducible run records.
-- [Excel report](ax_catalog_experiments/outputs/AX_Experiment_Report.xlsx)
-- [Individual observation CSVs](ax_catalog_experiments/outputs/timeseries/)
-- [Power BI design](ax_catalog_experiments/POWER_BI_DESIGN.md)
-
-Run the dashboard with `python flower_fruit_prediction/server.py`, then open the printed localhost URL. This serves the CSV files bundled in the dashboard directory. It does not publish a hosted site automatically.
-
-The repository keeps the historical AXData contents at its root. The `AXData` compatibility namespace supports existing commands such as `python -m AXData.ax_catalog_experiments report` from the repository root.
-
-### Experiment interpretation
-
-Archived model runs completed, but some predictions exhibit numerical instability (near-zero training variance amplified by scaling). These results require correction and re-evaluation before final model conclusions; execution success is not a data-quality or model-validity guarantee. Observation CSVs contain actual observations, not these predictions. Full database inventory verification remains separate from the completed local-cohort experiments.
-
-Run JSONs, predictions, prepared datasets and reports are retained. Rebuildable model weights, verbose logs, Python caches, credentials and the oversized raw environment cache are excluded. Existing database refresh commands require environment configuration; no credentials are bundled.
+이번 폴더 정리는 데이터를 변경하거나 실험을 다시 수행하지 않습니다. 보관된 일부 모델 결과에는 예측값의 수치적 불안정성이 있으므로, 실행 완료를 모델 품질 검증 완료로 해석하지 마세요.

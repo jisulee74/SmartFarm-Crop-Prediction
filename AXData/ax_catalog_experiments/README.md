@@ -4,16 +4,16 @@
 
 ## 실행
 
-작업공간 루트에서 기존 Python 3.11 환경을 사용합니다.
+저장소 루트에서 활성화한 Python 3.11 환경을 사용합니다. 설치는 AXData/README.md를 참고하세요.
 
 ```bash
-envs/jslee_py311/bin/python -m AXData.ax_catalog_experiments build
-envs/jslee_py311/bin/python -m AXData.ax_catalog_experiments snapshot-db
-envs/jslee_py311/bin/python -m AXData.ax_catalog_experiments run --target tomato_total_flower --profile smoke
-envs/jslee_py311/bin/python -m AXData.ax_catalog_experiments run --target tomato_total_flower --profile full
-envs/jslee_py311/bin/python -m AXData.ax_catalog_experiments run-all --profile full
-envs/jslee_py311/bin/python -m AXData.ax_catalog_experiments report
-envs/jslee_py311/bin/python -m pytest AXData/ax_catalog_experiments/tests -q
+python -m AXData.ax_catalog_experiments build
+python -m AXData.ax_catalog_experiments snapshot-db
+python -m AXData.ax_catalog_experiments run --target tomato_total_flower --profile smoke
+python -m AXData.ax_catalog_experiments run --target tomato_total_flower --profile full
+python -m AXData.ax_catalog_experiments run-all --profile full
+python -m AXData.ax_catalog_experiments report
+python -m pytest AXData/ax_catalog_experiments/tests -q
 ```
 
 `build`는 로컬 후보 사전, 토마토 원천 재구축, 학습 기반 범주 동결, 기존 결과 수입 및 Excel/CSV를 생성합니다. `run`은 실제 학습입니다. smoke는 기본 범주 Poisson의 실행 검증만 수행하며 순위 대상이 아닙니다. full은 3개 모델 탐색 후 최대 6개 조합에 6개 모델·튜닝·5개 seed를 적용하므로 상당한 계산 시간이 필요합니다. 작업별 결과가 저장되어 동일 명령으로 재개할 수 있습니다. run-all은 네 타깃을 순차 실행하고 타깃별로 보고서를 갱신하며 campaign_status.json에 진행 상태를 기록합니다. 실패 기록도 보존하므로 코드·환경 수정 후에는 새 `--output` 디렉터리를 사용합니다.

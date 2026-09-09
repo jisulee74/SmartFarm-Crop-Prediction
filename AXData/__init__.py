@@ -1,3 +1,1 @@
-"""Compatibility namespace for workspace-style AXData imports."""
-from pathlib import Path
-__path__.append(str(Path(__file__).resolve().parent.parent))
+"""Smart Farm observation datasets and prediction experiments."""
