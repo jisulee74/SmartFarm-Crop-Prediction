@@ -1,0 +1,31 @@
+{
+  "Run_ID": "RUN_7fae8f58610e176042dbf840",
+  "Target_ID": "strawberry_third",
+  "Variable_Group_ID": "VG_051fd2e5db962f10",
+  "Categories": [
+    "CAT_e5938f8193b1_strawberry_third_8b23e66065_V1"
+  ],
+  "Features": [
+    "history_count"
+  ],
+  "Feature_Count": 1,
+  "Model_Type": "poisson",
+  "Seed": 42,
+  "Stage": "screening",
+  "Fold_ID": null,
+  "Eval_Row_Hash": "2b1061385894320d8d42a4d2d7d6db17a92650aecb7639bf7be4c58616eee648",
+  "N_Eval": 780,
+  "Params": {
+    "alpha": 0.1,
+    "max_iter": 2000
+  },
+  "Status": "success",
+  "Result_Origin": "new",
+  "Metrics": {
+    "rmse": 1.4082359439228582,
+    "mae": 0.936537311054193,
+    "r2": -0.04903438926367576,
+    "ccc": 0.03604691144658313
+  },
+  "Best_Epoch": null
+}

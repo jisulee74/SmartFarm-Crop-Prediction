@@ -1,0 +1,36 @@
+{
+  "Run_ID": "RUN_dd33837e10865ac933ec5ac2",
+  "Target_ID": "strawberry_second",
+  "Variable_Group_ID": "VG_359255a4693ceb06",
+  "Categories": [
+    "CAT_b90126c51b5d_strawberry_second_0187becb0e_V1"
+  ],
+  "Features": [
+    "days_since_crop_start",
+    "days_since_first_measurement",
+    "days_since_first_positive",
+    "days_since_previous",
+    "week_cos",
+    "week_sin"
+  ],
+  "Feature_Count": 6,
+  "Model_Type": "poisson",
+  "Seed": 42,
+  "Stage": "screening",
+  "Fold_ID": null,
+  "Eval_Row_Hash": "995010ed9d3a861d600337831c71d690f6061da02383bae5e9c4951c1cc3f028",
+  "N_Eval": 780,
+  "Params": {
+    "alpha": 0.1,
+    "max_iter": 2000
+  },
+  "Status": "success",
+  "Result_Origin": "new",
+  "Metrics": {
+    "rmse": 1.2988940216677274,
+    "mae": 0.6660579465672923,
+    "r2": 0.3454193495292702,
+    "ccc": 0.5288155169522156
+  },
+  "Best_Epoch": null
+}

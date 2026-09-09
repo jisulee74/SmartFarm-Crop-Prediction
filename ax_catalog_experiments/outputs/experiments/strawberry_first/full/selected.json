@@ -1,0 +1,107 @@
+{
+  "winners": {
+    "poisson": {
+      "group": [
+        "CAT_997483fbec2c_strawberry_first_f0906a8f73_V1",
+        "CAT_b90126c51b5d_strawberry_first_0187becb0e_V1",
+        "CAT_e5938f8193b1_strawberry_first_8b23e66065_V1"
+      ],
+      "params": {
+        "alpha": 0.1,
+        "max_iter": 2000
+      },
+      "epochs": null,
+      "validation_rmse": 1.3606751116083362,
+      "validation_mae": 0.7691647022413328
+    },
+    "random_forest": {
+      "group": [
+        "CAT_997483fbec2c_strawberry_first_f0906a8f73_V1"
+      ],
+      "params": {
+        "n_estimators": 500,
+        "max_depth": 4,
+        "min_samples_leaf": 3,
+        "max_features": 0.7
+      },
+      "epochs": null,
+      "validation_rmse": 1.312481271726662,
+      "validation_mae": 0.6165793426807904
+    },
+    "catboost": {
+      "group": [
+        "CAT_997483fbec2c_strawberry_first_f0906a8f73_V1"
+      ],
+      "params": {
+        "iterations": 2000,
+        "depth": 6,
+        "learning_rate": 0.07,
+        "l2_leaf_reg": 7,
+        "early_stopping_rounds": 150
+      },
+      "epochs": 63,
+      "validation_rmse": 1.2990397609772473,
+      "validation_mae": 0.6296073225508252
+    },
+    "mlp": {
+      "group": [
+        "CAT_997483fbec2c_strawberry_first_f0906a8f73_V1",
+        "CAT_e5938f8193b1_strawberry_first_8b23e66065_V1"
+      ],
+      "params": {
+        "hidden": [
+          256,
+          128
+        ],
+        "dropout": 0.3,
+        "learning_rate": 0.001,
+        "batch_size": 128,
+        "max_epochs": 500,
+        "early_stopping_rounds": 50
+      },
+      "epochs": 27,
+      "validation_rmse": 1.3204735352751424,
+      "validation_mae": 0.5663697218140349
+    },
+    "tabm": {
+      "group": [
+        "CAT_997483fbec2c_strawberry_first_f0906a8f73_V1",
+        "CAT_e5938f8193b1_strawberry_first_8b23e66065_V1"
+      ],
+      "params": {
+        "k": 32,
+        "n_blocks": 3,
+        "dropout": 0.1,
+        "learning_rate": 0.002,
+        "weight_decay": 0.0003,
+        "batch_size": 128,
+        "max_epochs": 500,
+        "early_stopping_rounds": 50
+      },
+      "epochs": 7,
+      "validation_rmse": 1.3126845137996797,
+      "validation_mae": 0.6066905835829676
+    },
+    "tft": {
+      "group": [
+        "CAT_997483fbec2c_strawberry_first_f0906a8f73_V1"
+      ],
+      "params": {
+        "hidden_size": 16,
+        "attention_head_size": 2,
+        "hidden_continuous_size": 8,
+        "dropout": 0.1,
+        "learning_rate": 0.001,
+        "batch_size": 64,
+        "max_epochs": 100
+      },
+      "epochs": 14,
+      "validation_rmse": 1.3074585511181636,
+      "validation_mae": 0.5451382198430395
+    }
+  },
+  "overall": "catboost",
+  "failures": [],
+  "selection_metric": "validation mean per-seed RMSE",
+  "test_accessed_during_selection": false
+}

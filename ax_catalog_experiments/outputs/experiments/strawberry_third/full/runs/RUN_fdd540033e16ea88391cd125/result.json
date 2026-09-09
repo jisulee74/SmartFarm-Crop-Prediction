@@ -1,0 +1,33 @@
+{
+  "Run_ID": "RUN_fdd540033e16ea88391cd125",
+  "Target_ID": "strawberry_third",
+  "Variable_Group_ID": "VG_051fd2e5db962f10",
+  "Categories": [
+    "CAT_e5938f8193b1_strawberry_third_8b23e66065_V1"
+  ],
+  "Features": [
+    "history_count"
+  ],
+  "Feature_Count": 1,
+  "Model_Type": "random_forest",
+  "Seed": 42,
+  "Stage": "screening",
+  "Fold_ID": null,
+  "Eval_Row_Hash": "2b1061385894320d8d42a4d2d7d6db17a92650aecb7639bf7be4c58616eee648",
+  "N_Eval": 780,
+  "Params": {
+    "n_estimators": 500,
+    "max_depth": 8,
+    "min_samples_leaf": 3,
+    "max_features": "sqrt"
+  },
+  "Status": "success",
+  "Result_Origin": "new",
+  "Metrics": {
+    "rmse": 1.4384144984674314,
+    "mae": 0.8141015691334315,
+    "r2": -0.09447785554942323,
+    "ccc": 0.2718602218092183
+  },
+  "Best_Epoch": null
+}

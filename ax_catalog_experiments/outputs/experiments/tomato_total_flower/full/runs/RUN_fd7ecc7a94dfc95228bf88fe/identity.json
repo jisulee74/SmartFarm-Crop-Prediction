@@ -1,0 +1,16 @@
+{
+  "profile": "full",
+  "dataset": "850c623bd82209f555181e7ffec47af2e4a53fb512f2a7903da37cfca7733ef2",
+  "group": "VG_d6f01d899bf98ee5",
+  "model": "poisson",
+  "params": {
+    "alpha": 1.0,
+    "max_iter": 2000
+  },
+  "seed": 42,
+  "stage": "internal_cv",
+  "fold": 1,
+  "epochs": null,
+  "fit_rows": "2f7a20a35aea2656532e1f38db9d1e740baf213b5536e7325a025991449fdc35",
+  "eval_rows": "1f69b20d2b2dac85d3c89fe656a8fc54046474f590e27f5d126b3309a458f64b"
+}

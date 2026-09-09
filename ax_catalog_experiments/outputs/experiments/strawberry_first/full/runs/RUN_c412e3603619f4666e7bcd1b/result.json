@@ -1,0 +1,47 @@
+{
+  "Run_ID": "RUN_c412e3603619f4666e7bcd1b",
+  "Target_ID": "strawberry_first",
+  "Variable_Group_ID": "VG_7a71846d7c2282dd",
+  "Categories": [
+    "CAT_997483fbec2c_strawberry_first_f0906a8f73_V1"
+  ],
+  "Features": [
+    "fruit_count__current",
+    "fruit_count__delta",
+    "fruit_count__delta_per_day",
+    "fruit_count__lag1",
+    "fruit_count__lag2",
+    "fruit_count__lag3",
+    "fruit_count__roll2_std",
+    "fruit_count__roll3_max",
+    "fruit_count__roll3_mean",
+    "fruit_count__roll3_min",
+    "fruit_count__roll3_slope",
+    "fruit_count__roll3_std",
+    "fruit_count__roll4_max",
+    "fruit_count__roll4_mean",
+    "fruit_count__roll4_min",
+    "fruit_count__roll4_slope",
+    "fruit_count__roll4_std"
+  ],
+  "Feature_Count": 17,
+  "Model_Type": "poisson",
+  "Seed": 42,
+  "Stage": "internal_cv",
+  "Fold_ID": 2,
+  "Eval_Row_Hash": "04a0d9556524a5fe7efbcdab7af50234cd25a1ca4bb17be40b46299c3c579421",
+  "N_Eval": 443,
+  "Params": {
+    "alpha": 0.1,
+    "max_iter": 2000
+  },
+  "Status": "success",
+  "Result_Origin": "new",
+  "Metrics": {
+    "rmse": 1.2049079390521056,
+    "mae": 0.849580297217143,
+    "r2": -0.13619653190695358,
+    "ccc": 0.0737503023840681
+  },
+  "Best_Epoch": null
+}

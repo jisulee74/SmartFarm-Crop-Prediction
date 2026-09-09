@@ -1,0 +1,37 @@
+{
+  "Run_ID": "RUN_eea4330d14c139a67f39e175",
+  "Target_ID": "tomato_total_flower",
+  "Variable_Group_ID": "VG_11b431dacbb118a3",
+  "Categories": [
+    "CAT_b90126c51b5d_tomato_total_flower_49d76b5199_V1"
+  ],
+  "Features": [
+    "days_since_crop_start",
+    "days_since_first_measurement",
+    "days_since_previous",
+    "week_cos",
+    "week_sin"
+  ],
+  "Feature_Count": 5,
+  "Model_Type": "random_forest",
+  "Seed": 42,
+  "Stage": "screening",
+  "Fold_ID": null,
+  "Eval_Row_Hash": "17e5567b9df86880c6ff4471598079cf7e4c292f0e934f11f0efcf2e29aa0d5f",
+  "N_Eval": 337,
+  "Params": {
+    "n_estimators": 500,
+    "max_depth": 8,
+    "min_samples_leaf": 3,
+    "max_features": "sqrt"
+  },
+  "Status": "success",
+  "Result_Origin": "new",
+  "Metrics": {
+    "rmse": 1.937984370955391,
+    "mae": 1.5834000723932014,
+    "r2": 0.010608406452195185,
+    "ccc": 0.12294676964929559
+  },
+  "Best_Epoch": null
+}

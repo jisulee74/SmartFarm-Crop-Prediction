@@ -1,0 +1,35 @@
+{
+  "Run_ID": "RUN_47de47d5552d1574cc3d9bd3",
+  "Target_ID": "tomato_total_flower",
+  "Variable_Group_ID": "VG_11b431dacbb118a3",
+  "Categories": [
+    "CAT_b90126c51b5d_tomato_total_flower_49d76b5199_V1"
+  ],
+  "Features": [
+    "days_since_crop_start",
+    "days_since_first_measurement",
+    "days_since_previous",
+    "week_cos",
+    "week_sin"
+  ],
+  "Feature_Count": 5,
+  "Model_Type": "poisson",
+  "Seed": 42,
+  "Stage": "screening",
+  "Fold_ID": null,
+  "Eval_Row_Hash": "17e5567b9df86880c6ff4471598079cf7e4c292f0e934f11f0efcf2e29aa0d5f",
+  "N_Eval": 337,
+  "Params": {
+    "alpha": 0.1,
+    "max_iter": 2000
+  },
+  "Status": "success",
+  "Result_Origin": "new",
+  "Metrics": {
+    "rmse": 1.8356656874871657,
+    "mae": 1.4849933343400588,
+    "r2": 0.1123232283842992,
+    "ccc": 0.1968399686893215
+  },
+  "Best_Epoch": null
+}

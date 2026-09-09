@@ -1,0 +1,38 @@
+{
+  "Run_ID": "RUN_13beeeeb0a1d560025794af8",
+  "Target_ID": "strawberry_second",
+  "Variable_Group_ID": "VG_359255a4693ceb06",
+  "Categories": [
+    "CAT_b90126c51b5d_strawberry_second_0187becb0e_V1"
+  ],
+  "Features": [
+    "days_since_crop_start",
+    "days_since_first_measurement",
+    "days_since_first_positive",
+    "days_since_previous",
+    "week_cos",
+    "week_sin"
+  ],
+  "Feature_Count": 6,
+  "Model_Type": "random_forest",
+  "Seed": 42,
+  "Stage": "screening",
+  "Fold_ID": null,
+  "Eval_Row_Hash": "995010ed9d3a861d600337831c71d690f6061da02383bae5e9c4951c1cc3f028",
+  "N_Eval": 780,
+  "Params": {
+    "n_estimators": 500,
+    "max_depth": 8,
+    "min_samples_leaf": 3,
+    "max_features": "sqrt"
+  },
+  "Status": "success",
+  "Result_Origin": "new",
+  "Metrics": {
+    "rmse": 1.2830515149387531,
+    "mae": 0.6056065699075222,
+    "r2": 0.3612897068438502,
+    "ccc": 0.5938047639842651
+  },
+  "Best_Epoch": null
+}

@@ -1,0 +1,56 @@
+{
+  "Run_ID": "RUN_0c6ff68b1b9cf1d0db182616",
+  "Target_ID": "strawberry_second",
+  "Variable_Group_ID": "VG_eee51cae9e474e64",
+  "Categories": [
+    "CAT_997483fbec2c_strawberry_second_f0906a8f73_V1",
+    "CAT_b90126c51b5d_strawberry_second_0187becb0e_V1",
+    "CAT_e5938f8193b1_strawberry_second_8b23e66065_V1"
+  ],
+  "Features": [
+    "days_since_crop_start",
+    "days_since_first_measurement",
+    "days_since_first_positive",
+    "days_since_previous",
+    "fruit_count__current",
+    "fruit_count__delta",
+    "fruit_count__delta_per_day",
+    "fruit_count__lag1",
+    "fruit_count__lag2",
+    "fruit_count__lag3",
+    "fruit_count__roll2_std",
+    "fruit_count__roll3_max",
+    "fruit_count__roll3_mean",
+    "fruit_count__roll3_min",
+    "fruit_count__roll3_slope",
+    "fruit_count__roll3_std",
+    "fruit_count__roll4_max",
+    "fruit_count__roll4_mean",
+    "fruit_count__roll4_min",
+    "fruit_count__roll4_slope",
+    "fruit_count__roll4_std",
+    "history_count",
+    "week_cos",
+    "week_sin"
+  ],
+  "Feature_Count": 24,
+  "Model_Type": "poisson",
+  "Seed": 72,
+  "Stage": "validation",
+  "Fold_ID": null,
+  "Eval_Row_Hash": "995010ed9d3a861d600337831c71d690f6061da02383bae5e9c4951c1cc3f028",
+  "N_Eval": 780,
+  "Params": {
+    "alpha": 0.1,
+    "max_iter": 2000
+  },
+  "Status": "success",
+  "Result_Origin": "new",
+  "Metrics": {
+    "rmse": 1.055575897877312,
+    "mae": 0.5079701972367147,
+    "r2": 0.5676906204853112,
+    "ccc": 0.7148629667089412
+  },
+  "Best_Epoch": null
+}

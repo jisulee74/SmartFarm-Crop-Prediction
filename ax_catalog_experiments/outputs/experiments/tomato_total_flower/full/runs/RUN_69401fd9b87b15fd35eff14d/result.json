@@ -1,0 +1,45 @@
+{
+  "Run_ID": "RUN_69401fd9b87b15fd35eff14d",
+  "Target_ID": "tomato_total_flower",
+  "Variable_Group_ID": "VG_7c4ee3e79579a361",
+  "Categories": [
+    "CAT_80a5313b836f_tomato_total_flower_564a392096_V1"
+  ],
+  "Features": [
+    "EI__CI__1d_max",
+    "EI__CI__1d_mean",
+    "EI__CI__1d_min",
+    "EI__CI__1d_std",
+    "EI__CI__3d_max",
+    "EI__CI__3d_mean",
+    "EI__CI__3d_min",
+    "EI__CI__3d_std",
+    "EI__CI__7d_max",
+    "EI__CI__7d_mean",
+    "EI__CI__7d_min",
+    "EI__CI__7d_std"
+  ],
+  "Feature_Count": 12,
+  "Model_Type": "catboost",
+  "Seed": 42,
+  "Stage": "screening",
+  "Fold_ID": null,
+  "Eval_Row_Hash": "17e5567b9df86880c6ff4471598079cf7e4c292f0e934f11f0efcf2e29aa0d5f",
+  "N_Eval": 337,
+  "Params": {
+    "iterations": 1000,
+    "depth": 6,
+    "learning_rate": 0.03,
+    "l2_leaf_reg": 5,
+    "early_stopping_rounds": 100
+  },
+  "Status": "success",
+  "Result_Origin": "new",
+  "Metrics": {
+    "rmse": 1.9338079627428726,
+    "mae": 1.537847249626035,
+    "r2": 0.014868142332479684,
+    "ccc": 0.057772146929510174
+  },
+  "Best_Epoch": 1000
+}

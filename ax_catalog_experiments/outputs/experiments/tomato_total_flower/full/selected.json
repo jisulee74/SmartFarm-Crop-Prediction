@@ -1,0 +1,118 @@
+{
+  "winners": {
+    "poisson": {
+      "group": [
+        "CAT_0dc16b1184c9_tomato_total_flower_0f1e1ec8dc_V1",
+        "CAT_8f442a41cc28_tomato_total_flower_ce810df451_V1",
+        "CAT_e5938f8193b1_tomato_total_flower_8b23e66065_V1"
+      ],
+      "params": {
+        "alpha": 0.0,
+        "max_iter": 2000
+      },
+      "epochs": null,
+      "validation_rmse": 1.7204967577347745,
+      "validation_mae": 1.3510252872277437
+    },
+    "random_forest": {
+      "group": [
+        "CAT_0dc16b1184c9_tomato_total_flower_0f1e1ec8dc_V1",
+        "CAT_1dac82f034cc_tomato_total_flower_ef38a9eed5_V1",
+        "CAT_8f442a41cc28_tomato_total_flower_ce810df451_V1",
+        "CAT_e5938f8193b1_tomato_total_flower_8b23e66065_V1"
+      ],
+      "params": {
+        "n_estimators": 500,
+        "max_depth": null,
+        "min_samples_leaf": 8,
+        "max_features": "sqrt"
+      },
+      "epochs": null,
+      "validation_rmse": 1.651098166011367,
+      "validation_mae": 1.2649404431191915
+    },
+    "catboost": {
+      "group": [
+        "CAT_0dc16b1184c9_tomato_total_flower_0f1e1ec8dc_V1",
+        "CAT_1dac82f034cc_tomato_total_flower_ef38a9eed5_V1",
+        "CAT_8f442a41cc28_tomato_total_flower_ce810df451_V1",
+        "CAT_b90126c51b5d_tomato_total_flower_49d76b5199_V1"
+      ],
+      "params": {
+        "iterations": 2000,
+        "depth": 8,
+        "learning_rate": 0.07,
+        "l2_leaf_reg": 3,
+        "early_stopping_rounds": 150
+      },
+      "epochs": 59,
+      "validation_rmse": 1.691655751188383,
+      "validation_mae": 1.3382735245657136
+    },
+    "mlp": {
+      "group": [
+        "CAT_0dc16b1184c9_tomato_total_flower_0f1e1ec8dc_V1",
+        "CAT_8f442a41cc28_tomato_total_flower_ce810df451_V1",
+        "CAT_e5938f8193b1_tomato_total_flower_8b23e66065_V1"
+      ],
+      "params": {
+        "hidden": [
+          128,
+          64
+        ],
+        "dropout": 0.3,
+        "learning_rate": 0.0003,
+        "batch_size": 128,
+        "max_epochs": 500,
+        "early_stopping_rounds": 50
+      },
+      "epochs": 25,
+      "validation_rmse": 1.6966466951540773,
+      "validation_mae": 1.320929265004591
+    },
+    "tabm": {
+      "group": [
+        "CAT_0dc16b1184c9_tomato_total_flower_0f1e1ec8dc_V1",
+        "CAT_8f442a41cc28_tomato_total_flower_ce810df451_V1",
+        "CAT_e5938f8193b1_tomato_total_flower_8b23e66065_V1"
+      ],
+      "params": {
+        "k": 16,
+        "n_blocks": 3,
+        "dropout": 0.0,
+        "learning_rate": 0.002,
+        "weight_decay": 0.0003,
+        "batch_size": 128,
+        "max_epochs": 500,
+        "early_stopping_rounds": 50
+      },
+      "epochs": 3,
+      "validation_rmse": 1.7312620758458774,
+      "validation_mae": 1.3209829327968179
+    },
+    "tft": {
+      "group": [
+        "CAT_0dc16b1184c9_tomato_total_flower_0f1e1ec8dc_V1",
+        "CAT_1dac82f034cc_tomato_total_flower_ef38a9eed5_V1",
+        "CAT_8f442a41cc28_tomato_total_flower_ce810df451_V1",
+        "CAT_e5938f8193b1_tomato_total_flower_8b23e66065_V1"
+      ],
+      "params": {
+        "hidden_size": 32,
+        "attention_head_size": 2,
+        "hidden_continuous_size": 8,
+        "dropout": 0.1,
+        "learning_rate": 0.001,
+        "batch_size": 64,
+        "max_epochs": 100
+      },
+      "epochs": 16,
+      "validation_rmse": 1.6647760534086138,
+      "validation_mae": 1.277499513695077
+    }
+  },
+  "overall": "random_forest",
+  "failures": [],
+  "selection_metric": "validation mean per-seed RMSE",
+  "test_accessed_during_selection": false
+}

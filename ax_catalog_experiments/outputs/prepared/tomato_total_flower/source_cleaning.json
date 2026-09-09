@@ -1,0 +1,16 @@
+{
+  "EI__TI": [
+    -10,
+    60
+  ],
+  "EI__HI": [
+    0,
+    100
+  ],
+  "EI__CI": [
+    0,
+    5000
+  ],
+  "rule": "inclusive bounds; other fields finite numeric only",
+  "deduplication": "latest source_sn by full sensor identity and timestamp"
+}

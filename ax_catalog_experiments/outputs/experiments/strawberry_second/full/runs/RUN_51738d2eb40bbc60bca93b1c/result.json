@@ -1,0 +1,34 @@
+{
+  "Run_ID": "RUN_51738d2eb40bbc60bca93b1c",
+  "Target_ID": "strawberry_second",
+  "Variable_Group_ID": "VG_7c20c44cc736363e",
+  "Categories": [
+    "CAT_e5938f8193b1_strawberry_second_8b23e66065_V1"
+  ],
+  "Features": [
+    "history_count"
+  ],
+  "Feature_Count": 1,
+  "Model_Type": "catboost",
+  "Seed": 42,
+  "Stage": "screening",
+  "Fold_ID": null,
+  "Eval_Row_Hash": "995010ed9d3a861d600337831c71d690f6061da02383bae5e9c4951c1cc3f028",
+  "N_Eval": 780,
+  "Params": {
+    "iterations": 1000,
+    "depth": 6,
+    "learning_rate": 0.03,
+    "l2_leaf_reg": 5,
+    "early_stopping_rounds": 100
+  },
+  "Status": "success",
+  "Result_Origin": "new",
+  "Metrics": {
+    "rmse": 1.5487366817841104,
+    "mae": 0.8550754643224003,
+    "r2": 0.06938318160905343,
+    "ccc": 0.3015774783410189
+  },
+  "Best_Epoch": 1000
+}

@@ -1,0 +1,23 @@
+{
+  "profile": "full",
+  "dataset": "b4bbf44d655b5ddb85660c0188f9eb94d8ff077d1b1615ba3a9684bc773aa574",
+  "group": "VG_5dd18d1006c44e48",
+  "model": "mlp",
+  "params": {
+    "hidden": [
+      256,
+      128
+    ],
+    "dropout": 0.1,
+    "learning_rate": 0.001,
+    "batch_size": 64,
+    "max_epochs": 500,
+    "early_stopping_rounds": 50
+  },
+  "seed": 42,
+  "stage": "internal_cv",
+  "fold": 2,
+  "epochs": null,
+  "fit_rows": "6d345a6d409bbe6071175368428b996cbbe2e140823d92ac89249a39d14b9736",
+  "eval_rows": "0496980f3511c41778288c26f5bba9539e77b135a34113a07913abc3375f66a8"
+}

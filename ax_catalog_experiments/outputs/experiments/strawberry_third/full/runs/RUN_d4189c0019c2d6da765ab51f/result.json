@@ -1,0 +1,51 @@
+{
+  "Run_ID": "RUN_d4189c0019c2d6da765ab51f",
+  "Target_ID": "strawberry_third",
+  "Variable_Group_ID": "VG_c2493183aa08dd90",
+  "Categories": [
+    "CAT_997483fbec2c_strawberry_third_f0906a8f73_V1",
+    "CAT_e5938f8193b1_strawberry_third_8b23e66065_V1"
+  ],
+  "Features": [
+    "fruit_count__current",
+    "fruit_count__delta",
+    "fruit_count__delta_per_day",
+    "fruit_count__lag1",
+    "fruit_count__lag2",
+    "fruit_count__lag3",
+    "fruit_count__roll2_std",
+    "fruit_count__roll3_max",
+    "fruit_count__roll3_mean",
+    "fruit_count__roll3_min",
+    "fruit_count__roll3_slope",
+    "fruit_count__roll3_std",
+    "fruit_count__roll4_max",
+    "fruit_count__roll4_mean",
+    "fruit_count__roll4_min",
+    "fruit_count__roll4_slope",
+    "fruit_count__roll4_std",
+    "history_count"
+  ],
+  "Feature_Count": 18,
+  "Model_Type": "random_forest",
+  "Seed": 42,
+  "Stage": "internal_cv",
+  "Fold_ID": 1,
+  "Eval_Row_Hash": "9892255f8a3e61d74db314803ed2a79ecd73f0b1da8460d0b2882ae9004ad592",
+  "N_Eval": 808,
+  "Params": {
+    "n_estimators": 500,
+    "max_depth": null,
+    "min_samples_leaf": 3,
+    "max_features": "sqrt"
+  },
+  "Status": "success",
+  "Result_Origin": "new",
+  "Metrics": {
+    "rmse": 2.2356890728524657,
+    "mae": 1.5453757853218302,
+    "r2": 0.33007628846498605,
+    "ccc": 0.6214497963637603
+  },
+  "Best_Epoch": null
+}

@@ -1,0 +1,49 @@
+﻿Category_ID,AX_Category,Variable_Domain,Variable_Category,Version,Status,Source_Category_ID,Target_ID
+CAT_034,Context,재배 맥락,재배방식,1,candidate_not_frozen,,
+CAT_019,Context,재배 맥락,재배규모·밀도,1,candidate_not_frozen,,
+CAT_027,State,작물 생육,잎 생육정보,1,candidate_not_frozen,,
+CAT_012,State,작물 생육,줄기·관부 생육정보,1,candidate_not_frozen,,
+CAT_002,State,작물 생육,화방 관측정보,1,candidate_not_frozen,,
+CAT_022,State,작물 생육,과실 생육정보,1,candidate_not_frozen,,
+CAT_020,State,작물 생육,꽃 관측정보,1,candidate_not_frozen,,
+CAT_023,State,작물 생육,착과 관측정보,1,candidate_not_frozen,,
+CAT_005,Context,작물 생육,관측범위·품질,1,candidate_not_frozen,,
+CAT_008,Action,환경 제어,창 작동정보,1,candidate_not_frozen,,
+CAT_044,Action,환경 제어,커튼 작동정보,1,candidate_not_frozen,,
+CAT_013,Action,환경 제어,공기순환 작동정보,1,candidate_not_frozen,,
+CAT_042,Action,환경 제어,냉난방 작동정보,1,candidate_not_frozen,,
+CAT_001,Action,환경 제어,보광 작동정보,1,candidate_not_frozen,,
+CAT_014,Action,환경 제어,기타 장치 작동정보,1,candidate_not_frozen,,
+CAT_015,Action,환경 제어,CO2 공급 작동정보,1,candidate_not_frozen,,
+CAT_018,Action,환경 제어,관수·관비 작동정보,1,candidate_not_frozen,,
+CAT_035,Action,환경 제어,가습·제습 작동정보,1,candidate_not_frozen,,
+CAT_016,State,실내환경,실내 CO2,1,candidate_not_frozen,,
+CAT_045,State,실내환경,실내 온습도,1,candidate_not_frozen,,
+CAT_043,State,실내환경,실내 광환경,1,candidate_not_frozen,,
+CAT_010,State,실내환경,실내 바람,1,candidate_not_frozen,,
+CAT_007,State,외부환경,외부 광환경,1,candidate_not_frozen,,
+CAT_028,State,외부환경,강우·적설,1,candidate_not_frozen,,
+CAT_036,State,외부환경,외부 온습도,1,candidate_not_frozen,,
+CAT_004,State,외부환경,외부 바람,1,candidate_not_frozen,,
+CAT_009,State,근권·양액,근권·배지 상태,1,candidate_not_frozen,,
+CAT_011,State,근권·양액,양액·배액 상태,1,candidate_not_frozen,,
+CAT_029,Context,재배 맥락,시간정보,1,candidate_not_frozen,,
+CAT_037,Context,재배 맥락,조사이력,1,candidate_not_frozen,,
+CAT_003,State,작물 생육,화방 관측정보,1,frozen,CAT_002,tomato_total_flower
+CAT_021,State,작물 생육,꽃 관측정보,1,frozen,CAT_020,tomato_total_flower
+CAT_006,Context,작물 생육,관측범위·품질,1,frozen,CAT_005,tomato_total_flower
+CAT_017,State,실내환경,실내 CO2,1,frozen,CAT_016,tomato_total_flower
+CAT_046,State,실내환경,실내 온습도,1,frozen,CAT_045,tomato_total_flower
+CAT_033,Context,재배 맥락,시간정보,1,frozen,CAT_029,tomato_total_flower
+CAT_041,Context,재배 맥락,조사이력,1,frozen,CAT_037,tomato_total_flower
+CAT_026,State,작물 생육,착과 관측정보,1,frozen,CAT_023,strawberry_third
+CAT_032,Context,재배 맥락,시간정보,1,frozen,CAT_029,strawberry_third
+CAT_040,Context,재배 맥락,조사이력,1,frozen,CAT_037,strawberry_third
+CAT_025,State,작물 생육,착과 관측정보,1,frozen,CAT_023,strawberry_second
+CAT_031,Context,재배 맥락,시간정보,1,frozen,CAT_029,strawberry_second
+CAT_039,Context,재배 맥락,조사이력,1,frozen,CAT_037,strawberry_second
+CAT_024,State,작물 생육,착과 관측정보,1,frozen,CAT_023,strawberry_first
+CAT_030,Context,재배 맥락,시간정보,1,frozen,CAT_029,strawberry_first
+CAT_038,Context,재배 맥락,조사이력,1,frozen,CAT_037,strawberry_first
+CAT_047,Mixed,Legacy,FlowerA_legacy 原본 입력 목록,1,legacy_preserved,,
+CAT_048,Mixed,Legacy,FruitA_legacy 原본 입력 목록,1,legacy_preserved,,

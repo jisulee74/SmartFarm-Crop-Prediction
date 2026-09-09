@@ -1,0 +1,18 @@
+{
+  "profile": "full",
+  "dataset": "09d2015717002e947f24e720eff57f30144ee1ffb0aef05d224e882b4cab9c44",
+  "group": "VG_a289fcb41e8a4072",
+  "model": "random_forest",
+  "params": {
+    "n_estimators": 500,
+    "max_depth": null,
+    "min_samples_leaf": 8,
+    "max_features": 0.7
+  },
+  "seed": 42,
+  "stage": "internal_cv",
+  "fold": 3,
+  "epochs": null,
+  "fit_rows": "5eed622dfe6c213b84377d78121c655fabe6ac2215247352a877ae3cccd0e300",
+  "eval_rows": "e77bc9bc03fbc258ca0b84b8cc5572505e3ab5a7ca01d0dc058828e992f7b4f5"
+}

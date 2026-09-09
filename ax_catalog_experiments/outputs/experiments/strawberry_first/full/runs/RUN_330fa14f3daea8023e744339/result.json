@@ -1,0 +1,52 @@
+{
+  "Run_ID": "RUN_330fa14f3daea8023e744339",
+  "Target_ID": "strawberry_first",
+  "Variable_Group_ID": "VG_7a71846d7c2282dd",
+  "Categories": [
+    "CAT_997483fbec2c_strawberry_first_f0906a8f73_V1"
+  ],
+  "Features": [
+    "fruit_count__current",
+    "fruit_count__delta",
+    "fruit_count__delta_per_day",
+    "fruit_count__lag1",
+    "fruit_count__lag2",
+    "fruit_count__lag3",
+    "fruit_count__roll2_std",
+    "fruit_count__roll3_max",
+    "fruit_count__roll3_mean",
+    "fruit_count__roll3_min",
+    "fruit_count__roll3_slope",
+    "fruit_count__roll3_std",
+    "fruit_count__roll4_max",
+    "fruit_count__roll4_mean",
+    "fruit_count__roll4_min",
+    "fruit_count__roll4_slope",
+    "fruit_count__roll4_std"
+  ],
+  "Feature_Count": 17,
+  "Model_Type": "tft",
+  "Seed": 62,
+  "Stage": "test",
+  "Fold_ID": null,
+  "Eval_Row_Hash": "bdd675267fab83fd1d1c74966ee363eb822883e2903405e0b4f12d111cc4ee9b",
+  "N_Eval": 785,
+  "Params": {
+    "hidden_size": 16,
+    "attention_head_size": 2,
+    "hidden_continuous_size": 8,
+    "dropout": 0.1,
+    "learning_rate": 0.001,
+    "batch_size": 64,
+    "max_epochs": 100
+  },
+  "Status": "success",
+  "Result_Origin": "new",
+  "Metrics": {
+    "rmse": 1.710469498147945,
+    "mae": 0.7380960655060543,
+    "r2": 0.670061690820762,
+    "ccc": 0.8094490436607302
+  },
+  "Best_Epoch": 15
+}

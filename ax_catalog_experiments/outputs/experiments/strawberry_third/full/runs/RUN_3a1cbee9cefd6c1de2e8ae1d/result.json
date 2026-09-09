@@ -1,0 +1,56 @@
+{
+  "Run_ID": "RUN_3a1cbee9cefd6c1de2e8ae1d",
+  "Target_ID": "strawberry_third",
+  "Variable_Group_ID": "VG_c2493183aa08dd90",
+  "Categories": [
+    "CAT_997483fbec2c_strawberry_third_f0906a8f73_V1",
+    "CAT_e5938f8193b1_strawberry_third_8b23e66065_V1"
+  ],
+  "Features": [
+    "fruit_count__current",
+    "fruit_count__delta",
+    "fruit_count__delta_per_day",
+    "fruit_count__lag1",
+    "fruit_count__lag2",
+    "fruit_count__lag3",
+    "fruit_count__roll2_std",
+    "fruit_count__roll3_max",
+    "fruit_count__roll3_mean",
+    "fruit_count__roll3_min",
+    "fruit_count__roll3_slope",
+    "fruit_count__roll3_std",
+    "fruit_count__roll4_max",
+    "fruit_count__roll4_mean",
+    "fruit_count__roll4_min",
+    "fruit_count__roll4_slope",
+    "fruit_count__roll4_std",
+    "history_count"
+  ],
+  "Feature_Count": 18,
+  "Model_Type": "mlp",
+  "Seed": 42,
+  "Stage": "internal_cv",
+  "Fold_ID": 3,
+  "Eval_Row_Hash": "4ff263dc9b7588960d8e2bb31706517e8f42e4c30b958c7d8b9bd439ac07f4dd",
+  "N_Eval": 464,
+  "Params": {
+    "hidden": [
+      128,
+      64
+    ],
+    "dropout": 0.1,
+    "learning_rate": 0.0003,
+    "batch_size": 128,
+    "max_epochs": 500,
+    "early_stopping_rounds": 50
+  },
+  "Status": "success",
+  "Result_Origin": "new",
+  "Metrics": {
+    "rmse": 0.960874409102329,
+    "mae": 0.36809958233337464,
+    "r2": 0.7167042755007149,
+    "ccc": 0.8485184626284032
+  },
+  "Best_Epoch": 46
+}

@@ -1,0 +1,22 @@
+{
+  "profile": "full",
+  "dataset": "09d2015717002e947f24e720eff57f30144ee1ffb0aef05d224e882b4cab9c44",
+  "group": "VG_4c3777ceeb1f7afc",
+  "model": "tabm",
+  "params": {
+    "k": 32,
+    "n_blocks": 3,
+    "dropout": 0.1,
+    "learning_rate": 0.002,
+    "weight_decay": 0.0003,
+    "batch_size": 128,
+    "max_epochs": 500,
+    "early_stopping_rounds": 50
+  },
+  "seed": 82,
+  "stage": "test",
+  "fold": null,
+  "epochs": 7,
+  "fit_rows": "47413bef3b3ffbbb973257a579072f6196897c03b0d5462a3b4caf26184c2a0e",
+  "eval_rows": "bdd675267fab83fd1d1c74966ee363eb822883e2903405e0b4f12d111cc4ee9b"
+}

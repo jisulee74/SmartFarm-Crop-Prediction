@@ -65,3 +65,22 @@ The retained processed train/validation/test datasets already contain the aggreg
 ## Data notice
 
 This repository contains derived datasets and experiment artifacts originating from Smart Farm Korea data. Access and redistribution must follow the applicable data-use agreement and organizational policy.
+
+
+## Observation dashboard and experiment catalog
+
+- [Web dashboard](flower_fruit_prediction/README.md): eight tomato flower / strawberry fruit-set observation charts with facility, crop-cycle and individual filters.
+- [Experiment catalog](ax_catalog_experiments/README.md): category definitions, staged experiments, CSV/Excel exports and reproducible run records.
+- [Excel report](ax_catalog_experiments/outputs/AX_Experiment_Report.xlsx)
+- [Individual observation CSVs](ax_catalog_experiments/outputs/timeseries/)
+- [Power BI design](ax_catalog_experiments/POWER_BI_DESIGN.md)
+
+Run the dashboard with `python flower_fruit_prediction/server.py`, then open the printed localhost URL. This serves the CSV files bundled in the dashboard directory. It does not publish a hosted site automatically.
+
+The repository keeps the historical AXData contents at its root. The `AXData` compatibility namespace supports existing commands such as `python -m AXData.ax_catalog_experiments report` from the repository root.
+
+### Experiment interpretation
+
+Archived model runs completed, but some predictions exhibit numerical instability (near-zero training variance amplified by scaling). These results require correction and re-evaluation before final model conclusions; execution success is not a data-quality or model-validity guarantee. Observation CSVs contain actual observations, not these predictions. Full database inventory verification remains separate from the completed local-cohort experiments.
+
+Run JSONs, predictions, prepared datasets and reports are retained. Rebuildable model weights, verbose logs, Python caches, credentials and the oversized raw environment cache are excluded. Existing database refresh commands require environment configuration; no credentials are bundled.

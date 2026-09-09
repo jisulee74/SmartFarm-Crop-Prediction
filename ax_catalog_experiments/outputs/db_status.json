@@ -1,0 +1,5 @@
+{
+  "status": "blocked",
+  "reason": "FARMSTOM_DB_PASSWORD missing",
+  "db_inventory_complete": false
+}

@@ -1,0 +1,19 @@
+{
+  "profile": "full",
+  "dataset": "319ad3a8f93b8b2f4635cee7bbefbcfe3667e8cac16d605c30f6aef27d7e5bdb",
+  "group": "VG_6d41c8021840ddbe",
+  "model": "catboost",
+  "params": {
+    "iterations": 2000,
+    "depth": 8,
+    "learning_rate": 0.07,
+    "l2_leaf_reg": 3,
+    "early_stopping_rounds": 150
+  },
+  "seed": 42,
+  "stage": "internal_cv",
+  "fold": 1,
+  "epochs": null,
+  "fit_rows": "0c3fe95a307b1a8ade5d6d2431673dce9994b7467265004c854e65d82ee117e2",
+  "eval_rows": "f03dc50acead62c1051824e38cda759e4ee55d0006c258c65a8b9e2965773263"
+}

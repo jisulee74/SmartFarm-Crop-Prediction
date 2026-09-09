@@ -1,0 +1,56 @@
+{
+  "Run_ID": "RUN_5312c54bd9a27167eaaf5ce1",
+  "Target_ID": "tomato_total_flower",
+  "Variable_Group_ID": "VG_43fad93b8f63850a",
+  "Categories": [
+    "CAT_f9849be954d6_tomato_total_flower_cb421d427b_V1"
+  ],
+  "Features": [
+    "EI__HI__1d_max",
+    "EI__HI__1d_mean",
+    "EI__HI__1d_min",
+    "EI__HI__1d_std",
+    "EI__HI__3d_max",
+    "EI__HI__3d_mean",
+    "EI__HI__3d_min",
+    "EI__HI__3d_std",
+    "EI__HI__7d_max",
+    "EI__HI__7d_mean",
+    "EI__HI__7d_min",
+    "EI__HI__7d_std",
+    "EI__TI__1d_max",
+    "EI__TI__1d_mean",
+    "EI__TI__1d_min",
+    "EI__TI__1d_std",
+    "EI__TI__3d_max",
+    "EI__TI__3d_mean",
+    "EI__TI__3d_min",
+    "EI__TI__3d_std",
+    "EI__TI__7d_max",
+    "EI__TI__7d_mean",
+    "EI__TI__7d_min",
+    "EI__TI__7d_std"
+  ],
+  "Feature_Count": 24,
+  "Model_Type": "random_forest",
+  "Seed": 42,
+  "Stage": "screening",
+  "Fold_ID": null,
+  "Eval_Row_Hash": "17e5567b9df86880c6ff4471598079cf7e4c292f0e934f11f0efcf2e29aa0d5f",
+  "N_Eval": 337,
+  "Params": {
+    "n_estimators": 500,
+    "max_depth": 8,
+    "min_samples_leaf": 3,
+    "max_features": "sqrt"
+  },
+  "Status": "success",
+  "Result_Origin": "new",
+  "Metrics": {
+    "rmse": 2.1122148414892985,
+    "mae": 1.71433067768005,
+    "r2": -0.1752867908743292,
+    "ccc": -0.09999787170660937
+  },
+  "Best_Epoch": null
+}

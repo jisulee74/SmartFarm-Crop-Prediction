@@ -1,0 +1,23 @@
+{
+  "db_inventory_complete": false,
+  "row_counts": {
+    "README": 4,
+    "Source_Inventory": 143,
+    "Variable_Catalog": 976,
+    "Category_Catalog": 48,
+    "Category_Variables": 1153,
+    "Variable_Groups": 149,
+    "Group_Detail": 2130,
+    "Availability": 3800,
+    "Experiments": 65,
+    "Runs": 3957,
+    "Results": 15828,
+    "Execution_Progress": 132,
+    "Best_Configurations": 24,
+    "Results_Summary": 560,
+    "Category_Comparisons": 450,
+    "Campaign_Status": 4,
+    "Target_Status": 4,
+    "ID_Mapping": 4129
+  }
+}

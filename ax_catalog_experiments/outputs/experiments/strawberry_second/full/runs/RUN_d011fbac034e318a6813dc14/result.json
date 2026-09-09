@@ -1,0 +1,61 @@
+{
+  "Run_ID": "RUN_d011fbac034e318a6813dc14",
+  "Target_ID": "strawberry_second",
+  "Variable_Group_ID": "VG_00d21b4e419fa1a0",
+  "Categories": [
+    "CAT_997483fbec2c_strawberry_second_f0906a8f73_V1",
+    "CAT_b90126c51b5d_strawberry_second_0187becb0e_V1"
+  ],
+  "Features": [
+    "days_since_crop_start",
+    "days_since_first_measurement",
+    "days_since_first_positive",
+    "days_since_previous",
+    "fruit_count__current",
+    "fruit_count__delta",
+    "fruit_count__delta_per_day",
+    "fruit_count__lag1",
+    "fruit_count__lag2",
+    "fruit_count__lag3",
+    "fruit_count__roll2_std",
+    "fruit_count__roll3_max",
+    "fruit_count__roll3_mean",
+    "fruit_count__roll3_min",
+    "fruit_count__roll3_slope",
+    "fruit_count__roll3_std",
+    "fruit_count__roll4_max",
+    "fruit_count__roll4_mean",
+    "fruit_count__roll4_min",
+    "fruit_count__roll4_slope",
+    "fruit_count__roll4_std",
+    "week_cos",
+    "week_sin"
+  ],
+  "Feature_Count": 23,
+  "Model_Type": "mlp",
+  "Seed": 62,
+  "Stage": "test",
+  "Fold_ID": null,
+  "Eval_Row_Hash": "27dfb60dd213b8622d3134d3df9c2a2cf20c1826fb1215e818f74898711bf2e0",
+  "N_Eval": 785,
+  "Params": {
+    "hidden": [
+      256,
+      128
+    ],
+    "dropout": 0.3,
+    "learning_rate": 0.001,
+    "batch_size": 64,
+    "max_epochs": 500,
+    "early_stopping_rounds": 50
+  },
+  "Status": "success",
+  "Result_Origin": "new",
+  "Metrics": {
+    "rmse": 1.4981853918664367,
+    "mae": 0.5803353123034641,
+    "r2": 0.6414220047504322,
+    "ccc": 0.7869994491366291
+  },
+  "Best_Epoch": 4
+}

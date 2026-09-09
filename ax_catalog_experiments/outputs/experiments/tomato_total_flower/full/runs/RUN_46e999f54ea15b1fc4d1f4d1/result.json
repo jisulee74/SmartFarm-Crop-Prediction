@@ -1,0 +1,51 @@
+{
+  "Run_ID": "RUN_46e999f54ea15b1fc4d1f4d1",
+  "Target_ID": "tomato_total_flower",
+  "Variable_Group_ID": "VG_1b9466ef9c73183a",
+  "Categories": [
+    "CAT_8f442a41cc28_tomato_total_flower_ce810df451_V1"
+  ],
+  "Features": [
+    "flower_count__current",
+    "flower_count__delta",
+    "flower_count__delta_per_day",
+    "flower_count__lag1",
+    "flower_count__lag2",
+    "flower_count__lag3",
+    "flower_count__roll2_min",
+    "flower_count__roll2_std",
+    "flower_count__roll3_max",
+    "flower_count__roll3_mean",
+    "flower_count__roll3_min",
+    "flower_count__roll3_slope",
+    "flower_count__roll3_std",
+    "flower_count__roll4_max",
+    "flower_count__roll4_mean",
+    "flower_count__roll4_min",
+    "flower_count__roll4_slope",
+    "flower_count__roll4_std"
+  ],
+  "Feature_Count": 18,
+  "Model_Type": "catboost",
+  "Seed": 42,
+  "Stage": "internal_cv",
+  "Fold_ID": 2,
+  "Eval_Row_Hash": "f1ff68c632804e02b68f3ca503ee3ee15c8cff76be73f7b518866e1e8cf92f1e",
+  "N_Eval": 277,
+  "Params": {
+    "iterations": 2000,
+    "depth": 8,
+    "learning_rate": 0.07,
+    "l2_leaf_reg": 3,
+    "early_stopping_rounds": 150
+  },
+  "Status": "success",
+  "Result_Origin": "new",
+  "Metrics": {
+    "rmse": 1.1583562335455575,
+    "mae": 0.9611416980295475,
+    "r2": 0.047250224424039144,
+    "ccc": 0.09824535674681495
+  },
+  "Best_Epoch": 22
+}

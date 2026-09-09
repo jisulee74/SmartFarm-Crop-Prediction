@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>작물 생육 관측 추이</title>
+  <link rel="stylesheet" href="./src/styles.css">
+  <!-- Apache ECharts CDN (최신 안정 버전) -->
+  <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
+</head>
+<body>
+  <!-- 헤더 영역 -->
+  <header class="app-header">
+    <div class="header-container">
+      <div class="header-title-area">
+        <div class="header-icon">🌿</div>
+        <div>
+          <h1 class="header-title">작물 생육 관측 추이</h1>
+          <p class="header-subtitle">토마토 개화 및 딸기 착과 실제 관측 데이터 시계열 탐색 대시보드</p>
+        </div>
+      </div>
+
+      <!-- 상단 뷰 탭 -->
+      <nav class="crop-nav-tabs">
+        <button type="button" class="nav-tab-btn active" data-target="all">
+          <span>📊</span> 전체 보기 (8종)
+        </button>
+        <button type="button" class="nav-tab-btn" data-target="tomato-section">
+          <span>🍅</span> 토마토 꽃 수 (4종)
+        </button>
+        <button type="button" class="nav-tab-btn" data-target="strawberry-section">
+          <span>🍓</span> 딸기 착과수 (4종)
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- 메인 컨텐츠 영역 -->
+  <main class="main-content">
+
+    <!-- 안내 및 해석 가이드 배너 -->
+    <section class="guide-banner" aria-label="데이터 해석 안내">
+      <div class="guide-icon">💡</div>
+      <div class="guide-text">
+        <h4>생육 관측 데이터 해석 및 산출 기준 안내</h4>
+        <p>
+          • <strong>개체당 평균 모드:</strong> 특정 조사일에 조사된 유효 개체들의 평균값입니다. 조사일마다 조사 개체군(N수)이 달라질 수 있으므로 단순 총합이 아닌 평균값을 비교합니다.<br>
+          • <strong>결측치 및 0의 구분:</strong> 빈칸(미관측)은 결측값으로 처리되어 표본(N)에서 제외되며, 실제 관측값 0은 정상 포함됩니다.<br>
+          • <strong>토마토 전체 꽃 수:</strong> 1·2·3화방 외 추가 화방을 포함한 원본 CSV 관측값을 유지합니다. (임의 합산 방지)
+        </p>
+        <div class="guide-badges">
+          <span class="badge-info">✔️ train/validation/test 전체 행 포함</span>
+          <span class="badge-info">✔️ 실제 날짜 간격 반영 시간축</span>
+          <span class="badge-info">✔️ 마우스 휠 및 하단 슬라이더 확대/축소 지원</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 상단 작물별 관측 요약 카드 그리드 -->
+    <section class="summary-grid" aria-label="작물별 관측 요약">
+      <!-- 토마토 요약 -->
+      <div class="summary-card tomato">
+        <div class="summary-card-header">
+          <div class="summary-card-title">
+            <span>🍅</span>
+            <span>토마토 관측 현황</span>
+          </div>
+          <span class="summary-card-badge" id="tomato_summary_badge">로딩 중...</span>
+        </div>
+        <div class="summary-stats-list">
+          <div class="stat-item">
+            <span class="stat-label">관측 기간</span>
+            <span class="stat-value" id="tomato_period">-</span>
+            <span class="stat-subtext">실제 조사일 기준</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">시설 수</span>
+            <span class="stat-value" id="tomato_facility_count">-</span>
+            <span class="stat-subtext" id="tomato_crop_per_facility">시설별 작기 수: -</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">고유 개체 수</span>
+            <span class="stat-value" id="tomato_entity_count">-</span>
+            <span class="stat-subtext">시설+작기+개체번호 키</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">총 관측 건수</span>
+            <span class="stat-value" id="tomato_total_rows">-</span>
+            <span class="stat-subtext">누적 관측 행 수</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 딸기 요약 -->
+      <div class="summary-card strawberry">
+        <div class="summary-card-header">
+          <div class="summary-card-title">
+            <span>🍓</span>
+            <span>딸기 관측 현황</span>
+          </div>
+          <span class="summary-card-badge" id="strawberry_summary_badge">로딩 중...</span>
+        </div>
+        <div class="summary-stats-list">
+          <div class="stat-item">
+            <span class="stat-label">관측 기간</span>
+            <span class="stat-value" id="strawberry_period">-</span>
+            <span class="stat-subtext">실제 조사일 기준</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">시설 수</span>
+            <span class="stat-value" id="strawberry_facility_count">-</span>
+            <span class="stat-subtext" id="strawberry_crop_per_facility">시설별 작기 수: -</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">고유 개체 수</span>
+            <span class="stat-value" id="strawberry_entity_count">-</span>
+            <span class="stat-subtext">시설+작기+개체번호 키</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">총 관측 건수</span>
+            <span class="stat-value" id="strawberry_total_rows">-</span>
+            <span class="stat-subtext">누적 관측 행 수</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 토마토 영역 ================= -->
+    <section id="tomato-section" class="crop-section">
+      <div class="crop-section-header">
+        <h2 class="crop-section-title">
+          <span>🍅</span> 토마토 개화 관측 추이
+          <span class="crop-badge-count" id="tomato_filter_count_badge">전체 2,239건</span>
+        </h2>
+      </div>
+
+      <!-- 토마토 필터 툴바 -->
+      <div class="filter-toolbar" id="tomato_filter_toolbar">
+        <div class="filter-row-top">
+          <div class="mode-toggle-group" id="tomato_mode_toggle">
+            <button type="button" class="mode-btn active" data-mode="average">
+              <span>📊</span> 개체당 평균 모드
+            </button>
+            <button type="button" class="mode-btn" data-mode="individual">
+              <span>🔍</span> 개체별 추이 모드
+            </button>
+          </div>
+          <div class="filter-status-info" id="tomato_filter_status">
+            <span>ℹ️ 현재 조건: <strong>전체 개체 평균</strong></span>
+          </div>
+        </div>
+
+        <div class="filter-controls-grid">
+          <div class="control-group">
+            <label class="control-label" for="tomato_facility_select">🏢 시설 (Facility)</label>
+            <select id="tomato_facility_select" class="control-select">
+              <option value="ALL">전체 시설</option>
+            </select>
+          </div>
+          <div class="control-group">
+            <label class="control-label" for="tomato_crop_select">🌱 작기 기간 (Crop Cycle)</label>
+            <select id="tomato_crop_select" class="control-select">
+              <option value="ALL">전체 작기 (기간)</option>
+            </select>
+          </div>
+          <div class="control-group">
+            <label class="control-label" for="tomato_sample_select">🏷️ 개체 번호 (Sample #)</label>
+            <select id="tomato_sample_select" class="control-select">
+              <option value="ALL">전체 개체</option>
+            </select>
+          </div>
+          <div class="control-group">
+            <label class="control-label" for="tomato_start_date">📅 조회 시작일</label>
+            <input type="date" id="tomato_start_date" class="control-input">
+          </div>
+          <div class="control-group">
+            <label class="control-label" for="tomato_end_date">📅 조회 종료일</label>
+            <input type="date" id="tomato_end_date" class="control-input">
+          </div>
+          <div class="control-group">
+            <button type="button" class="btn-reset" id="tomato_btn_reset">
+              <span>🔄</span> 필터 초기화
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 토마토 4종 차트 그리드 -->
+      <div class="charts-grid">
+        <!-- 1. 1화방 꽃 수 -->
+        <div class="chart-card">
+          <div class="chart-card-header">
+            <div class="chart-title-group">
+              <h3 class="chart-title">토마토 1화방 꽃 수</h3>
+              <p class="chart-subtitle">개체별 1화방의 개화 관측 추이</p>
+            </div>
+            <span class="chart-mode-badge" id="badge_tomato_flower_truss1">개체당 평균</span>
+          </div>
+          <div id="chart_tomato_flower_truss1" class="chart-dom"></div>
+          <div class="chart-empty-state">
+            <div class="empty-icon">📂</div>
+            <div class="empty-text">해당 조건의 관측 데이터가 없습니다</div>
+          </div>
+        </div>
+
+        <!-- 2. 2화방 꽃 수 -->
+        <div class="chart-card">
+          <div class="chart-card-header">
+            <div class="chart-title-group">
+              <h3 class="chart-title">토마토 2화방 꽃 수</h3>
+              <p class="chart-subtitle">개체별 2화방의 개화 관측 추이</p>
+            </div>
+            <span class="chart-mode-badge" id="badge_tomato_flower_truss2">개체당 평균</span>
+          </div>
+          <div id="chart_tomato_flower_truss2" class="chart-dom"></div>
+          <div class="chart-empty-state">
+            <div class="empty-icon">📂</div>
+            <div class="empty-text">해당 조건의 관측 데이터가 없습니다</div>
+          </div>
+        </div>
+
+        <!-- 3. 3화방 꽃 수 -->
+        <div class="chart-card">
+          <div class="chart-card-header">
+            <div class="chart-title-group">
+              <h3 class="chart-title">토마토 3화방 꽃 수</h3>
+              <p class="chart-subtitle">개체별 3화방의 개화 관측 추이</p>
+            </div>
+            <span class="chart-mode-badge" id="badge_tomato_flower_truss3">개체당 평균</span>
+          </div>
+          <div id="chart_tomato_flower_truss3" class="chart-dom"></div>
+          <div class="chart-empty-state">
+            <div class="empty-icon">📂</div>
+            <div class="empty-text">해당 조건의 관측 데이터가 없습니다</div>
+          </div>
+        </div>
+
+        <!-- 4. 전체 꽃 수 -->
+        <div class="chart-card">
+          <div class="chart-card-header">
+            <div class="chart-title-group">
+              <h3 class="chart-title">토마토 전체 꽃 수</h3>
+              <p class="chart-subtitle">개체별 1·2·3화방 개화 관측 합계 추이</p>
+            </div>
+            <span class="chart-mode-badge" id="badge_tomato_flower_total">개체당 평균</span>
+          </div>
+          <div id="chart_tomato_flower_total" class="chart-dom"></div>
+          <div class="chart-empty-state">
+            <div class="empty-icon">📂</div>
+            <div class="empty-text">해당 조건의 관측 데이터가 없습니다</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ================= 딸기 영역 ================= -->
+    <section id="strawberry-section" class="crop-section">
+      <div class="crop-section-header">
+        <h2 class="crop-section-title">
+          <span>🍓</span> 딸기 착과 관측 추이
+          <span class="crop-badge-count" id="strawberry_filter_count_badge">전체 5,218건</span>
+        </h2>
+      </div>
+
+      <!-- 딸기 필터 툴바 -->
+      <div class="filter-toolbar" id="strawberry_filter_toolbar">
+        <div class="filter-row-top">
+          <div class="mode-toggle-group" id="strawberry_mode_toggle">
+            <button type="button" class="mode-btn active" data-mode="average">
+              <span>📊</span> 개체당 평균 모드
+            </button>
+            <button type="button" class="mode-btn" data-mode="individual">
+              <span>🔍</span> 개체별 추이 모드
+            </button>
+          </div>
+          <div class="filter-status-info" id="strawberry_filter_status">
+            <span>ℹ️ 현재 조건: <strong>전체 개체 평균</strong></span>
+          </div>
+        </div>
+
+        <div class="filter-controls-grid">
+          <div class="control-group">
+            <label class="control-label" for="strawberry_facility_select">🏢 시설 (Facility)</label>
+            <select id="strawberry_facility_select" class="control-select">
+              <option value="ALL">전체 시설</option>
+            </select>
+          </div>
+          <div class="control-group">
+            <label class="control-label" for="strawberry_crop_select">🌱 작기 기간 (Crop Cycle)</label>
+            <select id="strawberry_crop_select" class="control-select">
+              <option value="ALL">전체 작기 (기간)</option>
+            </select>
+          </div>
+          <div class="control-group">
+            <label class="control-label" for="strawberry_sample_select">🏷️ 개체 번호 (Sample #)</label>
+            <select id="strawberry_sample_select" class="control-select">
+              <option value="ALL">전체 개체</option>
+            </select>
+          </div>
+          <div class="control-group">
+            <label class="control-label" for="strawberry_start_date">📅 조회 시작일</label>
+            <input type="date" id="strawberry_start_date" class="control-input">
+          </div>
+          <div class="control-group">
+            <label class="control-label" for="strawberry_end_date">📅 조회 종료일</label>
+            <input type="date" id="strawberry_end_date" class="control-input">
+          </div>
+          <div class="control-group">
+            <button type="button" class="btn-reset" id="strawberry_btn_reset">
+              <span>🔄</span> 필터 초기화
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 딸기 4종 차트 그리드 -->
+      <div class="charts-grid">
+        <!-- 1. 1화방 착과수 -->
+        <div class="chart-card">
+          <div class="chart-card-header">
+            <div class="chart-title-group">
+              <h3 class="chart-title">딸기 1화방 착과수</h3>
+              <p class="chart-subtitle">개체별 1화방의 착과 관측 추이</p>
+            </div>
+            <span class="chart-mode-badge" id="badge_strawberry_fruit_truss1">개체당 평균</span>
+          </div>
+          <div id="chart_strawberry_fruit_truss1" class="chart-dom"></div>
+          <div class="chart-empty-state">
+            <div class="empty-icon">📂</div>
+            <div class="empty-text">해당 조건의 관측 데이터가 없습니다</div>
+          </div>
+        </div>
+
+        <!-- 2. 2화방 착과수 -->
+        <div class="chart-card">
+          <div class="chart-card-header">
+            <div class="chart-title-group">
+              <h3 class="chart-title">딸기 2화방 착과수</h3>
+              <p class="chart-subtitle">개체별 2화방의 착과 관측 추이</p>
+            </div>
+            <span class="chart-mode-badge" id="badge_strawberry_fruit_truss2">개체당 평균</span>
+          </div>
+          <div id="chart_strawberry_fruit_truss2" class="chart-dom"></div>
+          <div class="chart-empty-state">
+            <div class="empty-icon">📂</div>
+            <div class="empty-text">해당 조건의 관측 데이터가 없습니다</div>
+          </div>
+        </div>
+
+        <!-- 3. 3화방 착과수 -->
+        <div class="chart-card">
+          <div class="chart-card-header">
+            <div class="chart-title-group">
+              <h3 class="chart-title">딸기 3화방 착과수</h3>
+              <p class="chart-subtitle">개체별 3화방의 착과 관측 추이</p>
+            </div>
+            <span class="chart-mode-badge" id="badge_strawberry_fruit_truss3">개체당 평균</span>
+          </div>
+          <div id="chart_strawberry_fruit_truss3" class="chart-dom"></div>
+          <div class="chart-empty-state">
+            <div class="empty-icon">📂</div>
+            <div class="empty-text">해당 조건의 관측 데이터가 없습니다</div>
+          </div>
+        </div>
+
+        <!-- 4. 전체 착과수 -->
+        <div class="chart-card">
+          <div class="chart-card-header">
+            <div class="chart-title-group">
+              <h3 class="chart-title">딸기 전체 착과수</h3>
+              <p class="chart-subtitle">개체별 1·2·3화방 착과 관측 합계 추이</p>
+            </div>
+            <span class="chart-mode-badge" id="badge_strawberry_fruit_total">개체당 평균</span>
+          </div>
+          <div id="chart_strawberry_fruit_total" class="chart-dom"></div>
+          <div class="chart-empty-state">
+            <div class="empty-icon">📂</div>
+            <div class="empty-text">해당 조건의 관측 데이터가 없습니다</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- 푸터 -->
+  <footer class="app-footer">
+    <p>작물 생육 관측 추이 대시보드 • Agricultural Growth Observation Trends Dashboard</p>
+  </footer>
+
+  <!-- 알림 토스트 -->
+  <div id="alert_toast" class="alert-toast"></div>
+
+  <!-- 메인 애플리케이션 진입점 -->
+  <script type="module" src="./src/app.js?v=6"></script>
+</body>
+</html>

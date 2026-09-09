@@ -1,0 +1,50 @@
+{
+  "Run_ID": "RUN_1f99138783c0b4e240878fbf",
+  "Target_ID": "strawberry_first",
+  "Variable_Group_ID": "VG_7a71846d7c2282dd",
+  "Categories": [
+    "CAT_997483fbec2c_strawberry_first_f0906a8f73_V1"
+  ],
+  "Features": [
+    "fruit_count__current",
+    "fruit_count__delta",
+    "fruit_count__delta_per_day",
+    "fruit_count__lag1",
+    "fruit_count__lag2",
+    "fruit_count__lag3",
+    "fruit_count__roll2_std",
+    "fruit_count__roll3_max",
+    "fruit_count__roll3_mean",
+    "fruit_count__roll3_min",
+    "fruit_count__roll3_slope",
+    "fruit_count__roll3_std",
+    "fruit_count__roll4_max",
+    "fruit_count__roll4_mean",
+    "fruit_count__roll4_min",
+    "fruit_count__roll4_slope",
+    "fruit_count__roll4_std"
+  ],
+  "Feature_Count": 17,
+  "Model_Type": "catboost",
+  "Seed": 42,
+  "Stage": "internal_cv",
+  "Fold_ID": 1,
+  "Eval_Row_Hash": "d0ccf46cb487597692cbf7e7ef3723a6e50089cddc56f264e3318cfbe4361bc1",
+  "N_Eval": 808,
+  "Params": {
+    "iterations": 2000,
+    "depth": 6,
+    "learning_rate": 0.07,
+    "l2_leaf_reg": 7,
+    "early_stopping_rounds": 150
+  },
+  "Status": "success",
+  "Result_Origin": "new",
+  "Metrics": {
+    "rmse": 1.3575162477944815,
+    "mae": 0.6866861289074925,
+    "r2": 0.02946722536291224,
+    "ccc": 0.3737029010498319
+  },
+  "Best_Epoch": 50
+}

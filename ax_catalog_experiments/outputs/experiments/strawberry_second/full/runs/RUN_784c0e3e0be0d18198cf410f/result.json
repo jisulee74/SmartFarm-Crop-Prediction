@@ -1,0 +1,55 @@
+{
+  "Run_ID": "RUN_784c0e3e0be0d18198cf410f",
+  "Target_ID": "strawberry_second",
+  "Variable_Group_ID": "VG_d3d1e762983dc78a",
+  "Categories": [
+    "CAT_997483fbec2c_strawberry_second_f0906a8f73_V1",
+    "CAT_e5938f8193b1_strawberry_second_8b23e66065_V1"
+  ],
+  "Features": [
+    "fruit_count__current",
+    "fruit_count__delta",
+    "fruit_count__delta_per_day",
+    "fruit_count__lag1",
+    "fruit_count__lag2",
+    "fruit_count__lag3",
+    "fruit_count__roll2_std",
+    "fruit_count__roll3_max",
+    "fruit_count__roll3_mean",
+    "fruit_count__roll3_min",
+    "fruit_count__roll3_slope",
+    "fruit_count__roll3_std",
+    "fruit_count__roll4_max",
+    "fruit_count__roll4_mean",
+    "fruit_count__roll4_min",
+    "fruit_count__roll4_slope",
+    "fruit_count__roll4_std",
+    "history_count"
+  ],
+  "Feature_Count": 18,
+  "Model_Type": "tabm",
+  "Seed": 42,
+  "Stage": "internal_cv",
+  "Fold_ID": 2,
+  "Eval_Row_Hash": "687d675fa39df60f10764832fb4a13ac8b9a6a29d4ecf1726e7e6aba953783b5",
+  "N_Eval": 443,
+  "Params": {
+    "k": 32,
+    "n_blocks": 2,
+    "dropout": 0.1,
+    "learning_rate": 0.002,
+    "weight_decay": 0.0003,
+    "batch_size": 64,
+    "max_epochs": 500,
+    "early_stopping_rounds": 50
+  },
+  "Status": "success",
+  "Result_Origin": "new",
+  "Metrics": {
+    "rmse": 0.9374300859891427,
+    "mae": 0.29276119914267457,
+    "r2": 0.37875090931046396,
+    "ccc": 0.49662159565915864
+  },
+  "Best_Epoch": 3
+}

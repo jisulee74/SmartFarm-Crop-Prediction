@@ -1,0 +1,45 @@
+{
+  "Run_ID": "RUN_78c62de9c295e9bd499a42e3",
+  "Target_ID": "tomato_total_flower",
+  "Variable_Group_ID": "VG_1b9466ef9c73183a",
+  "Categories": [
+    "CAT_8f442a41cc28_tomato_total_flower_ce810df451_V1"
+  ],
+  "Features": [
+    "flower_count__current",
+    "flower_count__delta",
+    "flower_count__delta_per_day",
+    "flower_count__lag1",
+    "flower_count__lag2",
+    "flower_count__lag3",
+    "flower_count__roll2_min",
+    "flower_count__roll2_std",
+    "flower_count__roll3_max",
+    "flower_count__roll3_mean",
+    "flower_count__roll3_min",
+    "flower_count__roll3_slope",
+    "flower_count__roll3_std",
+    "flower_count__roll4_max",
+    "flower_count__roll4_mean",
+    "flower_count__roll4_min",
+    "flower_count__roll4_slope",
+    "flower_count__roll4_std"
+  ],
+  "Feature_Count": 18,
+  "Model_Type": "persistence",
+  "Seed": 0,
+  "Stage": "test",
+  "Fold_ID": null,
+  "Eval_Row_Hash": "42802aeb92bd868813cb385715630d082a493a6f09aaca4faa3e3a76ce643b4b",
+  "N_Eval": 332,
+  "Params": {},
+  "Status": "success",
+  "Result_Origin": "new",
+  "Metrics": {
+    "rmse": 1.5149853870224512,
+    "mae": 1.1265060240963856,
+    "r2": -0.38849615806805726,
+    "ccc": 0.3231668164890202
+  },
+  "Best_Epoch": null
+}

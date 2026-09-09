@@ -1,0 +1,144 @@
+﻿Source_Table,Source_Field_or_Code,Description,Data_Type,Evidence,Status
+sfkr_pvsn_crop,sn,,int(11),local_schema_snapshot,schema_only
+sfkr_pvsn_crop,user_id,,varchar(100),local_schema_snapshot,schema_only
+sfkr_pvsn_crop,cropping_serl_no,작기 일련번호,varchar(100),local_schema_snapshot,schema_only
+sfkr_pvsn_crop,cropping_season_name,작기명,varchar(100),local_schema_snapshot,schema_only
+sfkr_pvsn_crop,item_code,품목코드,varchar(100),local_schema_snapshot,schema_only
+sfkr_pvsn_crop,cropping_date,작기 시작 일자,varchar(100),local_schema_snapshot,schema_only
+sfkr_pvsn_crop,cropping_end_date,작기 종료 일자,varchar(100),local_schema_snapshot,schema_only
+sfkr_pvsn_crop,cropping_system,"재배방식 코드(1:토경, 2:수경)",varchar(100),local_schema_snapshot,schema_only
+sfkr_pvsn_crop,cultivation_area,재배 면적(평),varchar(100),local_schema_snapshot,schema_only
+sfkr_pvsn_crop,cal_cultivation_area,재배 면적(㎡),varchar(100),local_schema_snapshot,schema_only
+sfkr_pvsn_crop,plant_num,재식수량,varchar(100),local_schema_snapshot,schema_only
+sfkr_pvsn_crop,cal_plant_num,1㎡당 재식수량,varchar(100),local_schema_snapshot,schema_only
+sfkr_pvsn_crop,stem_slab_num,배지 1개당 작물의 줄기 수,varchar(100),local_schema_snapshot,schema_only
+sfkr_pvsn_crop,plan_slab_num,배지 1개당 작물의 수,varchar(100),local_schema_snapshot,schema_only
+sfkr_pvsn_crop,plant_density,재식밀도,varchar(100),local_schema_snapshot,schema_only
+sfkr_pvsn_crop,standard_plant_density,기준 재식밀도,varchar(100),local_schema_snapshot,schema_only
+sfkr_pvsn_crop,floodlight_dec,투광율,varchar(100),local_schema_snapshot,schema_only
+sfkr_pvsn_crop,leaf_area,엽면적기준,varchar(100),local_schema_snapshot,schema_only
+sfkr_pvsn_crop,stnd_temp,기준온도,varchar(100),local_schema_snapshot,schema_only
+sfkr_pvsn_crop,stnd_weight,기준과중,varchar(100),local_schema_snapshot,schema_only
+sfkr_pvsn_crop,stnd_solar,기준광,varchar(100),local_schema_snapshot,schema_only
+sfkr_pvsn_crop,stnd_meta,기초대사,varchar(100),local_schema_snapshot,schema_only
+sfkr_pvsn_grow,sn,,int(11),local_schema_snapshot,schema_only
+sfkr_pvsn_grow,user_id,사용자ID,varchar(100),local_schema_snapshot,schema_only
+sfkr_pvsn_grow,item_code,품목코드,varchar(100),local_schema_snapshot,schema_only
+sfkr_pvsn_grow,sample_num,표본번호,varchar(100),local_schema_snapshot,schema_only
+sfkr_pvsn_grow,meas_date,측정 일자,datetime,local_schema_snapshot,schema_only
+sfkr_pvsn_grow,leaves_length,엽장,varchar(100),local_schema_snapshot,schema_only
+sfkr_pvsn_grow,leaves_num,엽수,varchar(100),local_schema_snapshot,schema_only
+sfkr_pvsn_grow,leaves_width,엽폭,varchar(100),local_schema_snapshot,schema_only
+sfkr_pvsn_grow,petiole_length,엽병장,varchar(100),local_schema_snapshot,schema_only
+sfkr_pvsn_grow,stem_diameter,줄기 직경,varchar(100),local_schema_snapshot,schema_only
+sfkr_pvsn_grow,theca_diameter,관부 직경,varchar(100),local_schema_snapshot,schema_only
+sfkr_pvsn_grow,flower_length,초장,varchar(100),local_schema_snapshot,schema_only
+sfkr_pvsn_grow,grow_length,생장 길이,varchar(100),local_schema_snapshot,schema_only
+sfkr_pvsn_grow,flower_top,화방 높이,varchar(100),local_schema_snapshot,schema_only
+sfkr_pvsn_grow,fruit_cluster_num,화방수,varchar(100),local_schema_snapshot,schema_only
+sfkr_pvsn_grow,first_flower_num,1화방 꽃수,varchar(100),local_schema_snapshot,schema_only
+sfkr_pvsn_grow,second_flower_num,2화방 꽃수,varchar(100),local_schema_snapshot,schema_only
+sfkr_pvsn_grow,third_flower_num,3화방 꽃수,varchar(100),local_schema_snapshot,schema_only
+sfkr_pvsn_grow,first_fruits_num,1화방 착과수,varchar(100),local_schema_snapshot,schema_only
+sfkr_pvsn_grow,second_fruits_num,2화방 착과수,varchar(100),local_schema_snapshot,schema_only
+sfkr_pvsn_grow,third_fruits_num,3화방 착과수,varchar(100),local_schema_snapshot,schema_only
+sfkr_pvsn_grow,flower_position,개화군,varchar(100),local_schema_snapshot,schema_only
+sfkr_pvsn_grow,fruits_position,착화군,varchar(100),local_schema_snapshot,schema_only
+sfkr_pvsn_grow,fruits_num,열매수,varchar(100),local_schema_snapshot,schema_only
+sfkr_pvsn_grow,harvest_position,수확군,varchar(100),local_schema_snapshot,schema_only
+sfkr_pvsn_grow,ped,PED,varchar(100),local_schema_snapshot,schema_only
+sfkr_pvsn_grow,solar_correction,수광량,varchar(100),local_schema_snapshot,schema_only
+sfkr_pvsn_grow,fruits_weight,평균과중,varchar(100),local_schema_snapshot,schema_only
+sfkr_hbfm_env_con,CR__CC01_1_B_C,후측일중천창 작동상태,binary,local_sensor_code_dictionary,code_only
+sfkr_hbfm_env_con,CR__CC01_1_F_C,전측일중천창 작동상태,binary,local_sensor_code_dictionary,code_only
+sfkr_hbfm_env_con,CR__CC01_1_L_C,좌측일중천창 작동상태,binary,local_sensor_code_dictionary,code_only
+sfkr_hbfm_env_con,CR__CC01_1_R_C,우측일중천창 작동상태,binary,local_sensor_code_dictionary,code_only
+sfkr_hbfm_env_con,CR__CC01_2_B_C,후측이중천창 작동상태,binary,local_sensor_code_dictionary,code_only
+sfkr_hbfm_env_con,CR__CC01_2_F_C,전측이중천창 작동상태,binary,local_sensor_code_dictionary,code_only
+sfkr_hbfm_env_con,CR__CC01_2_L_C,좌측이중천창 작동상태,binary,local_sensor_code_dictionary,code_only
+sfkr_hbfm_env_con,CR__CC01_2_R_C,우측이중천창 작동상태,binary,local_sensor_code_dictionary,code_only
+sfkr_hbfm_env_con,CR__CC01_3_B_C,후측삼중천창 작동상태,binary,local_sensor_code_dictionary,code_only
+sfkr_hbfm_env_con,CR__CC01_3_F_C,전측삼중천창 작동상태,binary,local_sensor_code_dictionary,code_only
+sfkr_hbfm_env_con,CR__CC01_3_L_C,좌측삼중천창 작동상태,binary,local_sensor_code_dictionary,code_only
+sfkr_hbfm_env_con,CR__CC01_3_R_C,우측삼중천창 작동상태,binary,local_sensor_code_dictionary,code_only
+sfkr_hbfm_env_con,CR__CC03_1_B_C,후측일중측창 작동상태,binary,local_sensor_code_dictionary,code_only
+sfkr_hbfm_env_con,CR__CC03_1_F_C,전측일중측창 작동상태,binary,local_sensor_code_dictionary,code_only
+sfkr_hbfm_env_con,CR__CC03_1_L_C,좌측일중측창 작동상태,binary,local_sensor_code_dictionary,code_only
+sfkr_hbfm_env_con,CR__CC03_1_R_C,우측일중측창 작동상태,binary,local_sensor_code_dictionary,code_only
+sfkr_hbfm_env_con,CR__CC03_2_B_C,후측이중측창 작동상태,binary,local_sensor_code_dictionary,code_only
+sfkr_hbfm_env_con,CR__CC03_2_F_C,전측이중측창 작동상태,binary,local_sensor_code_dictionary,code_only
+sfkr_hbfm_env_con,CR__CC03_2_L_C,좌측이중측창 작동상태,binary,local_sensor_code_dictionary,code_only
+sfkr_hbfm_env_con,CR__CC03_2_R_C,우측이중측창 작동상태,binary,local_sensor_code_dictionary,code_only
+sfkr_hbfm_env_con,CR__CC03_3_B_C,후측삼중측창 작동상태,binary,local_sensor_code_dictionary,code_only
+sfkr_hbfm_env_con,CR__CC03_3_F_C,전측삼중측창 작동상태,binary,local_sensor_code_dictionary,code_only
+sfkr_hbfm_env_con,CR__CC03_3_L_C,좌측삼중측창 작동상태,binary,local_sensor_code_dictionary,code_only
+sfkr_hbfm_env_con,CR__CC03_3_R_C,우측삼중측창 작동상태,binary,local_sensor_code_dictionary,code_only
+sfkr_hbfm_env_con,CR__CC0403,차광커튼작동상태,binary,local_sensor_code_dictionary,code_only
+sfkr_hbfm_env_con,CR__CC0503,보온커튼작동상태,binary,local_sensor_code_dictionary,code_only
+sfkr_hbfm_env_con,CR__CC0803,유동팬작동상태,binary,local_sensor_code_dictionary,code_only
+sfkr_hbfm_env_con,CR__CC0903,난방기작동상태,binary,local_sensor_code_dictionary,code_only
+sfkr_hbfm_env_con,CR__CC1103,보광등작동상태,binary,local_sensor_code_dictionary,code_only
+sfkr_hbfm_env_con,CR__CC1203,냉방기작동상태,binary,local_sensor_code_dictionary,code_only
+sfkr_hbfm_env_con,CR__CC1303,순환식수막시스템작동상태,binary,local_sensor_code_dictionary,code_only
+sfkr_hbfm_env_con,CR__CC1403,CO2발생장치작동상태,binary,local_sensor_code_dictionary,code_only
+sfkr_hbfm_env_con,CR__CC1703,3WAY벨브작동상태,binary,local_sensor_code_dictionary,code_only
+sfkr_hbfm_env_con,CR__CC1803,배기팬작동상태,binary,local_sensor_code_dictionary,code_only
+sfkr_hbfm_env_con,CR__CC1903,환기구작동상태,binary,local_sensor_code_dictionary,code_only
+sfkr_hbfm_env_con,CR__CC2003,관수작동상태 (토경)작동상태,binary,local_sensor_code_dictionary,code_only
+sfkr_hbfm_env_con,CR__CC2103,양수작동상태 (수경)작동상태,binary,local_sensor_code_dictionary,code_only
+sfkr_hbfm_env_con,CR__CC22_D_C,제습 작동상태,binary,local_sensor_code_dictionary,code_only
+sfkr_hbfm_env_con,CR__CC22_H_C,가습 작동상태,binary,local_sensor_code_dictionary,code_only
+sfkr_hbfm_env_con,CR__CC23_C_C,냉방 작동상태,binary,local_sensor_code_dictionary,code_only
+sfkr_hbfm_env_con,CR__CC23_H_C,난방 작동상태,binary,local_sensor_code_dictionary,code_only
+sfkr_hbfm_env_con,CR__CC2403,훈증기작동상태,binary,local_sensor_code_dictionary,code_only
+sfkr_hbfm_env_con,CR__CC2503,CO2발생기+난방기작동상태,binary,local_sensor_code_dictionary,code_only
+sfkr_hbfm_env_con,CR__CC2603,관수모터 작동상태,binary,local_sensor_code_dictionary,code_only
+sfkr_hbfm_env_con,CR__CC2703,관수밸브 작동상태,binary,local_sensor_code_dictionary,code_only
+sfkr_hbfm_env_con,CR__CC2803,관비모터 작동상태,binary,local_sensor_code_dictionary,code_only
+sfkr_hbfm_env_con,CR__CC2903,관비밸브 작동상태,binary,local_sensor_code_dictionary,code_only
+sfkr_hbfm_env_con,CR__CC3101,단열커튼(천정) 작동상태,binary,local_sensor_code_dictionary,code_only
+sfkr_hbfm_env_con,CR__CC3201,단열커튼(측면) 작동상태,binary,local_sensor_code_dictionary,code_only
+sfkr_hbfm_env_con,EI__CI,내부CO2,numeric,local_sensor_code_dictionary,code_only
+sfkr_hbfm_env_con,EI__DT,(내부)이슬점온도,numeric,local_sensor_code_dictionary,code_only
+sfkr_hbfm_env_con,EI__HI,내부습도,numeric,local_sensor_code_dictionary,code_only
+sfkr_hbfm_env_con,EI__HI01,절대습도,numeric,local_sensor_code_dictionary,code_only
+sfkr_hbfm_env_con,EI__HI02,(내부)상대습도,numeric,local_sensor_code_dictionary,code_only
+sfkr_hbfm_env_con,EI__ID,일장,numeric,local_sensor_code_dictionary,code_only
+sfkr_hbfm_env_con,EI__IR,광량,numeric,local_sensor_code_dictionary,code_only
+sfkr_hbfm_env_con,EI__IS,내부일사량,numeric,local_sensor_code_dictionary,code_only
+sfkr_hbfm_env_con,EI__CR,누적일사량(가공_내부),numeric,local_sensor_code_dictionary,code_only
+sfkr_hbfm_env_con,EI__LI,내부조도,numeric,local_sensor_code_dictionary,code_only
+sfkr_hbfm_env_con,EI__LW,광파장(광질),numeric,local_sensor_code_dictionary,code_only
+sfkr_hbfm_env_con,EI__TI,내부온도,numeric,local_sensor_code_dictionary,code_only
+sfkr_hbfm_env_con,EI__WS,내부풍속,numeric,local_sensor_code_dictionary,code_only
+sfkr_hbfm_env_con,EO__CR,누적일사량(가공_외부),numeric,local_sensor_code_dictionary,code_only
+sfkr_hbfm_env_con,EO__CS,누적강우량(가공),numeric,local_sensor_code_dictionary,code_only
+sfkr_hbfm_env_con,EO__DC,결로,numeric,local_sensor_code_dictionary,code_only
+sfkr_hbfm_env_con,EO__DS,적설,numeric,local_sensor_code_dictionary,code_only
+sfkr_hbfm_env_con,EO__DT,(외부)이슬점온도,numeric,local_sensor_code_dictionary,code_only
+sfkr_hbfm_env_con,EO__HE,외부습도,numeric,local_sensor_code_dictionary,code_only
+sfkr_hbfm_env_con,EO__HR,(외부)상대습도,numeric,local_sensor_code_dictionary,code_only
+sfkr_hbfm_env_con,EO__PD,광양자수,numeric,local_sensor_code_dictionary,code_only
+sfkr_hbfm_env_con,EO__RF,외부강우,numeric,local_sensor_code_dictionary,code_only
+sfkr_hbfm_env_con,EO__RP,강우감지,binary,local_sensor_code_dictionary,code_only
+sfkr_hbfm_env_con,EO__SR,외부일사량,numeric,local_sensor_code_dictionary,code_only
+sfkr_hbfm_env_con,EO__TE,외부온도,numeric,local_sensor_code_dictionary,code_only
+sfkr_hbfm_env_con,EO__WD,외부풍향,numeric,local_sensor_code_dictionary,code_only
+sfkr_hbfm_env_con,EO__WS,외부풍속,numeric,local_sensor_code_dictionary,code_only
+sfkr_hbfm_env_con,NT__AT,수분함수율,numeric,local_sensor_code_dictionary,code_only
+sfkr_hbfm_env_con,NT__BW,배지무게,numeric,local_sensor_code_dictionary,code_only
+sfkr_hbfm_env_con,NT__CF,(양액)압/출력,numeric,local_sensor_code_dictionary,code_only
+sfkr_hbfm_env_con,NT__CL,배지온도,numeric,local_sensor_code_dictionary,code_only
+sfkr_hbfm_env_con,NT__CN,(양액)공급횟수,numeric,local_sensor_code_dictionary,code_only
+sfkr_hbfm_env_con,NT__EI,(양액)공급EC,numeric,local_sensor_code_dictionary,code_only
+sfkr_hbfm_env_con,NT__EO,(양액)배액EC,numeric,local_sensor_code_dictionary,code_only
+sfkr_hbfm_env_con,NT__HL,(양액)지습,numeric,local_sensor_code_dictionary,code_only
+sfkr_hbfm_env_con,NT__NI,(양액)공급량,numeric,local_sensor_code_dictionary,code_only
+sfkr_hbfm_env_con,NT__NO,(양액)배액량,numeric,local_sensor_code_dictionary,code_only
+sfkr_hbfm_env_con,NT__NT,양액수온,numeric,local_sensor_code_dictionary,code_only
+sfkr_hbfm_env_con,NT__PI,(양액)공급PH,numeric,local_sensor_code_dictionary,code_only
+sfkr_hbfm_env_con,NT__PO,(양액)배액PH,numeric,local_sensor_code_dictionary,code_only
+sfkr_hbfm_env_con,NT__RT,근권부 온도,numeric,local_sensor_code_dictionary,code_only
+sfkr_hbfm_env_con,NT__SI,(양액)총급액,numeric,local_sensor_code_dictionary,code_only
+sfkr_hbfm_env_con,NT__SO,(양액)총배액,numeric,local_sensor_code_dictionary,code_only
+sfkr_hbfm_env_con,NT__TL,지온,numeric,local_sensor_code_dictionary,code_only

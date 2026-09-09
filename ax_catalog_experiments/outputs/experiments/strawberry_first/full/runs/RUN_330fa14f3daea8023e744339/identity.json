@@ -1,0 +1,21 @@
+{
+  "profile": "full",
+  "dataset": "09d2015717002e947f24e720eff57f30144ee1ffb0aef05d224e882b4cab9c44",
+  "group": "VG_7a71846d7c2282dd",
+  "model": "tft",
+  "params": {
+    "hidden_size": 16,
+    "attention_head_size": 2,
+    "hidden_continuous_size": 8,
+    "dropout": 0.1,
+    "learning_rate": 0.001,
+    "batch_size": 64,
+    "max_epochs": 100
+  },
+  "seed": 62,
+  "stage": "test",
+  "fold": null,
+  "epochs": 14,
+  "fit_rows": "47413bef3b3ffbbb973257a579072f6196897c03b0d5462a3b4caf26184c2a0e",
+  "eval_rows": "bdd675267fab83fd1d1c74966ee363eb822883e2903405e0b4f12d111cc4ee9b"
+}

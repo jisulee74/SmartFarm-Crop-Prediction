@@ -1,0 +1,5 @@
+﻿Item,Value
+Scope,4 targets; category atomic selection; legacy is not comparable with new runs
+DB inventory,NOT COMPLETE: local schema/code evidence only unless reviewed DB inventory is supplied
+Metrics,Long format; never sum metric values or mix targets/stages/origins
+New runs,Smoke is verification only. New full experiments require prepared raw provenance and engine full completion.

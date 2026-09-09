@@ -1,0 +1,72 @@
+{
+  "Run_ID": "RUN_0feed3bf2262d69749018acc",
+  "Target_ID": "tomato_total_flower",
+  "Variable_Group_ID": "VG_de65dcbed32f3485",
+  "Categories": [
+    "CAT_1dac82f034cc_tomato_total_flower_ef38a9eed5_V1",
+    "CAT_8f442a41cc28_tomato_total_flower_ce810df451_V1",
+    "CAT_e5938f8193b1_tomato_total_flower_8b23e66065_V1"
+  ],
+  "Features": [
+    "flower_count__current",
+    "flower_count__delta",
+    "flower_count__delta_per_day",
+    "flower_count__lag1",
+    "flower_count__lag2",
+    "flower_count__lag3",
+    "flower_count__roll2_min",
+    "flower_count__roll2_std",
+    "flower_count__roll3_max",
+    "flower_count__roll3_mean",
+    "flower_count__roll3_min",
+    "flower_count__roll3_slope",
+    "flower_count__roll3_std",
+    "flower_count__roll4_max",
+    "flower_count__roll4_mean",
+    "flower_count__roll4_min",
+    "flower_count__roll4_slope",
+    "flower_count__roll4_std",
+    "history_count",
+    "observed_truss_count__current",
+    "observed_truss_count__delta",
+    "observed_truss_count__delta_per_day",
+    "observed_truss_count__lag1",
+    "observed_truss_count__lag2",
+    "observed_truss_count__lag3",
+    "observed_truss_count__roll3_max",
+    "observed_truss_count__roll3_mean",
+    "observed_truss_count__roll3_slope",
+    "observed_truss_count__roll3_std",
+    "observed_truss_count__roll4_max",
+    "observed_truss_count__roll4_mean",
+    "observed_truss_count__roll4_slope",
+    "observed_truss_count__roll4_std"
+  ],
+  "Feature_Count": 33,
+  "Model_Type": "mlp",
+  "Seed": 42,
+  "Stage": "internal_cv",
+  "Fold_ID": 3,
+  "Eval_Row_Hash": "92cf182fbb54b1c26b9b2be955d02c099a90c976ae751c9efa175f8e31508385",
+  "N_Eval": 227,
+  "Params": {
+    "hidden": [
+      128,
+      64
+    ],
+    "dropout": 0.1,
+    "learning_rate": 0.001,
+    "batch_size": 64,
+    "max_epochs": 500,
+    "early_stopping_rounds": 50
+  },
+  "Status": "success",
+  "Result_Origin": "new",
+  "Metrics": {
+    "rmse": 48180863654297.24,
+    "mae": 28056517160509.094,
+    "r2": -4.297895340422829e+25,
+    "ccc": 5.310122163090777e-14
+  },
+  "Best_Epoch": 1
+}

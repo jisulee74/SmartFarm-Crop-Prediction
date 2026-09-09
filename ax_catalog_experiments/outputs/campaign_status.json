@@ -1,0 +1,18 @@
+[
+  {
+    "Target_ID": "tomato_total_flower",
+    "Status": "complete"
+  },
+  {
+    "Target_ID": "strawberry_first",
+    "Status": "complete"
+  },
+  {
+    "Target_ID": "strawberry_second",
+    "Status": "complete"
+  },
+  {
+    "Target_ID": "strawberry_third",
+    "Status": "complete"
+  }
+]

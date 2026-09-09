@@ -1,0 +1,108 @@
+{
+  "winners": {
+    "poisson": {
+      "group": [
+        "CAT_997483fbec2c_strawberry_second_f0906a8f73_V1",
+        "CAT_b90126c51b5d_strawberry_second_0187becb0e_V1",
+        "CAT_e5938f8193b1_strawberry_second_8b23e66065_V1"
+      ],
+      "params": {
+        "alpha": 0.1,
+        "max_iter": 2000
+      },
+      "epochs": null,
+      "validation_rmse": 1.055575897877312,
+      "validation_mae": 0.5079701972367147
+    },
+    "random_forest": {
+      "group": [
+        "CAT_997483fbec2c_strawberry_second_f0906a8f73_V1"
+      ],
+      "params": {
+        "n_estimators": 500,
+        "max_depth": 4,
+        "min_samples_leaf": 8,
+        "max_features": 0.7
+      },
+      "epochs": null,
+      "validation_rmse": 0.9406314344752185,
+      "validation_mae": 0.39093166137994956
+    },
+    "catboost": {
+      "group": [
+        "CAT_997483fbec2c_strawberry_second_f0906a8f73_V1",
+        "CAT_e5938f8193b1_strawberry_second_8b23e66065_V1"
+      ],
+      "params": {
+        "iterations": 2000,
+        "depth": 6,
+        "learning_rate": 0.07,
+        "l2_leaf_reg": 3,
+        "early_stopping_rounds": 150
+      },
+      "epochs": 74,
+      "validation_rmse": 0.9500102946637675,
+      "validation_mae": 0.3991185782981826
+    },
+    "mlp": {
+      "group": [
+        "CAT_997483fbec2c_strawberry_second_f0906a8f73_V1",
+        "CAT_b90126c51b5d_strawberry_second_0187becb0e_V1"
+      ],
+      "params": {
+        "hidden": [
+          256,
+          128
+        ],
+        "dropout": 0.3,
+        "learning_rate": 0.001,
+        "batch_size": 64,
+        "max_epochs": 500,
+        "early_stopping_rounds": 50
+      },
+      "epochs": 4,
+      "validation_rmse": 0.9218503017831015,
+      "validation_mae": 0.3751305107672054
+    },
+    "tabm": {
+      "group": [
+        "CAT_997483fbec2c_strawberry_second_f0906a8f73_V1"
+      ],
+      "params": {
+        "k": 32,
+        "n_blocks": 3,
+        "dropout": 0.1,
+        "learning_rate": 0.002,
+        "weight_decay": 0.0003,
+        "batch_size": 128,
+        "max_epochs": 500,
+        "early_stopping_rounds": 50
+      },
+      "epochs": 5,
+      "validation_rmse": 0.9564981965456264,
+      "validation_mae": 0.38769605811709207
+    },
+    "tft": {
+      "group": [
+        "CAT_997483fbec2c_strawberry_second_f0906a8f73_V1",
+        "CAT_e5938f8193b1_strawberry_second_8b23e66065_V1"
+      ],
+      "params": {
+        "hidden_size": 32,
+        "attention_head_size": 2,
+        "hidden_continuous_size": 8,
+        "dropout": 0.1,
+        "learning_rate": 0.001,
+        "batch_size": 64,
+        "max_epochs": 100
+      },
+      "epochs": 14,
+      "validation_rmse": 0.9267009710882173,
+      "validation_mae": 0.4020615481210198
+    }
+  },
+  "overall": "mlp",
+  "failures": [],
+  "selection_metric": "validation mean per-seed RMSE",
+  "test_accessed_during_selection": false
+}
