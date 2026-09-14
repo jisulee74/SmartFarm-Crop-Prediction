@@ -250,9 +250,10 @@ export class ExperimentViewController {
     }
 
     // 11. Variable details modal
-    const detailBtn = document.getElementById('exp_btn_group_detail');
+    const detailBtn = document.getElementById('exp_view_features_btn') || document.getElementById('exp_btn_group_detail');
     const modal = document.getElementById('exp_variable_modal');
-    const modalCloseBtn = document.getElementById('exp_modal_close_btn');
+    const modalCloseBtn = document.getElementById('modal_close_btn') || document.getElementById('exp_modal_close_btn');
+    const modalConfirmBtn = document.getElementById('modal_confirm_btn');
 
     if (detailBtn) {
       detailBtn.addEventListener('click', () => {
@@ -261,6 +262,11 @@ export class ExperimentViewController {
     }
     if (modalCloseBtn) {
       modalCloseBtn.addEventListener('click', () => {
+        if (modal) modal.style.display = 'none';
+      });
+    }
+    if (modalConfirmBtn) {
+      modalConfirmBtn.addEventListener('click', () => {
         if (modal) modal.style.display = 'none';
       });
     }
@@ -1080,27 +1086,82 @@ export class ExperimentViewController {
 
   openVariableModal() {
     const modal = document.getElementById('exp_variable_modal');
-    if (!modal || !this.metadata) return;
+    if (!modal) return;
+
+    if (!this.metadata) {
+      this.loadInitialData().then(() => this.openVariableModal());
+      return;
+    }
 
     const tData = this.metadata.targets?.[this.state.target];
-    const groupInfo = tData?.groups?.[this.state.group_id];
-    if (!groupInfo) return;
+    let groupInfo = tData?.groups?.[this.state.group_id];
 
-    document.getElementById('modal_group_title').textContent = `${groupInfo.readable_name} (${groupInfo.feature_count}개 변수)`;
-    document.getElementById('modal_group_id').textContent = groupInfo.group_id;
-    document.getElementById('modal_old_group_id').textContent = groupInfo.old_group_id || '-';
-    document.getElementById('modal_categories_list').textContent = groupInfo.category_names?.join(', ') || '-';
-    document.getElementById('modal_feature_count').textContent = `${groupInfo.feature_count}개`;
+    // Fallback to first group if not selected yet
+    if (!groupInfo && tData?.groups) {
+      const firstGid = Object.keys(tData.groups)[0];
+      if (firstGid) {
+        this.state.group_id = firstGid;
+        groupInfo = tData.groups[firstGid];
+      }
+    }
 
+    if (!groupInfo) {
+      this.showToast('선택된 변수군 정보를 찾을 수 없습니다.');
+      return;
+    }
+
+    const titleEl = document.getElementById('modal_group_name') || document.getElementById('modal_group_title');
+    const readableEl = document.getElementById('modal_group_readable');
+    const idEl = document.getElementById('modal_group_id');
+    const oldIdEl = document.getElementById('modal_old_group_id');
+    const countEl = document.getElementById('modal_group_count') || document.getElementById('modal_feature_count');
+    const catEl = document.getElementById('modal_categories_list');
     const featListEl = document.getElementById('modal_features_container');
+
+    if (titleEl) {
+      titleEl.textContent = `${groupInfo.readable_name || '입력변수군 상세'}`;
+    }
+    if (readableEl) {
+      readableEl.textContent = `${groupInfo.group_id}${groupInfo.old_group_id ? ` (${groupInfo.old_group_id})` : ''} • 총 ${groupInfo.feature_count}개 변수`;
+    }
+    if (idEl) {
+      idEl.textContent = groupInfo.group_id;
+    }
+    if (oldIdEl) {
+      oldIdEl.textContent = groupInfo.old_group_id || '-';
+    }
+    if (countEl) {
+      countEl.textContent = `${groupInfo.feature_count}개`;
+    }
+
+    if (catEl) {
+      catEl.innerHTML = '';
+      const cats = groupInfo.category_names || [];
+      if (cats.length === 0) {
+        catEl.textContent = '-';
+      } else {
+        cats.forEach(c => {
+          const tag = document.createElement('span');
+          tag.className = 'cat-tag';
+          tag.textContent = c;
+          catEl.appendChild(tag);
+        });
+      }
+    }
+
     if (featListEl) {
       featListEl.innerHTML = '';
-      (groupInfo.features || []).forEach((f, idx) => {
-        const item = document.createElement('div');
-        item.className = 'feature-item';
-        item.innerHTML = `<span class="feat-idx">${idx + 1}.</span> <span class="feat-name">${f}</span>`;
-        featListEl.appendChild(item);
-      });
+      const features = groupInfo.features || [];
+      if (features.length === 0) {
+        featListEl.innerHTML = '<div class="text-muted" style="padding: 10px;">변수 목록 정보가 없습니다.</div>';
+      } else {
+        features.forEach((f, idx) => {
+          const item = document.createElement('div');
+          item.className = 'feature-item';
+          item.innerHTML = `<span class="feat-idx">${idx + 1}.</span> <span class="feat-name">${f}</span>`;
+          featListEl.appendChild(item);
+        });
+      }
     }
 
     modal.style.display = 'flex';

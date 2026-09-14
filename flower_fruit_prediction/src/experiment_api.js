@@ -85,22 +85,52 @@ export async function fetchComparison(target, model, split, force = false) {
   try {
     const index = await getStaticIndex();
     const t_data = index.targets?.[target] || {};
-    const winner_group = t_data.frozen?.overall || null;
+    const groups_dict = t_data.groups || {};
+    const results_dict = t_data.results || {};
+    const frozen_winners = t_data.frozen?.winners || {};
+    const winner_group = frozen_winners[model]?.group || t_data.frozen?.overall || null;
+
     const rows = [];
-    for (const [g_id, g_data] of Object.entries(t_data.groups || {})) {
-      const res_item = g_data.models?.[model]?.[split];
-      if (res_item) {
+    for (const [gid, ginfo] of Object.entries(groups_dict)) {
+      const key = `${gid}::${model}::${split}`;
+      const res_item = results_dict[key];
+      if (!res_item) {
         rows.push({
-          group_id: g_id,
-          group_num: g_data.group_num,
-          group_code: g_data.group_code,
-          feature_count: g_data.feature_count,
-          categories: g_data.categories || [],
+          group_id: gid,
+          old_group_id: ginfo.old_group_id || "",
+          readable_name: ginfo.readable_name || "",
+          feature_count: ginfo.feature_count || 0,
+          category_names: ginfo.category_names || [],
+          category_ids: ginfo.category_ids || [],
+          completed_seeds: 0,
+          status: "unstarted",
+          is_winner: (gid === winner_group),
+          params: {},
+          bounded: {},
+          raw: {}
+        });
+      } else {
+        rows.push({
+          group_id: gid,
+          old_group_id: ginfo.old_group_id || "",
+          readable_name: ginfo.readable_name || "",
+          feature_count: ginfo.feature_count || 0,
+          category_names: ginfo.category_names || [],
+          category_ids: ginfo.category_ids || [],
+          completed_seeds: res_item.completed_seeds || 0,
+          status: res_item.status || "unstarted",
+          is_winner: (gid === winner_group),
+          params: res_item.params || {},
+          upper_bound: res_item.upper_bound,
+          output_clip_rate: res_item.output_clip_rate,
+          best_epoch: res_item.best_epoch,
+          n_eval: res_item.n_eval,
           bounded: res_item.bounded || {},
           raw: res_item.raw || {}
         });
       }
     }
+
     rows.sort((a, b) => {
       const aRmse = a.bounded?.rmse_mean ?? 999999;
       const bRmse = b.bounded?.rmse_mean ?? 999999;
@@ -151,10 +181,10 @@ export async function fetchPredictions(target, group, model, split, seed = 'all'
   try {
     const index = await getStaticIndex();
     const t_data = index.targets?.[target] || {};
-    const g_data = t_data.groups?.[group] || {};
-    const res_entry = g_data.models?.[model]?.[split];
+    const key = `${group}::${model}::${split}`;
+    const res_entry = t_data.results?.[key];
     if (!res_entry) {
-      return { status: "not_found", predictions: [] };
+      return { status: "no_results", group_id: group, model, split, target, predictions: [], metadata: {} };
     }
     const seeds_dict = res_entry.seeds || {};
     const available_seeds = Object.keys(seeds_dict).map(s => parseInt(s, 10)).sort((a, b) => a - b);
@@ -221,6 +251,11 @@ export async function fetchPredictions(target, group, model, split, seed = 'all'
       const pRes = await fetch(`./cache/predictions/${seed_item.run_id}.json`);
       if (!pRes.ok) throw new Error(`Prediction fetch HTTP error ${pRes.status}`);
       const pData = await pRes.json();
+      const preds = (pData.predictions || []).map(r => ({
+        ...r,
+        crop_sn: String(r.crop_sn),
+        sample_num: String(r.sample_num)
+      }));
       const data = {
         status: "success",
         mode: "single_seed",
@@ -232,7 +267,7 @@ export async function fetchPredictions(target, group, model, split, seed = 'all'
         model,
         split,
         metadata: res_entry,
-        predictions: pData.predictions || []
+        predictions: preds
       };
       CACHE.predictions.set(cacheKey, data);
       return data;
