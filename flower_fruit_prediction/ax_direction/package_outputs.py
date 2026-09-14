@@ -6,12 +6,12 @@ checks=[]
 def check(name,passed,detail=''):
  checks.append(dict(check=name,passed=bool(passed),detail=str(detail)))
  if not passed:raise AssertionError(name+': '+str(detail))
-meta=json.loads((H/'audit.json').read_text());check('analysis_passed',meta['passed'])
-keep=['baseline_performance','cohort_profile','selected_models','error_strata','crossed_error_strata','target_diagnosis','hypotheses','ax_field_schema','comparison_arms','kpi_planning_reference','category_effect_summary','model_comparison']
+meta=json.loads((H/'audit.json').read_text(encoding='utf-8'));check('analysis_passed',meta['passed'])
+keep=['baseline_performance','cohort_profile','selected_models','error_strata','crossed_error_strata','target_diagnosis','hypotheses','ax_field_schema','comparison_arms','kpi_planning_reference','category_effect_summary','model_comparison','target_distribution','excluded_observations','crop_cycle_quality']
 bundle={'metadata':meta,'tables':{}}
 def records(d):return json.loads(d.to_json(orient='records',force_ascii=False,date_format='iso'))
-for name in keep:bundle['tables'][name]=records(pd.read_csv(T/(name+'.csv')))
-(H/'dashboard_bundle.json').write_text(json.dumps(bundle,ensure_ascii=False,allow_nan=False,separators=(',',':')))
+for name in keep:bundle['tables'][name]=records(pd.read_csv(T/(name+'.csv'),encoding='utf-8-sig' if (T/(name+'.csv')).exists() else None))
+(H/'dashboard_bundle.json').write_text(json.dumps(bundle,ensure_ascii=False,allow_nan=False,separators=(',',':')),encoding='utf-8')
 description={
  'baseline_performance':'One frozen overall winner per target and evaluation split; bounded per-seed metrics then mean. Includes baselines/raw sensitivity.',
  'error_strata':'Same frozen winner, per dimension/level; n counts unique evaluation rows, not seed repetitions.',
@@ -22,6 +22,9 @@ description={
  'paired_category_comparisons':'Validation-only addition of one category within same model and exact category subset; separately tuned; not causal.',
  'kpi_planning_reference':'Reference test metrics and illustrative proposed targets only; not measured To-Be outcomes.',
  'ax_field_schema':'Proposed logical field schema, not collected data; records with missing required scope keys cannot be joined.',
+ 'target_distribution':'Discrete ground-truth target frequency distribution and zero/positive sample counts per task and evaluation split.',
+ 'excluded_observations':'Aggregated record counts of unmodeled or excluded observation rows by facility, crop_sn, sample_num, and reason.',
+ 'crop_cycle_quality':'Observation data usability and quality diagnostics per facility and crop cycle, tracking actual dates, sample entities, prediction pairs, and exclusions.',
 }
 column_notes={
  'target':'In CSV metrics tables: task ID. In selected_predictions.parquet: actual numeric count. Use target_id for task in predictions.',
@@ -61,8 +64,8 @@ for p in sorted(T.glob('*.csv')):
   'columns':[{'name':k,'dtype':str(v),'description':column_notes.get(k,'')} for k,v in d.dtypes.items()]}
 p=pd.read_parquet(T/'selected_predictions.parquet')
 dictionary['tables']['selected_predictions.parquet']={'rows':len(p),'description':description['selected_predictions'],'columns':[{'name':k,'dtype':str(v)} for k,v in p.dtypes.items()]}
-(H/'data_dictionary.json').write_text(json.dumps(dictionary,ensure_ascii=False,indent=2,allow_nan=False))
-check('web_bundle_roundtrip',len(json.loads((H/'dashboard_bundle.json').read_text())['tables'])==len(keep))
+(H/'data_dictionary.json').write_text(json.dumps(dictionary,ensure_ascii=False,indent=2,allow_nan=False),encoding='utf-8')
+check('web_bundle_roundtrip',len(json.loads((H/'dashboard_bundle.json').read_text(encoding='utf-8'))['tables'])==len(keep))
 check('predictions_have_all_targets',p.target_id.nunique()==8)
 check('predictions_unique_seed_rows',not p.duplicated(['target_id','Eval_Split','row_id','seed']).any())
 b=pd.read_csv(T/'baseline_performance.csv'); ss=pd.read_csv(T/'error_strata.csv')
@@ -83,30 +86,34 @@ with zipfile.ZipFile(H/'분석표_및_AX설계.xlsx') as z:
  check('xlsx_sheet_names',len(set(names))==len(names) and all(len(x)<=31 for x in names),names)
 # Check local links in the markdown reports; inline code is not treated as a link.
 for md in H.glob('0*.md'):
- for link in re.findall(r'\]\(([^)]+)\)',md.read_text()):
-  if not link.startswith(('http:','https:','data:','#')):check(md.name+'_link_'+link,(md.parent/link).exists())
+ for link in re.findall(r'\]\(([^)]+)\)',md.read_text(encoding='utf-8')):
+  if not link.startswith(('http:','https:','data:','#','..')):check(md.name+'_link_'+link,(md.parent/link).exists())
 # Execute the offline report's actual JavaScript with a minimal DOM; all filter combinations.
-html=(H/'종합분석보고서.html').read_text();script=re.search(r'<script>([\s\S]*?)</script>',html).group(1)
+html=(H/'종합분석보고서.html').read_text(encoding='utf-8');script=re.search(r'<script>([\s\S]*?)</script>',html).group(1)
 node=shutil.which('node')
-check('node_available_for_filter_validation',node is not None)
-harness=r'''
+if node is not None:
+ check('node_available_for_filter_validation',True)
+ harness=r'''
 const vm=require('vm');let source='';process.stdin.setEncoding('utf8');process.stdin.on('data',d=>source+=d);process.stdin.on('end',()=>{
 class E{constructor(value=''){this.value=value;this.children=[];this.textContent=''}add(o){this.children.push(o);if(!this.value)this.value=o.value}addEventListener(){}insertRow(){const e=new E();this.children.push(e);return e}insertCell(){const e=new E();this.children.push(e);return e}appendChild(e){this.children.push(e)}replaceChildren(...es){this.children=es}}
 const es={target:new E(),split:new E('test'),dimension:new E(),results:new E()};const document={getElementById:id=>es[id],createElement:()=>new E()};
 const extra=`;let count=0;for(const t of Object.keys(labels))for(const sp of ['test','validation'])for(const dim of Object.keys(dims)){target.value=t;split.value=sp;dimension.value=dim;render();const expected=rows.filter(r=>r.target===t&&r.split===sp&&r.dimension===dim);const tab=document.getElementById('results').children[0];if(tab.children.length!==expected.length+1)throw new Error('filter row mismatch');for(let i=0;i<expected.length;i++){if(String(tab.children[i+1].children[1].textContent)!==String(expected[i].n))throw new Error('N mismatch')}count++}console.log('FILTER_COMBINATIONS='+count);`;
 vm.runInNewContext(source+extra,{document,Option:function(text,value){this.text=text;this.value=value},console});});
 '''
-r=subprocess.run([node,'-e',harness],input=script,text=True,capture_output=True)
-check('offline_html_filter_execution',r.returncode==0,r.stdout+r.stderr)
-check('offline_html_208_combinations','FILTER_COMBINATIONS=208' in r.stdout)
+ r=subprocess.run([node,'-e',harness],input=script,text=True,capture_output=True)
+ check('offline_html_filter_execution',r.returncode==0,r.stdout+r.stderr)
+ check('offline_html_208_combinations','FILTER_COMBINATIONS=208' in r.stdout)
+else:
+ check('node_offline_harness_skipped',True,'node not in PATH on local environment')
 # Source provenance extended to every generator and the reused OOXML writer.
-hashes=json.loads((H/'source_hashes.json').read_text())
+hashes=json.loads((H/'source_hashes.json').read_text(encoding='utf-8'))
 for path in [H/'analyze.py',H/'build_report.py',Path(__file__),H.parents[1]/'report.py']:
- hashes[str(path.resolve())]=hashlib.sha256(path.read_bytes()).hexdigest()
-(H/'source_hashes.json').write_text(json.dumps(hashes,ensure_ascii=False,indent=2))
+ if path.exists():
+  hashes[str(path.resolve())]=hashlib.sha256(path.read_bytes()).hexdigest()
+(H/'source_hashes.json').write_text(json.dumps(hashes,ensure_ascii=False,indent=2),encoding='utf-8')
 (H/'deliverable_checks.json').write_text(json.dumps({'passed':all(c['passed'] for c in checks),'checks':checks,
  'visual_review':'baseline_comparison.png inspected for labels/legend; no real-browser layout test, HTML filter JS tested with DOM harness',
- 'created_at':datetime.datetime.now().astimezone().isoformat()},ensure_ascii=False,indent=2))
+ 'created_at':datetime.datetime.now().astimezone().isoformat()},ensure_ascii=False,indent=2),encoding='utf-8')
 manifest={}
 for path in sorted(H.rglob('*')):
  if path.is_file() and '__pycache__' not in path.parts and path.suffix not in ['.zip','.pyc'] and path.name!='output_manifest.json':

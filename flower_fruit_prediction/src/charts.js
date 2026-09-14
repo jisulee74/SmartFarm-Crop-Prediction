@@ -82,16 +82,133 @@ export const METRIC_CONFIGS = {
   }
 };
 
+import { fetchAnalysisBundle } from './analysis_api.js';
+
 export class ChartManager {
   constructor() {
     this.chartInstances = new Map();
+    this.qualityData = null;
     this.initResizeListener();
+    this.loadQualityData();
+    this.initDropdownListeners();
   }
 
   initResizeListener() {
     window.addEventListener('resize', () => {
       this.resizeAll();
     });
+  }
+
+  async loadQualityData() {
+    try {
+      const bundle = await fetchAnalysisBundle();
+      if (bundle && bundle.tables && bundle.tables.crop_cycle_quality) {
+        this.qualityData = bundle.tables.crop_cycle_quality;
+      }
+    } catch (e) {
+      console.warn('[ChartManager] Failed to load quality data:', e);
+    }
+  }
+
+  initDropdownListeners() {
+    ['tomato', 'strawberry'].forEach(crop => {
+      const facEl = document.getElementById(`${crop}_facility_select`);
+      const cropEl = document.getElementById(`${crop}_crop_select`);
+      const resetBtn = document.getElementById(`${crop}_btn_reset`);
+      if (facEl) facEl.addEventListener('change', () => setTimeout(() => this.updateUsabilityCard(crop), 50));
+      if (cropEl) cropEl.addEventListener('change', () => setTimeout(() => this.updateUsabilityCard(crop), 50));
+      if (resetBtn) resetBtn.addEventListener('click', () => setTimeout(() => this.updateUsabilityCard(crop), 100));
+    });
+  }
+
+  updateUsabilityCard(cropKey) {
+    const card = document.getElementById(`${cropKey}_usability_card`);
+    if (!card) return;
+
+    const facEl = document.getElementById(`${cropKey}_facility_select`);
+    const cropEl = document.getElementById(`${cropKey}_crop_select`);
+    const selectedFac = facEl ? facEl.value : 'ALL';
+    const selectedCrop = cropEl ? cropEl.value : 'ALL';
+
+    if (selectedCrop === 'ALL') {
+      card.style.display = 'none';
+      return;
+    }
+
+    const item = (this.qualityData || []).find(r => 
+      r.crop === cropKey && 
+      String(r.crop_sn) === String(selectedCrop) &&
+      (selectedFac === 'ALL' || r.facility_id === selectedFac)
+    );
+
+    if (!item) {
+      card.style.display = 'none';
+      return;
+    }
+
+    card.style.display = 'block';
+    const isSingle = Boolean(item.is_single_observation);
+    card.className = `prediction-usability-card ${isSingle ? 'state-warning' : 'state-normal'}`;
+
+    const titleIcon = isSingle ? '⚠️' : '✅';
+    const titleText = isSingle
+      ? '작기 품질 및 예측 활용 가능성 진단: 적격성 경고 (예측쌍 생성 불가)'
+      : '작기 품질 및 예측 활용 가능성 진단: 정상 적격';
+    const badgeHtml = isSingle
+      ? '<span class="usability-state-badge badge-warn">⚠️ 단일 관측 시점 (모델링 코호트 제외)</span>'
+      : '<span class="usability-state-badge badge-ok">✅ 예측 적격 작기 (연속 관측)</span>';
+
+    const pairsSub = item.prediction_pairs === 0 ? 'shift(-1) 쌍 생성 불가' : '유효 지도학습 쌍';
+    const noticeClass = isSingle ? 'notice-warn' : 'notice-info';
+    const noticeIcon = isSingle ? '⚠️' : 'ℹ️';
+
+    let noticeText = item.custom_notice;
+    if (!noticeText) {
+      noticeText = isSingle
+        ? `이 작기는 실제 관측일이 ${item.unique_dates}회(${item.dates_str})에 불과하여 다음 조사값 예측쌍을 생성할 수 없습니다. 원본 관측은 보존되지만 모델 학습·검증·평가에서는 제외됩니다.`
+        : `이 작기는 ${item.unique_dates}회에 걸쳐 총 ${item.actual_rows}건의 조사가 이루어졌으며, ${item.prediction_pairs}개의 유효한 다음 조사 예측쌍이 생성되어 모델링에 정상 활용됩니다.`;
+    }
+
+    card.innerHTML = `
+      <div class="usability-card-header">
+        <div class="usability-card-title">
+          <span>${titleIcon}</span>
+          <span>${titleText}</span>
+        </div>
+        ${badgeHtml}
+      </div>
+      <div class="usability-stats-grid">
+        <div class="usability-stat-item">
+          <span class="usability-stat-label">실제 관측 행 수</span>
+          <span class="usability-stat-val">${Number(item.actual_rows).toLocaleString()}건</span>
+          <span class="usability-stat-sub">실제 기록된 관측 행</span>
+        </div>
+        <div class="usability-stat-item ${isSingle ? 'highlight-warn' : ''}">
+          <span class="usability-stat-label">관측된 고유 날짜 수</span>
+          <span class="usability-stat-val">${item.unique_dates}일</span>
+          <span class="usability-stat-sub">${item.dates_str}</span>
+        </div>
+        <div class="usability-stat-item">
+          <span class="usability-stat-label">관측 개체 수</span>
+          <span class="usability-stat-val">${item.sample_count}개체</span>
+          <span class="usability-stat-sub">${item.samples_str}</span>
+        </div>
+        <div class="usability-stat-item ${item.prediction_pairs === 0 ? 'highlight-warn' : ''}">
+          <span class="usability-stat-label">다음 관측 예측쌍 수</span>
+          <span class="usability-stat-val">${item.prediction_pairs}쌍</span>
+          <span class="usability-stat-sub">${pairsSub}</span>
+        </div>
+        <div class="usability-stat-item ${item.excluded_rows > 0 ? 'highlight-warn' : ''}">
+          <span class="usability-stat-label">제외 행 수 및 사유</span>
+          <span class="usability-stat-val">${item.excluded_rows}건</span>
+          <span class="usability-stat-sub">${item.exclusion_reasons || '제외 사유 없음'}</span>
+        </div>
+      </div>
+      <div class="usability-notice-box ${noticeClass}">
+        <span style="font-size: 16px;">${noticeIcon}</span>
+        <span><strong>품질 판정:</strong> ${noticeText}</span>
+      </div>
+    `;
   }
 
   resizeAll() {
@@ -134,6 +251,21 @@ export class ChartManager {
     }
     if (emptyOverlay) emptyOverlay.style.display = 'none';
 
+    const isSingleDate = (trendData.length === 1);
+    const cardBadge = document.getElementById(`badge_${metricKey}`);
+    if (cardBadge) {
+      if (isSingleDate) {
+        cardBadge.textContent = '단일 관측 시점';
+        cardBadge.className = 'chart-mode-badge badge-single-obs';
+      } else {
+        cardBadge.textContent = '개체당 평균';
+        cardBadge.className = 'chart-mode-badge';
+        cardBadge.style.background = '#eff6ff';
+        cardBadge.style.color = '#2563eb';
+        cardBadge.style.borderColor = '#bfdbfe';
+      }
+    }
+
     // 시간축 시리즈 데이터: [ [Date, Value, validCount, min, max], ... ]
     const seriesData = trendData.map(item => [
       item.date,
@@ -143,6 +275,11 @@ export class ChartManager {
       item.max,
       item.totalEntitiesToday
     ]);
+
+    const singleAlertHtml = isSingleDate ? `
+      <div style="margin-top: 6px; padding: 4px 8px; background: rgba(217, 119, 6, 0.25); border-left: 3px solid #f59e0b; color: #fde047; font-size: 11px; font-weight: 700;">
+        ⚠️ 단일 관측 시점: 다음 조사 예측쌍 생성 불가 (모델링 제외)
+      </div>` : '';
 
     const option = {
       backgroundColor: 'transparent',
@@ -156,12 +293,12 @@ export class ChartManager {
       tooltip: {
         trigger: 'axis',
         axisPointer: {
-          type: 'cross',
+          type: isSingleDate ? 'none' : 'cross',
           crossStyle: { color: '#94a3b8' },
           lineStyle: { color: config.color, width: 1.5, type: 'dashed' }
         },
         backgroundColor: 'rgba(15, 23, 42, 0.92)',
-        borderColor: config.color,
+        borderColor: isSingleDate ? '#f59e0b' : config.color,
         borderWidth: 1.5,
         padding: [10, 14],
         textStyle: { color: '#ffffff', fontSize: 13 },
@@ -178,7 +315,7 @@ export class ChartManager {
             </div>
             <div style="display: flex; align-items: center; justify-content: space-between; gap: 15px; margin-bottom: 4px;">
               <span>📊 <strong>개체당 평균:</strong></span>
-              <span style="font-size: 15px; font-weight: 800; color: ${config.color}">${avgVal} ${config.unit}</span>
+              <span style="font-size: 15px; font-weight: 800; color: ${isSingleDate ? '#f59e0b' : config.color}">${avgVal} ${config.unit}</span>
             </div>
             <div style="font-size: 12px; color: #cbd5e1; margin-bottom: 2px;">
               👥 <strong>유효 관측 개체 수:</strong> <span style="color:#fde047; font-weight:700">${validCount}개체</span>
@@ -186,6 +323,7 @@ export class ChartManager {
             <div style="font-size: 11px; color: #94a3b8;">
               📈 당일 관측 범위: ${minVal} ~ ${maxVal} ${config.unit}
             </div>
+            ${singleAlertHtml}
           `;
         }
       },
@@ -246,18 +384,18 @@ export class ChartManager {
           type: 'line',
           smooth: false,
           showSymbol: true,
-          symbol: 'circle',
-          symbolSize: 6,
+          symbol: isSingleDate ? 'diamond' : 'circle',
+          symbolSize: isSingleDate ? 12 : 6,
           itemStyle: {
-            color: config.color,
+            color: isSingleDate ? '#d97706' : config.color,
             borderColor: '#ffffff',
-            borderWidth: 1.5
+            borderWidth: isSingleDate ? 2 : 1.5
           },
           lineStyle: {
-            width: 2.5,
+            width: isSingleDate ? 0 : 2.5,
             color: config.color
           },
-          areaStyle: {
+          areaStyle: isSingleDate ? null : {
             color: new window.echarts.graphic.LinearGradient(0, 0, 0, 1, [
               { offset: 0, color: config.accentColor },
               { offset: 1, color: 'rgba(255, 255, 255, 0.01)' }
@@ -269,6 +407,7 @@ export class ChartManager {
     };
 
     chart.setOption(option, true);
+    this.updateUsabilityCard(config.crop);
   }
 
   /**
@@ -293,6 +432,21 @@ export class ChartManager {
     }
     if (emptyOverlay) emptyOverlay.style.display = 'none';
 
+    const isSingleObservationGroup = (individualGroups.length > 0 && individualGroups.every(g => g.points.length <= 1));
+    const cardBadge = document.getElementById(`badge_${metricKey}`);
+    if (cardBadge) {
+      if (isSingleObservationGroup) {
+        cardBadge.textContent = `단일 관측 시점 (${individualGroups.length}개 개체)`;
+        cardBadge.className = 'chart-mode-badge badge-single-obs';
+      } else {
+        cardBadge.textContent = `개체별 실제값 (${individualGroups.length}개 계열)`;
+        cardBadge.className = 'chart-mode-badge';
+        cardBadge.style.background = '#f3e8ff';
+        cardBadge.style.color = '#7e22ce';
+        cardBadge.style.borderColor = '#d8b4fe';
+      }
+    }
+
     // 색상 팔레트
     const palette = [
       '#e03131', '#2f9e44', '#1971c2', '#f08c00', '#9c36b5',
@@ -316,15 +470,15 @@ export class ChartManager {
         type: 'line',
         smooth: false,
         showSymbol: true,
-        symbol: 'circle',
-        symbolSize: 7,
+        symbol: isSingleObservationGroup ? 'diamond' : 'circle',
+        symbolSize: isSingleObservationGroup ? 10 : 7,
         itemStyle: {
           color: color,
           borderColor: '#ffffff',
           borderWidth: 1.5
         },
         lineStyle: {
-          width: 2,
+          width: isSingleObservationGroup ? 0 : 2,
           color: color
         },
         data: seriesData
@@ -437,5 +591,6 @@ export class ChartManager {
     };
 
     chart.setOption(option, true);
+    this.updateUsabilityCard(config.crop);
   }
 }

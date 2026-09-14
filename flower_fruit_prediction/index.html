@@ -215,6 +215,9 @@
         </div>
       </div>
 
+      <!-- 토마토 작기 품질 및 예측 활용 가능성 카드 -->
+      <div class="prediction-usability-card" id="tomato_usability_card" style="display: none;"></div>
+
       <!-- 토마토 4종 차트 그리드 -->
       <div class="charts-grid">
         <!-- 1. 1화방 꽃 수 -->
@@ -343,6 +346,9 @@
           </div>
         </div>
       </div>
+
+      <!-- 딸기 작기 품질 및 예측 활용 가능성 카드 -->
+      <div class="prediction-usability-card" id="strawberry_usability_card" style="display: none;"></div>
 
       <!-- 딸기 4종 차트 그리드 -->
       <div class="charts-grid">
@@ -893,6 +899,70 @@
             </div>
             <div class="anl-stat-main" id="anl_summary_ccc">-</div>
             <div class="anl-stat-subtext" id="anl_summary_ccc_sub">실제값 vs 예측값 일치성</div>
+          </div>
+        </section>
+
+        <!-- 1-2-B. 정답 분포 및 표본 편중 (Target Distribution & Zero-Inflation Diagnosis) -->
+        <section class="anl-target-dist-section" id="anl_target_dist_section" aria-label="정답 분포 및 표본 편중">
+          <div class="anl-dist-header">
+            <div class="anl-dist-title-group">
+              <h3 class="anl-dist-title"><span>📊</span> 정답 분포 및 표본 편중 (Zero-Inflation Diagnosis)</h3>
+              <p class="anl-dist-subtitle">선택된 예측 평가 코호트의 실제 다음 조사값 정답 분포와 0 편중 현황을 정밀 진단합니다.</p>
+            </div>
+            <div class="anl-dist-badge-wrap">
+              <span class="chart-mode-badge" id="anl_dist_cohort_badge">평가 코호트 로딩 중...</span>
+            </div>
+          </div>
+
+          <!-- 동적 경고 요약 카드 (토마토 타깃 시 강조) -->
+          <div class="anl-dist-warning-card" id="anl_dist_warning_card" style="display: none;"></div>
+
+          <!-- 2열 나란한 차트 그리드 (모바일 세로) -->
+          <div class="anl-dist-charts-grid">
+            <!-- 차트 A: 0 vs 양수 구성 막대 -->
+            <div class="chart-card anl-dist-card">
+              <div class="chart-card-header">
+                <div class="chart-title-group">
+                  <h4 class="chart-title">정답 0 vs 양수 표본 구성 비율</h4>
+                  <p class="chart-subtitle">전체 평가 표본 중 0과 양수(개화/착과) 정답의 N 및 비중</p>
+                </div>
+                <div class="anl-card-badges" id="anl_dist_comp_badges">
+                  <span class="chart-mode-badge" id="badge_target_composition">100% 구성비</span>
+                </div>
+              </div>
+              <div id="anl_chart_target_composition" class="chart-dom" style="height: 330px;"></div>
+              <div class="anl-chart-footer-caption" id="anl_comp_footer_caption">
+                <!-- 동적 캡션 -->
+              </div>
+            </div>
+
+            <!-- 차트 B: 이산형 정답 히스토그램 -->
+            <div class="chart-card anl-dist-card">
+              <div class="chart-card-header">
+                <div class="chart-title-group">
+                  <h4 class="chart-title">이산형 꽃수/착과수 정답 분포</h4>
+                  <p class="chart-subtitle">실제 다음 조사값(0, 1, 2, ...)별 빈도 및 극단값 구간 (0 강조, 빈 구간 유지)</p>
+                </div>
+                <div class="anl-hist-controls">
+                  <button type="button" class="hist-toggle-btn active" id="anl_hist_toggle_count" data-mode="count">표본수 (N)</button>
+                  <button type="button" class="hist-toggle-btn" id="anl_hist_toggle_rate" data-mode="rate">비율 (%)</button>
+                </div>
+              </div>
+              <div id="anl_chart_target_histogram" class="chart-dom" style="height: 330px;"></div>
+              <!-- 대체 표 콘텐츠 (차트 로드 실패 시 제공) -->
+              <div class="anl-hist-fallback-table-wrap" id="anl_hist_fallback" style="display: none;"></div>
+              <div class="anl-chart-footer-caption" id="anl_hist_footer_caption">
+                <!-- 동적 캡션 -->
+              </div>
+            </div>
+          </div>
+
+          <!-- 해석 가이드 -->
+          <div class="anl-dist-interpretation-box">
+            <div class="anl-interp-icon">💡</div>
+            <div class="anl-interp-text">
+              <strong>현장 데이터 해석 가이드:</strong> 꽃수 0은 실제 무개화, 해당 화방 종료, 관측 불가 또는 기록 방식의 차이를 포함할 수 있습니다. 현재 분석은 0을 오류로 간주하지 않으며 현장 정의 확인이 필요합니다.
+            </div>
           </div>
         </section>
 

@@ -61,12 +61,15 @@ export class AnalysisViewController {
       selectedArmId: 'B0',
       schemaTableFilter: 'all',
       schemaSearchQuery: '',
+      histMode: 'count', // 'count' | 'rate'
     };
 
     // ECharts instances
     this.chartModelComp = null;
     this.chartErrorStrata = null;
     this.chartSseShare = null;
+    this.chartTargetComp = null;
+    this.chartTargetHist = null;
     this.initialized = false;
   }
 
@@ -159,6 +162,24 @@ export class AnalysisViewController {
         this.renderTargetDependentViews();
       });
     });
+
+    // 4-B. Histogram Count/Rate Toggle Buttons
+    const btnHistCount = document.getElementById('anl_hist_toggle_count');
+    const btnHistRate = document.getElementById('anl_hist_toggle_rate');
+    if (btnHistCount && btnHistRate) {
+      btnHistCount.addEventListener('click', () => {
+        btnHistCount.classList.add('active');
+        btnHistRate.classList.remove('active');
+        this.state.histMode = 'count';
+        this.renderTargetHistogram();
+      });
+      btnHistRate.addEventListener('click', () => {
+        btnHistRate.classList.add('active');
+        btnHistCount.classList.remove('active');
+        this.state.histMode = 'rate';
+        this.renderTargetHistogram();
+      });
+    }
 
     // 5. Dimension Dropdown
     const dimSelect = document.getElementById('anl_dimension_select');
@@ -266,6 +287,7 @@ export class AnalysisViewController {
 
   renderTargetDependentViews() {
     this.renderKpiSummaryCards();
+    this.renderTargetDistributionSection();
     this.renderDiagnosisCard();
     this.renderBaselineComparisonTable();
     this.renderCrossedStrataTable();
@@ -351,6 +373,8 @@ export class AnalysisViewController {
     const domModel = document.getElementById('anl_chart_model_comp');
     const domStrata = document.getElementById('anl_chart_strata');
     const domSse = document.getElementById('anl_chart_sse');
+    const domComp = document.getElementById('anl_chart_target_composition');
+    const domHist = document.getElementById('anl_chart_target_histogram');
 
     if (domModel && window.echarts) {
       this.chartModelComp = echarts.init(domModel);
@@ -361,6 +385,12 @@ export class AnalysisViewController {
     if (domSse && window.echarts) {
       this.chartSseShare = echarts.init(domSse);
     }
+    if (domComp && window.echarts) {
+      this.chartTargetComp = echarts.init(domComp);
+    }
+    if (domHist && window.echarts) {
+      this.chartTargetHist = echarts.init(domHist);
+    }
 
     this.renderCharts();
   }
@@ -369,11 +399,14 @@ export class AnalysisViewController {
     if (this.chartModelComp) this.chartModelComp.resize();
     if (this.chartErrorStrata) this.chartErrorStrata.resize();
     if (this.chartSseShare) this.chartSseShare.resize();
+    if (this.chartTargetComp) this.chartTargetComp.resize();
+    if (this.chartTargetHist) this.chartTargetHist.resize();
   }
 
   renderCharts() {
     this.renderModelComparisonChart();
     this.renderStrataVisuals();
+    this.renderTargetDistributionCharts();
   }
 
   // Chart 1: Model Comparison Bar Chart
@@ -452,6 +485,397 @@ export class AnalysisViewController {
     };
 
     this.chartModelComp.setOption(option, true);
+  }
+
+  // =========================================================================
+  // 1-2-B. TARGET DISTRIBUTION & ZERO-INFLATION DIAGNOSIS
+  // =========================================================================
+  renderTargetDistributionSection() {
+    if (!this.bundle || !this.bundle.tables || !this.bundle.tables.target_distribution) return;
+    const targetDist = this.bundle.tables.target_distribution;
+    const rows = targetDist.filter(
+      r => r.target_id === this.state.target && r.split === this.state.split
+    );
+
+    if (!rows || rows.length === 0) return;
+
+    const targetInfo = TARGET_META[this.state.target] || { name: this.state.target, icon: '🌱' };
+    const splitLabel = this.state.split === 'test' ? '테스트(test)' : '검증(validation)';
+    const r0 = rows[0];
+    const total_n = Number(r0.total_n);
+    const zero_n = Number(r0.zero_n);
+    const positive_n = Number(r0.positive_n);
+    const zero_rate = Number(r0.zero_rate);
+    const positive_rate = Number(r0.positive_rate);
+
+    // Header badge update
+    const badgeEl = document.getElementById('anl_dist_cohort_badge');
+    if (badgeEl) {
+      badgeEl.textContent = `${targetInfo.icon} ${targetInfo.name} [${splitLabel}셋 N=${total_n.toLocaleString()}건]`;
+    }
+
+    // Dynamic Warning Card
+    const warnCard = document.getElementById('anl_dist_warning_card');
+    if (warnCard) {
+      warnCard.style.display = 'block';
+      const isTomato = this.state.target.startsWith('tomato');
+      const isSmallPos = positive_n < 30;
+
+      if (isTomato) {
+        warnCard.innerHTML = `
+          <div class="warn-header">
+            <span>⚠️</span> <strong>토마토 꽃수 정답의 0 편중(Zero-Inflation) 및 표본 특성 진단</strong>
+          </div>
+          <div class="warn-summary-chips">
+            <div class="warn-chip">선택 코호트 (${splitLabel}셋): 0 비율 ${(zero_rate * 100).toFixed(1)}%</div>
+            <div class="warn-chip">양수(개화) 정답: 단 ${positive_n}행 / 전체 ${total_n}행 (${(positive_rate * 100).toFixed(1)}%)</div>
+            <div class="warn-chip" style="${isSmallPos ? 'background:#fee2e2;border-color:#fca5a5;color:#991b1b;' : ''}">
+              ${isSmallPos ? '⚠️ 양수 소표본 (N < 30)' : '표본 확보'}
+            </div>
+          </div>
+          <ul class="warn-desc-list">
+            <li><strong>개화 구간 성능 판단의 한계:</strong> 0이 대다수인 전체 평균 성능(RMSE/MAE)만으로는 실제 개화(꽃 발생) 구간의 모델 성능을 판단하기 어렵습니다.</li>
+            <li><strong>0 예측 기준의 착시:</strong> 항상 0만 예측하는 진단용 더미 모델이라도 대다수 표본에서 오차가 0이 되므로 겉보기 RMSE가 매우 낮게 왜곡됩니다. 0 예측 기준의 낮은 RMSE가 실제 개화 포착 성공을 의미하지 않습니다.</li>
+            <li><strong>테스트 코호트 실태:</strong> 테스트셋 기준 토마토 4개 타깃의 0 비율은 96.3~97.0%에 달하며, 양수 정답은 타깃별 9~12행에 불과한 극소 표본입니다 (현재 화면 수치는 선택된 ${splitLabel}셋 데이터로 동적 계산됨).</li>
+          </ul>
+        `;
+      } else {
+        warnCard.innerHTML = `
+          <div class="warn-header">
+            <span>🍓</span> <strong>딸기 착과수 정답 분포 및 표본 특성 진단</strong>
+          </div>
+          <div class="warn-summary-chips">
+            <div class="warn-chip">선택 코호트 (${splitLabel}셋): 0 비율 ${(zero_rate * 100).toFixed(1)}%</div>
+            <div class="warn-chip">착과(양수) 정답: ${positive_n}행 / 전체 ${total_n}행 (${(positive_rate * 100).toFixed(1)}%)</div>
+            <div class="warn-chip">${isSmallPos ? '⚠️ 소표본 (N < 30)' : '충분 표본 (N ≥ 30)'}</div>
+          </div>
+          <ul class="warn-desc-list">
+            <li><strong>수량 변화 구간 오차 편중:</strong> 딸기는 토마토 대비 착과 발생 비율(${(positive_rate * 100).toFixed(1)}%)이 높으나, 2개 이상 급증 구간에 전체 제곱오차(SSE)의 91.6~96.0%가 편중되어 있습니다.</li>
+            <li><strong>변화 대응력 검증 필요:</strong> 전체 평균 RMSE뿐만 아니라 실제 착과 수량이 변하는 시점의 변화 포착 정확도를 함께 검증해야 합니다.</li>
+          </ul>
+        `;
+      }
+    }
+
+    this.renderTargetDistributionCharts();
+  }
+
+  renderTargetDistributionCharts() {
+    this.renderTargetCompositionChart();
+    this.renderTargetHistogram();
+  }
+
+  // Chart A: 0 vs Positive 100% Stacked Composition Bar
+  renderTargetCompositionChart() {
+    const dom = document.getElementById('anl_chart_target_composition');
+    if (!dom || !this.bundle || !this.bundle.tables || !this.bundle.tables.target_distribution) return;
+    if (!this.chartTargetComp && window.echarts) {
+      this.chartTargetComp = echarts.init(dom);
+    }
+    if (!this.chartTargetComp) return;
+
+    const rows = this.bundle.tables.target_distribution.filter(
+      r => r.target_id === this.state.target && r.split === this.state.split
+    );
+    if (!rows || rows.length === 0) return;
+
+    const r0 = rows[0];
+    const total_n = Number(r0.total_n);
+    const zero_n = Number(r0.zero_n);
+    const positive_n = Number(r0.positive_n);
+    const zero_pct = (Number(r0.zero_rate) * 100).toFixed(1);
+    const pos_pct = (Number(r0.positive_rate) * 100).toFixed(1);
+
+    // Small sample badge update
+    const badgesWrap = document.getElementById('anl_dist_comp_badges');
+    if (badgesWrap) {
+      let smallBadge = '';
+      if (positive_n < 30) {
+        smallBadge = `<span class="badge-small-sample">⚠️ 소표본 (양수 N=${positive_n})</span>`;
+      }
+      badgesWrap.innerHTML = `<span class="chart-mode-badge" id="badge_target_composition">100% 구성비</span>${smallBadge}`;
+    }
+
+    // Footer caption
+    const capEl = document.getElementById('anl_comp_footer_caption');
+    if (capEl) {
+      const splitLabel = this.state.split === 'test' ? '테스트(test)' : '검증(validation)';
+      capEl.innerHTML = `타깃: <strong>${TARGET_META[this.state.target].name}</strong> | 분할: <strong>${splitLabel}</strong> | 전체 평가 표본 N=<strong>${total_n.toLocaleString()}</strong>건 (0: ${zero_n.toLocaleString()}건, 양수: ${positive_n.toLocaleString()}건)`;
+    }
+
+    const option = {
+      tooltip: {
+        trigger: 'item',
+        backgroundColor: 'rgba(15, 23, 42, 0.94)',
+        borderColor: '#e2e8f0',
+        textStyle: { color: '#ffffff', fontSize: 12 },
+        formatter: (params) => {
+          const val = params.value;
+          const pct = ((val / total_n) * 100).toFixed(2);
+          return `
+            <div style="font-weight:700;margin-bottom:4px;border-bottom:1px solid rgba(255,255,255,0.2);padding-bottom:3px;">
+              ${params.seriesName}
+            </div>
+            <div style="display:flex;justify-content:space-between;gap:15px;margin-bottom:2px;">
+              <span>표본 수(N):</span>
+              <span style="font-weight:800;color:#fde047;">${val.toLocaleString()}건</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;gap:15px;">
+              <span>구성 비율:</span>
+              <span style="font-weight:800;color:#60a5fa;">${pct}%</span>
+            </div>
+            <div style="font-size:11px;color:#cbd5e1;margin-top:4px;">
+              (전체 코호트 N=${total_n.toLocaleString()}건 기준)
+            </div>
+          `;
+        }
+      },
+      legend: {
+        top: 10,
+        textStyle: { fontSize: 12, color: '#475569' },
+        itemGap: 20
+      },
+      grid: {
+        left: 30,
+        right: 40,
+        top: 60,
+        bottom: 40,
+        containLabel: true
+      },
+      xAxis: {
+        type: 'value',
+        max: total_n,
+        axisLabel: {
+          formatter: (val) => `${((val / total_n) * 100).toFixed(0)}%`,
+          color: '#64748b'
+        },
+        splitLine: { lineStyle: { type: 'dashed', color: '#f1f5f9' } }
+      },
+      yAxis: {
+        type: 'category',
+        data: ['정답 구성'],
+        axisLabel: { color: '#1e293b', fontWeight: 600, fontSize: 12 },
+        axisTick: { show: false },
+        axisLine: { lineStyle: { color: '#cbd5e1' } }
+      },
+      series: [
+        {
+          name: '정답 0 (무개화/종료)',
+          type: 'bar',
+          stack: 'total',
+          data: [zero_n],
+          itemStyle: {
+            color: '#d97706',
+            borderColor: '#92400e',
+            borderWidth: 2,
+            borderRadius: [4, 0, 0, 4]
+          },
+          label: {
+            show: true,
+            position: 'inside',
+            formatter: () => `0 표본: ${zero_n}건 (${zero_pct}%)`,
+            color: '#ffffff',
+            fontWeight: 'bold',
+            fontSize: 12
+          }
+        },
+        {
+          name: '양수 정답 (개화/착과 ≥1)',
+          type: 'bar',
+          stack: 'total',
+          data: [positive_n],
+          itemStyle: {
+            color: '#10b981',
+            borderColor: '#047857',
+            borderWidth: 2,
+            borderRadius: [0, 4, 4, 0]
+          },
+          label: {
+            show: true,
+            position: (positive_n / total_n) < 0.12 ? 'right' : 'inside',
+            formatter: () => `양수: ${positive_n}건 (${pos_pct}%)`,
+            color: (positive_n / total_n) < 0.12 ? '#047857' : '#ffffff',
+            fontWeight: 'bold',
+            fontSize: 12
+          }
+        }
+      ]
+    };
+
+    this.chartTargetComp.setOption(option, true);
+  }
+
+  // Chart B: Discrete Integer Flower/Fruit Set Histogram
+  renderTargetHistogram() {
+    const dom = document.getElementById('anl_chart_target_histogram');
+    const fallbackWrap = document.getElementById('anl_hist_fallback');
+    if (!dom || !this.bundle || !this.bundle.tables || !this.bundle.tables.target_distribution) return;
+    if (!this.chartTargetHist && window.echarts) {
+      this.chartTargetHist = echarts.init(dom);
+    }
+
+    const rawRows = this.bundle.tables.target_distribution.filter(
+      r => r.target_id === this.state.target && r.split === this.state.split
+    );
+    if (!rawRows || rawRows.length === 0) return;
+
+    const total_n = Number(rawRows[0].total_n);
+    const isRateMode = (this.state.histMode === 'rate');
+
+    const maxVal = Math.max(...rawRows.map(r => Number(r.value)));
+    const rowMap = new Map();
+    rawRows.forEach(r => rowMap.set(Number(r.value), r));
+
+    const xCategories = [];
+    const barData = [];
+    const tableData = [];
+
+    for (let v = 0; v <= maxVal; v++) {
+      xCategories.push(String(v));
+      const exist = rowMap.get(v);
+      const n = exist ? Number(exist.n) : 0;
+      const rate = exist ? Number(exist.rate) : 0.0;
+      const yVal = isRateMode ? Number((rate * 100).toFixed(2)) : n;
+
+      const isZero = (v === 0);
+      barData.push({
+        value: yVal,
+        countN: n,
+        rateVal: rate,
+        itemStyle: {
+          color: isZero ? '#d97706' : '#3b82f6',
+          borderColor: isZero ? '#92400e' : '#1d4ed8',
+          borderWidth: isZero ? 2 : 1.2,
+          borderRadius: [4, 4, 0, 0]
+        }
+      });
+
+      tableData.push({
+        val: v,
+        n: n,
+        rate: (rate * 100).toFixed(2),
+        note: isZero ? '정답 0 편중 구간' : (n === 0 ? '빈 구간 (0건)' : (n < 30 ? '소표본' : '정상'))
+      });
+    }
+
+    // Footer caption
+    const capEl = document.getElementById('anl_hist_footer_caption');
+    if (capEl) {
+      const splitLabel = this.state.split === 'test' ? '테스트(test)' : '검증(validation)';
+      capEl.innerHTML = `표시 모드: <strong>${isRateMode ? '비율(%)' : '표본수(N)'}</strong> | 이산 구간 0~${maxVal} (빈 구간 0건 유지, 극단값 포함) | 전체 N=<strong>${total_n.toLocaleString()}</strong>건`;
+    }
+
+    // Fallback table rendering
+    if (fallbackWrap) {
+      const rowsHtml = tableData.map(r => `
+        <tr>
+          <td><strong>${r.val}</strong></td>
+          <td>${r.n.toLocaleString()}건</td>
+          <td>${r.rate}%</td>
+          <td><span style="${r.val === 0 ? 'color:#b45309;font-weight:700;' : ''}">${r.note}</span></td>
+        </tr>
+      `).join('');
+
+      fallbackWrap.innerHTML = `
+        <table class="anl-hist-fallback-table">
+          <thead>
+            <tr>
+              <th>실제 다음 조사값</th>
+              <th>표본수 (N)</th>
+              <th>비율 (%)</th>
+              <th>구간 특성</th>
+            </tr>
+          </thead>
+          <tbody>${rowsHtml}</tbody>
+        </table>
+      `;
+    }
+
+    if (!this.chartTargetHist) {
+      if (fallbackWrap) fallbackWrap.style.display = 'block';
+      return;
+    }
+    if (fallbackWrap) fallbackWrap.style.display = 'none';
+
+    const option = {
+      tooltip: {
+        trigger: 'axis',
+        axisPointer: { type: 'shadow' },
+        backgroundColor: 'rgba(15, 23, 42, 0.94)',
+        borderColor: '#e2e8f0',
+        textStyle: { color: '#ffffff', fontSize: 12 },
+        formatter: (params) => {
+          if (!params || params.length === 0) return '';
+          const p = params[0];
+          const val = p.name;
+          const item = p.data;
+          const isZero = (val === '0');
+          const zeroNote = isZero
+            ? '<div style="margin-top:4px;padding:3px 6px;background:rgba(217,119,6,0.3);color:#fde047;font-size:11px;font-weight:700;">⚠️ 0 편중 구간 (무개화/관측종료)</div>'
+            : '';
+          return `
+            <div style="font-weight:700;margin-bottom:4px;border-bottom:1px solid rgba(255,255,255,0.2);padding-bottom:3px;">
+              실제 꽃수/착과수: <span style="color:#60a5fa">${val}개</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;gap:15px;margin-bottom:2px;">
+              <span>표본 수(N):</span>
+              <span style="font-weight:800;color:#fde047;">${item.countN.toLocaleString()}건</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;gap:15px;">
+              <span>비율:</span>
+              <span style="font-weight:800;color:#38bdf8;">${(item.rateVal * 100).toFixed(2)}%</span>
+            </div>
+            ${zeroNote}
+          `;
+        }
+      },
+      grid: {
+        left: 20,
+        right: 20,
+        top: 30,
+        bottom: 40,
+        containLabel: true
+      },
+      xAxis: {
+        type: 'category',
+        data: xCategories,
+        name: '실제 다음 조사값 (개)',
+        nameLocation: 'middle',
+        nameGap: 24,
+        nameTextStyle: { color: '#64748b', fontSize: 11 },
+        axisLabel: {
+          color: '#64748b',
+          fontSize: 11,
+          interval: maxVal > 25 ? 4 : (maxVal > 15 ? 2 : 0)
+        },
+        axisTick: { alignWithLabel: true }
+      },
+      yAxis: {
+        type: 'value',
+        name: isRateMode ? '비율 (%)' : '표본 수 (N)',
+        nameTextStyle: { color: '#64748b', fontSize: 11 },
+        axisLabel: {
+          formatter: isRateMode ? '{value}%' : '{value}',
+          color: '#64748b'
+        },
+        splitLine: { lineStyle: { type: 'dashed', color: '#f1f5f9' } }
+      },
+      series: [
+        {
+          name: '정답 빈도',
+          type: 'bar',
+          barWidth: '60%',
+          data: barData
+        }
+      ]
+    };
+
+    try {
+      this.chartTargetHist.setOption(option, true);
+    } catch (err) {
+      console.error('Failed to setOption for histogram:', err);
+      if (fallbackWrap) fallbackWrap.style.display = 'block';
+    }
   }
 
   // Chart 2 & 3: Strata RMSE & SSE Share Charts + Strata Table

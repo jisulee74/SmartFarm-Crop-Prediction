@@ -2668,3 +2668,357 @@ body {
     grid-template-columns: 1fr;
   }
 }
+
+/* ==========================================================================
+   Tab 1: 작기 품질 및 예측 활용 가능성 카드 (Prediction Usability Card)
+   ========================================================================== */
+.prediction-usability-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: var(--radius-md, 12px);
+  padding: 18px 22px;
+  margin-bottom: 24px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+  transition: all 0.25s ease;
+}
+
+.prediction-usability-card.state-warning {
+  background: #fffdfa;
+  border: 1.5px solid #fde68a;
+  border-left: 6px solid #f59e0b;
+  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.08);
+}
+
+.prediction-usability-card.state-normal {
+  background: #ffffff;
+  border: 1.5px solid #bfdbfe;
+  border-left: 6px solid #2563eb;
+}
+
+.usability-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+}
+
+.usability-card-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 15px;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.usability-state-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.usability-state-badge.badge-warn {
+  background: #fef3c7;
+  color: #b45309;
+  border: 1px solid #fde68a;
+}
+
+.usability-state-badge.badge-ok {
+  background: #eff6ff;
+  color: #1d4ed8;
+  border: 1px solid #bfdbfe;
+}
+
+.usability-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.usability-stat-item {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 10px 14px;
+  display: flex;
+  flex-direction: column;
+}
+
+.usability-stat-item.highlight-warn {
+  background: #fffbeb;
+  border-color: #fde68a;
+}
+
+.usability-stat-label {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: #64748b;
+  margin-bottom: 4px;
+}
+
+.usability-stat-val {
+  font-size: 18px;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.usability-stat-item.highlight-warn .usability-stat-val {
+  color: #d97706;
+}
+
+.usability-stat-sub {
+  font-size: 10.5px;
+  color: #94a3b8;
+  margin-top: 2px;
+}
+
+.usability-notice-box {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-size: 12.5px;
+  line-height: 1.6;
+  margin-top: 10px;
+}
+
+.usability-notice-box.notice-warn {
+  background: #fffbeb;
+  border: 1px solid #fef08a;
+  color: #92400e;
+}
+
+.usability-notice-box.notice-info {
+  background: #f1f5f9;
+  border: 1px solid #e2e8f0;
+  color: #334155;
+}
+
+.badge-single-obs {
+  background: #fef3c7 !important;
+  color: #b45309 !important;
+  border: 1px solid #fde68a !important;
+  font-weight: 800 !important;
+  animation: pulse-warn 2s infinite ease-in-out;
+}
+
+@keyframes pulse-warn {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.8; }
+}
+
+.badge-small-sample {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 9px;
+  font-size: 11px;
+  font-weight: 700;
+  border-radius: 6px;
+  background: #fffbeb;
+  color: #b45309;
+  border: 1px solid #fde68a;
+  margin-left: 8px;
+}
+
+/* ==========================================================================
+   Tab 3: 정답 분포 및 표본 편중 섹션 (Target Distribution & Zero-Inflation)
+   ========================================================================== */
+.anl-target-dist-section {
+  margin-top: 28px;
+  margin-bottom: 34px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: var(--radius-md, 12px);
+  padding: 24px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
+}
+
+.anl-dist-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 18px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.anl-dist-title-group .anl-dist-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 17px;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.anl-dist-title-group .anl-dist-subtitle {
+  font-size: 12.5px;
+  color: #64748b;
+  margin-top: 4px;
+}
+
+.anl-dist-warning-card {
+  background: #fffdf5;
+  border: 1.5px solid #fde68a;
+  border-left: 6px solid #f59e0b;
+  border-radius: 10px;
+  padding: 16px 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 8px rgba(245, 158, 11, 0.06);
+}
+
+.anl-dist-warning-card .warn-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14.5px;
+  font-weight: 800;
+  color: #92400e;
+  margin-bottom: 8px;
+}
+
+.anl-dist-warning-card .warn-summary-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.anl-dist-warning-card .warn-chip {
+  background: #fef3c7;
+  border: 1px solid #fde68a;
+  color: #78350f;
+  padding: 5px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.anl-dist-warning-card .warn-desc-list {
+  margin: 0;
+  padding-left: 18px;
+  font-size: 12.5px;
+  color: #451a03;
+  line-height: 1.65;
+}
+
+.anl-dist-warning-card .warn-desc-list li {
+  margin-bottom: 4px;
+}
+
+.anl-dist-charts-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  margin-bottom: 16px;
+}
+
+.anl-dist-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.anl-hist-controls {
+  display: flex;
+  gap: 4px;
+  background: #f1f5f9;
+  padding: 3px;
+  border-radius: 6px;
+  border: 1px solid #cbd5e1;
+}
+
+.hist-toggle-btn {
+  padding: 4px 10px;
+  font-size: 11.5px;
+  font-weight: 700;
+  border: none;
+  background: transparent;
+  color: #64748b;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.hist-toggle-btn.active {
+  background: #2563eb;
+  color: #ffffff;
+  box-shadow: 0 1px 3px rgba(37, 99, 235, 0.3);
+}
+
+.anl-chart-footer-caption {
+  font-size: 11.5px;
+  color: #64748b;
+  padding-top: 10px;
+  margin-top: auto;
+  border-top: 1px dashed #e2e8f0;
+  text-align: right;
+}
+
+.anl-dist-interpretation-box {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 14px 18px;
+  font-size: 13px;
+  color: #334155;
+  line-height: 1.6;
+}
+
+.anl-interp-icon {
+  font-size: 18px;
+  line-height: 1;
+}
+
+.anl-interp-text strong {
+  color: #0f172a;
+}
+
+.anl-hist-fallback-table-wrap {
+  max-height: 320px;
+  overflow-y: auto;
+  margin-bottom: 12px;
+}
+
+.anl-hist-fallback-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+
+.anl-hist-fallback-table th,
+.anl-hist-fallback-table td {
+  padding: 6px 10px;
+  border: 1px solid #e2e8f0;
+  text-align: center;
+}
+
+.anl-hist-fallback-table th {
+  background: #f1f5f9;
+  font-weight: 700;
+  color: #475569;
+}
+
+@media (max-width: 900px) {
+  .usability-stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .anl-dist-charts-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
