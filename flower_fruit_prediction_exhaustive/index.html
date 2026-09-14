@@ -1,0 +1,1461 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>꽃수·착과수 예측 모델 검증</title>
+  <link rel="stylesheet" href="./src/styles.css?v=12">
+  <!-- Apache ECharts CDN (최신 안정 버전) -->
+  <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
+</head>
+<body>
+  <!-- 최상단 글로벌 헤더 & 1차 주 탭 (전체 제목 및 탭 선택) -->
+  <header class="global-navbar">
+    <div class="global-navbar-container">
+      <div class="global-brand">
+        <span class="global-logo">🌱</span>
+        <div>
+          <h1 class="global-title">꽃수·착과수 예측 모델 검증</h1>
+          <p class="global-subtitle">생육 관측 데이터 탐색 &amp; 머신러닝 예측 모델 실험 검증 플랫폼</p>
+        </div>
+      </div>
+
+      <!-- 1차 주 탭 (관측 현황 vs 실험 결과 비교 vs 생육 예측 분석) -->
+      <nav class="primary-nav-tabs" aria-label="메인 대시보드 탭">
+        <button type="button" class="primary-tab-btn active" data-tab="tab-observation">
+          <span>📊</span> 관측 현황
+        </button>
+        <button type="button" class="primary-tab-btn" data-tab="tab-experiments">
+          <span>🧪</span> 실험 결과 비교
+        </button>
+        <button type="button" class="primary-tab-btn" data-tab="tab-analysis">
+          <span>📋</span> 생육 예측 분석
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ====================================================================
+       TAB 1: 관측 현황 (수정 전 기존 UI / 레이아웃 / 구성 100% 완전 보존)
+       ==================================================================== -->
+  <div id="tab-observation" class="tab-pane active">
+<!-- 헤더 영역 -->
+  <header class="app-header">
+    <div class="header-container">
+      <div class="header-title-area">
+        <div class="header-icon">🌿</div>
+        <div>
+          <h1 class="header-title">작물 생육 관측 추이</h1>
+          <p class="header-subtitle">토마토 개화 및 딸기 착과 실제 관측 데이터 시계열 탐색 대시보드</p>
+        </div>
+      </div>
+
+      <!-- 상단 뷰 탭 -->
+      <nav class="crop-nav-tabs">
+        <button type="button" class="nav-tab-btn active" data-target="all">
+          <span>📊</span> 전체 보기 (8종)
+        </button>
+        <button type="button" class="nav-tab-btn" data-target="tomato-section">
+          <span>🍅</span> 토마토 꽃 수 (4종)
+        </button>
+        <button type="button" class="nav-tab-btn" data-target="strawberry-section">
+          <span>🍓</span> 딸기 착과수 (4종)
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- 메인 컨텐츠 영역 -->
+  <main class="main-content">
+    
+    <!-- 안내 및 해석 가이드 배너 -->
+    <section class="guide-banner" aria-label="데이터 해석 안내">
+      <div class="guide-icon">💡</div>
+      <div class="guide-text">
+        <h4>생육 관측 데이터 해석 및 산출 기준 안내</h4>
+        <p>
+          • <strong>개체당 평균 모드:</strong> 특정 조사일에 조사된 유효 개체들의 평균값입니다. 조사일마다 조사 개체군(N수)이 달라질 수 있으므로 단순 총합이 아닌 평균값을 비교합니다.<br>
+          • <strong>결측치 및 0의 구분:</strong> 빈칸(미관측)은 결측값으로 처리되어 표본(N)에서 제외되며, 실제 관측값 0은 정상 포함됩니다.<br>
+          • <strong>토마토 전체 꽃 수:</strong> 1·2·3화방 외 추가 화방을 포함한 원본 CSV 관측값을 유지합니다. (임의 합산 방지)
+        </p>
+        <div class="guide-badges">
+          <span class="badge-info">✔️ train/validation/test 전체 행 포함</span>
+          <span class="badge-info">✔️ 실제 날짜 간격 반영 시간축</span>
+          <span class="badge-info">✔️ 마우스 휠 및 하단 슬라이더 확대/축소 지원</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 상단 작물별 관측 요약 카드 그리드 -->
+    <section class="summary-grid" aria-label="작물별 관측 요약">
+      <!-- 토마토 요약 -->
+      <div class="summary-card tomato">
+        <div class="summary-card-header">
+          <div class="summary-card-title">
+            <span>🍅</span>
+            <span>토마토 관측 현황</span>
+          </div>
+          <span class="summary-card-badge" id="tomato_summary_badge">로딩 중...</span>
+        </div>
+        <div class="summary-stats-list">
+          <div class="stat-item">
+            <span class="stat-label">관측 기간</span>
+            <span class="stat-value" id="tomato_period">-</span>
+            <span class="stat-subtext">실제 조사일 기준</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">시설 수</span>
+            <span class="stat-value" id="tomato_facility_count">-</span>
+            <span class="stat-subtext" id="tomato_crop_per_facility">시설별 작기 수: -</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">고유 개체 수</span>
+            <span class="stat-value" id="tomato_entity_count">-</span>
+            <span class="stat-subtext">시설+작기+개체번호 키</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">총 관측 건수</span>
+            <span class="stat-value" id="tomato_total_rows">-</span>
+            <span class="stat-subtext">누적 관측 행 수</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 딸기 요약 -->
+      <div class="summary-card strawberry">
+        <div class="summary-card-header">
+          <div class="summary-card-title">
+            <span>🍓</span>
+            <span>딸기 관측 현황</span>
+          </div>
+          <span class="summary-card-badge" id="strawberry_summary_badge">로딩 중...</span>
+        </div>
+        <div class="summary-stats-list">
+          <div class="stat-item">
+            <span class="stat-label">관측 기간</span>
+            <span class="stat-value" id="strawberry_period">-</span>
+            <span class="stat-subtext">실제 조사일 기준</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">시설 수</span>
+            <span class="stat-value" id="strawberry_facility_count">-</span>
+            <span class="stat-subtext" id="strawberry_crop_per_facility">시설별 작기 수: -</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">고유 개체 수</span>
+            <span class="stat-value" id="strawberry_entity_count">-</span>
+            <span class="stat-subtext">시설+작기+개체번호 키</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">총 관측 건수</span>
+            <span class="stat-value" id="strawberry_total_rows">-</span>
+            <span class="stat-subtext">누적 관측 행 수</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 토마토 영역 ================= -->
+    <section id="tomato-section" class="crop-section">
+      <div class="crop-section-header">
+        <h2 class="crop-section-title">
+          <span>🍅</span> 토마토 개화 관측 추이
+          <span class="crop-badge-count" id="tomato_filter_count_badge">전체 2,239건</span>
+        </h2>
+      </div>
+
+      <!-- 토마토 필터 툴바 -->
+      <div class="filter-toolbar" id="tomato_filter_toolbar">
+        <div class="filter-row-top">
+          <div class="mode-toggle-group" id="tomato_mode_toggle">
+            <button type="button" class="mode-btn active" data-mode="average">
+              <span>📊</span> 개체당 평균 모드
+            </button>
+            <button type="button" class="mode-btn" data-mode="individual">
+              <span>🔍</span> 개체별 추이 모드
+            </button>
+          </div>
+          <div class="filter-status-info" id="tomato_filter_status">
+            <span>ℹ️ 현재 조건: <strong>전체 개체 평균</strong></span>
+          </div>
+        </div>
+
+        <div class="filter-controls-grid">
+          <div class="control-group">
+            <label class="control-label" for="tomato_facility_select">🏢 시설 (Facility)</label>
+            <select id="tomato_facility_select" class="control-select">
+              <option value="ALL">전체 시설</option>
+            </select>
+          </div>
+          <div class="control-group">
+            <label class="control-label" for="tomato_crop_select">🌱 작기 기간 (Crop Cycle)</label>
+            <select id="tomato_crop_select" class="control-select">
+              <option value="ALL">전체 작기 (기간)</option>
+            </select>
+          </div>
+          <div class="control-group" id="tomato_sample_control_group">
+            <div class="control-label-row">
+              <label class="control-label" for="tomato_sample_select">🏷️ 개체 번호 (Sample #)</label>
+              <span class="sample-mode-hint" id="tomato_sample_hint">개체당 평균 모드에서는 전체 개체를 대상으로 계산합니다.</span>
+            </div>
+            <select id="tomato_sample_select" class="control-select" disabled>
+              <option value="ALL">전체 개체</option>
+            </select>
+          </div>
+          <div class="control-group">
+            <label class="control-label" for="tomato_start_date">📅 조회 시작일</label>
+            <input type="date" id="tomato_start_date" class="control-input">
+          </div>
+          <div class="control-group">
+            <label class="control-label" for="tomato_end_date">📅 조회 종료일</label>
+            <input type="date" id="tomato_end_date" class="control-input">
+          </div>
+          <div class="control-group">
+            <button type="button" class="btn-reset" id="tomato_btn_reset">
+              <span>🔄</span> 필터 초기화
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 토마토 작기 품질 및 예측 활용 가능성 카드 -->
+      <div class="prediction-usability-card" id="tomato_usability_card" style="display: none;"></div>
+
+      <!-- 토마토 4종 차트 그리드 -->
+      <div class="charts-grid">
+        <!-- 1. 1화방 꽃 수 -->
+        <div class="chart-card">
+          <div class="chart-card-header">
+            <div class="chart-title-group">
+              <h3 class="chart-title">토마토 1화방 꽃 수</h3>
+              <p class="chart-subtitle">개체별 1화방의 개화 관측 추이</p>
+            </div>
+            <span class="chart-mode-badge" id="badge_tomato_flower_truss1">개체당 평균</span>
+          </div>
+          <div id="chart_tomato_flower_truss1" class="chart-dom"></div>
+          <div class="chart-empty-state">
+            <div class="empty-icon">📂</div>
+            <div class="empty-text">해당 조건의 관측 데이터가 없습니다</div>
+          </div>
+        </div>
+
+        <!-- 2. 2화방 꽃 수 -->
+        <div class="chart-card">
+          <div class="chart-card-header">
+            <div class="chart-title-group">
+              <h3 class="chart-title">토마토 2화방 꽃 수</h3>
+              <p class="chart-subtitle">개체별 2화방의 개화 관측 추이</p>
+            </div>
+            <span class="chart-mode-badge" id="badge_tomato_flower_truss2">개체당 평균</span>
+          </div>
+          <div id="chart_tomato_flower_truss2" class="chart-dom"></div>
+          <div class="chart-empty-state">
+            <div class="empty-icon">📂</div>
+            <div class="empty-text">해당 조건의 관측 데이터가 없습니다</div>
+          </div>
+        </div>
+
+        <!-- 3. 3화방 꽃 수 -->
+        <div class="chart-card">
+          <div class="chart-card-header">
+            <div class="chart-title-group">
+              <h3 class="chart-title">토마토 3화방 꽃 수</h3>
+              <p class="chart-subtitle">개체별 3화방의 개화 관측 추이</p>
+            </div>
+            <span class="chart-mode-badge" id="badge_tomato_flower_truss3">개체당 평균</span>
+          </div>
+          <div id="chart_tomato_flower_truss3" class="chart-dom"></div>
+          <div class="chart-empty-state">
+            <div class="empty-icon">📂</div>
+            <div class="empty-text">해당 조건의 관측 데이터가 없습니다</div>
+          </div>
+        </div>
+
+        <!-- 4. 전체 꽃 수 -->
+        <div class="chart-card">
+          <div class="chart-card-header">
+            <div class="chart-title-group">
+              <h3 class="chart-title">토마토 전체 꽃 수</h3>
+              <p class="chart-subtitle">개체별 1·2·3화방 개화 관측 합계 추이</p>
+            </div>
+            <span class="chart-mode-badge" id="badge_tomato_flower_total">개체당 평균</span>
+          </div>
+          <div id="chart_tomato_flower_total" class="chart-dom"></div>
+          <div class="chart-empty-state">
+            <div class="empty-icon">📂</div>
+            <div class="empty-text">해당 조건의 관측 데이터가 없습니다</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ================= 딸기 영역 ================= -->
+    <section id="strawberry-section" class="crop-section">
+      <div class="crop-section-header">
+        <h2 class="crop-section-title">
+          <span>🍓</span> 딸기 착과 관측 추이
+          <span class="crop-badge-count" id="strawberry_filter_count_badge">전체 5,218건</span>
+        </h2>
+      </div>
+
+      <!-- 딸기 필터 툴바 -->
+      <div class="filter-toolbar" id="strawberry_filter_toolbar">
+        <div class="filter-row-top">
+          <div class="mode-toggle-group" id="strawberry_mode_toggle">
+            <button type="button" class="mode-btn active" data-mode="average">
+              <span>📊</span> 개체당 평균 모드
+            </button>
+            <button type="button" class="mode-btn" data-mode="individual">
+              <span>🔍</span> 개체별 추이 모드
+            </button>
+          </div>
+          <div class="filter-status-info" id="strawberry_filter_status">
+            <span>ℹ️ 현재 조건: <strong>전체 개체 평균</strong></span>
+          </div>
+        </div>
+
+        <div class="filter-controls-grid">
+          <div class="control-group">
+            <label class="control-label" for="strawberry_facility_select">🏢 시설 (Facility)</label>
+            <select id="strawberry_facility_select" class="control-select">
+              <option value="ALL">전체 시설</option>
+            </select>
+          </div>
+          <div class="control-group">
+            <label class="control-label" for="strawberry_crop_select">🌱 작기 기간 (Crop Cycle)</label>
+            <select id="strawberry_crop_select" class="control-select">
+              <option value="ALL">전체 작기 (기간)</option>
+            </select>
+          </div>
+          <div class="control-group" id="strawberry_sample_control_group">
+            <div class="control-label-row">
+              <label class="control-label" for="strawberry_sample_select">🏷️ 개체 번호 (Sample #)</label>
+              <span class="sample-mode-hint" id="strawberry_sample_hint">개체당 평균 모드에서는 전체 개체를 대상으로 계산합니다.</span>
+            </div>
+            <select id="strawberry_sample_select" class="control-select" disabled>
+              <option value="ALL">전체 개체</option>
+            </select>
+          </div>
+          <div class="control-group">
+            <label class="control-label" for="strawberry_start_date">📅 조회 시작일</label>
+            <input type="date" id="strawberry_start_date" class="control-input">
+          </div>
+          <div class="control-group">
+            <label class="control-label" for="strawberry_end_date">📅 조회 종료일</label>
+            <input type="date" id="strawberry_end_date" class="control-input">
+          </div>
+          <div class="control-group">
+            <button type="button" class="btn-reset" id="strawberry_btn_reset">
+              <span>🔄</span> 필터 초기화
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 딸기 작기 품질 및 예측 활용 가능성 카드 -->
+      <div class="prediction-usability-card" id="strawberry_usability_card" style="display: none;"></div>
+
+      <!-- 딸기 4종 차트 그리드 -->
+      <div class="charts-grid">
+        <!-- 1. 1화방 착과수 -->
+        <div class="chart-card">
+          <div class="chart-card-header">
+            <div class="chart-title-group">
+              <h3 class="chart-title">딸기 1화방 착과수</h3>
+              <p class="chart-subtitle">개체별 1화방의 착과 관측 추이</p>
+            </div>
+            <span class="chart-mode-badge" id="badge_strawberry_fruit_truss1">개체당 평균</span>
+          </div>
+          <div id="chart_strawberry_fruit_truss1" class="chart-dom"></div>
+          <div class="chart-empty-state">
+            <div class="empty-icon">📂</div>
+            <div class="empty-text">해당 조건의 관측 데이터가 없습니다</div>
+          </div>
+        </div>
+
+        <!-- 2. 2화방 착과수 -->
+        <div class="chart-card">
+          <div class="chart-card-header">
+            <div class="chart-title-group">
+              <h3 class="chart-title">딸기 2화방 착과수</h3>
+              <p class="chart-subtitle">개체별 2화방의 착과 관측 추이</p>
+            </div>
+            <span class="chart-mode-badge" id="badge_strawberry_fruit_truss2">개체당 평균</span>
+          </div>
+          <div id="chart_strawberry_fruit_truss2" class="chart-dom"></div>
+          <div class="chart-empty-state">
+            <div class="empty-icon">📂</div>
+            <div class="empty-text">해당 조건의 관측 데이터가 없습니다</div>
+          </div>
+        </div>
+
+        <!-- 3. 3화방 착과수 -->
+        <div class="chart-card">
+          <div class="chart-card-header">
+            <div class="chart-title-group">
+              <h3 class="chart-title">딸기 3화방 착과수</h3>
+              <p class="chart-subtitle">개체별 3화방의 착과 관측 추이</p>
+            </div>
+            <span class="chart-mode-badge" id="badge_strawberry_fruit_truss3">개체당 평균</span>
+          </div>
+          <div id="chart_strawberry_fruit_truss3" class="chart-dom"></div>
+          <div class="chart-empty-state">
+            <div class="empty-icon">📂</div>
+            <div class="empty-text">해당 조건의 관측 데이터가 없습니다</div>
+          </div>
+        </div>
+
+        <!-- 4. 전체 착과수 -->
+        <div class="chart-card">
+          <div class="chart-card-header">
+            <div class="chart-title-group">
+              <h3 class="chart-title">딸기 전체 착과수</h3>
+              <p class="chart-subtitle">개체별 1·2·3화방 착과 관측 합계 추이</p>
+            </div>
+            <span class="chart-mode-badge" id="badge_strawberry_fruit_total">개체당 평균</span>
+          </div>
+          <div id="chart_strawberry_fruit_total" class="chart-dom"></div>
+          <div class="chart-empty-state">
+            <div class="empty-icon">📂</div>
+            <div class="empty-text">해당 조건의 관측 데이터가 없습니다</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- 푸터 -->
+  <footer class="app-footer">
+    <p>작물 생육 관측 추이 대시보드 • Agricultural Growth Observation Trends Dashboard</p>
+  </footer>
+  </div>
+
+  <!-- ====================================================================
+       TAB 2: 실험 결과 비교 (신규 실험 검증 UI 및 기능 전용)
+       ==================================================================== -->
+  <div id="tab-experiments" class="tab-pane">
+    <main class="main-content">
+      <!-- 실험 조건 순차 선택 제어판 -->
+      <section class="exp-control-card" aria-label="실험 조건 선택 제어판">
+        <div class="exp-control-header">
+          <div class="exp-header-left">
+            <span class="section-badge exp">Experiment Selection</span>
+            <h2 class="exp-control-title">🧪 모델 및 입력변수군 실험 조건 선택</h2>
+          </div>
+          <div class="exp-header-actions">
+            <button type="button" id="exp_refresh_btn" class="btn-refresh" title="실험 결과 새로고침">
+              <span class="refresh-icon">🔄</span> 최신 실험 결과 새로고침
+            </button>
+          </div>
+        </div>
+
+        <div class="exp-selectors-grid">
+          <!-- 1. 작물 선택 -->
+          <div class="selector-field">
+            <label class="selector-label">1. 작물 (Crop)</label>
+            <div class="crop-radio-pills">
+              <label class="radio-pill">
+                <input type="radio" name="exp_crop_radio" value="tomato" checked>
+                <span>🍅 토마토 (Tomato)</span>
+              </label>
+              <label class="radio-pill">
+                <input type="radio" name="exp_crop_radio" value="strawberry">
+                <span>🍓 딸기 (Strawberry)</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- 2. 예측 대상 선택 -->
+          <div class="selector-field">
+            <label for="exp_target_select" class="selector-label">2. 예측 대상 (Target)</label>
+            <select id="exp_target_select" class="exp-select"></select>
+          </div>
+
+          <!-- 3. 모델 선택 -->
+          <div class="selector-field">
+            <label for="exp_model_select" class="selector-label">3. 머신러닝 모델 (Model)</label>
+            <select id="exp_model_select" class="exp-select">
+              <option value="poisson">Poisson Regression</option>
+              <option value="random_forest">Random Forest</option>
+              <option value="catboost">CatBoost</option>
+              <option value="mlp">MLP (다층 퍼셉트론)</option>
+              <option value="tabm" selected>TabM</option>
+              <option value="tft">TFT (Temporal Fusion Transformer)</option>
+            </select>
+          </div>
+
+          <!-- 4. 변수군 선택 -->
+          <div class="selector-field group-selector-field">
+            <div class="label-with-action">
+              <label for="exp_group_select" class="selector-label">4. 입력변수군 조합 (127개 전수조합)</label>
+              <div class="header-inline-actions">
+                <button type="button" id="exp_open_explorer_btn" class="btn-primary-action" title="127개 조합 전체 탐색기 열기">
+                  <span>🧭</span> 조합 탐색기
+                </button>
+                <button type="button" id="exp_view_features_btn" class="btn-text-action" title="포함된 세부 변수 목록 확인">
+                  <span>📋</span> 상세 변수
+                </button>
+              </div>
+            </div>
+            <select id="exp_group_select" class="exp-select"></select>
+          </div>
+
+          <!-- 5. Split 선택 -->
+          <div class="selector-field">
+            <label class="selector-label">5. 데이터 분할 (Split)</label>
+            <div class="toggle-pill-group">
+              <button type="button" class="pill-btn active" data-split="validation">검증 (Validation)</button>
+              <button type="button" class="pill-btn" data-split="test">테스트 (Test)</button>
+            </div>
+          </div>
+
+          <!-- 6. Seed 선택 -->
+          <div class="selector-field">
+            <label for="exp_seed_select" class="selector-label">6. 랜덤 시드 (Seed)</label>
+            <select id="exp_seed_select" class="exp-select">
+              <option value="all" selected>3개 Seed 앙상블 평균 (권장)</option>
+              <option value="42">Seed 42</option>
+              <option value="52">Seed 52</option>
+              <option value="62">Seed 62</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- 127개 조합 빠른 필터 & 검색 툴바 -->
+        <div class="combo-explorer-toolbar" id="combo_fast_filter_toolbar">
+          <!-- 행 1: 변수군 수 분류 (1~7개) -->
+          <div class="combo-filter-row">
+            <span class="combo-filter-label">🔢 변수군 수 분류:</span>
+            <div class="combo-pills-wrap" id="combo_count_filter_pills">
+              <button type="button" class="combo-pill active" data-count="ALL">전체 <span class="pill-count">127</span></button>
+              <button type="button" class="combo-pill" data-count="1">단독 1개 <span class="pill-count">7</span></button>
+              <button type="button" class="combo-pill" data-count="2">2개 조합 <span class="pill-count">21</span></button>
+              <button type="button" class="combo-pill" data-count="3">3개 조합 <span class="pill-count">35</span></button>
+              <button type="button" class="combo-pill" data-count="4">4개 조합 <span class="pill-count">35</span></button>
+              <button type="button" class="combo-pill" data-count="5">5개 조합 <span class="pill-count">21</span></button>
+              <button type="button" class="combo-pill" data-count="6">6개 조합 <span class="pill-count">7</span></button>
+              <button type="button" class="combo-pill" data-count="7">7개 전체 <span class="pill-count">1</span></button>
+            </div>
+          </div>
+
+          <!-- 행 2: 포함 변수군 다중 태그 필터 (E1~E7) -->
+          <div class="combo-filter-row">
+            <span class="combo-filter-label">🏷️ 포함 변수군 필터:</span>
+            <div class="combo-pills-wrap" id="combo_included_grp_pills">
+              <button type="button" class="combo-pill grp-pill" data-grp="E1">E1: 목표·생식 (12)</button>
+              <button type="button" class="combo-pill grp-pill" data-grp="E2">E2: 영양생장 (9)</button>
+              <button type="button" class="combo-pill grp-pill" data-grp="E3">E3: 시설내환경 (5)</button>
+              <button type="button" class="combo-pill grp-pill" data-grp="E4">E4: 외부기상 (4)</button>
+              <button type="button" class="combo-pill grp-pill" data-grp="E5">E5: 근권양액 (4)</button>
+              <button type="button" class="combo-pill grp-pill" data-grp="E6">E6: 시설제어 (4)</button>
+              <button type="button" class="combo-pill grp-pill" data-grp="E7">E7: 시설작기맥락 (11)</button>
+              <button type="button" class="btn-reset-filter" id="btn_reset_combo_filters" style="display:none;">
+                <span>🔄</span> 필터 초기화
+              </button>
+            </div>
+          </div>
+
+          <!-- 행 3: 실시간 검색 & 건수 표시 -->
+          <div class="combo-search-row">
+            <div class="combo-search-box">
+              <input type="text" id="exp_combo_search_input" class="combo-search-input" placeholder="🔍 변수군 코드(E1~E7), 변수군명, 세부 변수명 실시간 검색...">
+              <button type="button" id="exp_combo_search_clear" class="combo-search-clear" style="display:none;" title="검색어 지우기">✕</button>
+            </div>
+            <div class="combo-status-info">
+              <span class="combo-count-badge" id="exp_combo_count_badge">전체 127개 중 127개 표시</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 변수군 부가 정보 바 -->
+        <div class="exp-group-meta-bar" id="exp_group_meta_bar">
+          <div class="meta-item">
+            <span class="meta-label">선택 조합 ID:</span>
+            <span class="meta-val font-mono" id="exp_meta_combo_id">-</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label">포함 변수 수:</span>
+            <span class="meta-val font-bold" id="exp_meta_feature_count">-</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label">포함 변수군:</span>
+            <div class="meta-tags" id="exp_meta_categories">-</div>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label">최적 선정 여부:</span>
+            <span class="meta-val" id="exp_meta_winner_status">-</span>
+          </div>
+          <div class="meta-item ml-auto">
+            <div class="variant-toggle-wrap">
+              <span class="meta-label">예측 제약(Bounded) 적용:</span>
+              <div class="toggle-pill-group small">
+                <button type="button" class="pill-btn active" data-variant="bounded">Bounded [0, 상한]</button>
+                <button type="button" class="pill-btn" data-variant="raw">Raw (미보정)</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION A: 변수군 조합별 성능 비교표 -->
+      <section class="exp-section-card" aria-label="입력변수군 조합별 성능 비교표">
+        <div class="exp-card-header">
+          <div class="exp-card-title-group">
+            <h3 class="exp-card-title">📋 127개 입력변수군 조합별 모델 성능 비교표</h3>
+            <p class="exp-card-subtitle">
+              E1~E7 비공집합 127개 전수조합의 성능 지표를 비교합니다. 행을 클릭하면 해당 조합의 상세 예측 결과가 하단에 즉시 표시됩니다. (미실행 조합은 '결과 대기'로 표시)
+            </p>
+          </div>
+          <span class="filter-count-badge" id="exp_candidates_count_badge">후보 조합 127개</span>
+        </div>
+
+        <div class="table-responsive">
+          <table class="styled-comparison-table" id="exp_comparison_table">
+            <thead>
+              <tr>
+                <th data-sort="rank" class="th-center">순위</th>
+                <th class="th-center">최적 여부</th>
+                <th data-sort="name">입력변수군 조합명 (범주 구성)</th>
+                <th data-sort="features" class="th-center">변수 수</th>
+                <th class="th-center">Split</th>
+                <th data-sort="seeds" class="th-center">완료 Seed</th>
+                <th data-sort="rmse" class="th-right">RMSE (평균 ± 표준편차)</th>
+                <th data-sort="mae" class="th-right">MAE (평균 ± 표준편차)</th>
+                <th data-sort="r2" class="th-right">R² (결정계수)</th>
+                <th data-sort="ccc" class="th-right">CCC (일치상관계수)</th>
+                <th class="th-center">실행 상태</th>
+              </tr>
+            </thead>
+            <tbody id="exp_comparison_tbody">
+              <tr>
+                <td colspan="11" class="td-center loading-row">데이터를 불러오는 중입니다...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- SECTION B: 선택한 실험 결과 상세 시각화 -->
+      <section class="exp-section-card" id="exp_chart_section" aria-label="선택한 실험 결과 시각화">
+        <div class="exp-card-header">
+          <div class="exp-card-title-group">
+            <h3 class="exp-card-title">📈 실제 관측값 vs 모델 예측값 시계열 추이</h3>
+            <p class="exp-card-subtitle">
+              저장된 식별키(시설-작기-개체번호)로 1:1 대응된 실제값과 모델 예측값을 예측 대상 날짜(target_date) 기준으로 비교합니다.
+            </p>
+          </div>
+        </div>
+
+        <!-- 예측 결과 필터 툴바 (관측 현황과 100% 동일한 2단 구성 및 비주얼) -->
+        <div class="filter-toolbar exp-chart-filter-toolbar" id="exp_filter_toolbar">
+          <div class="filter-row-top">
+            <div class="mode-toggle-group" id="exp_mode_toggle_group">
+              <button type="button" class="mode-btn exp-chart-mode-btn active" data-mode="individual">
+                <span>🔍</span> 개체별 상세 추이 모드
+              </button>
+              <button type="button" class="mode-btn exp-chart-mode-btn" data-mode="average">
+                <span>📊</span> 일자별 표본 평균 모드
+              </button>
+            </div>
+            <div class="filter-status-info" id="exp_filter_status">
+              <span>ℹ️ 현재 조건: <strong>개체별 상세 추이 모드</strong> (전체 시설 / 전체 작기 / 전체 개체)</span>
+            </div>
+          </div>
+
+          <div class="filter-controls-grid">
+            <div class="control-group">
+              <label class="control-label" for="exp_filter_facility">🏢 시설 (Facility)</label>
+              <select id="exp_filter_facility" class="control-select">
+                <option value="ALL">전체 시설</option>
+              </select>
+            </div>
+            <div class="control-group">
+              <label class="control-label" for="exp_filter_crop_sn">🌱 작기 기간 (Crop Cycle)</label>
+              <select id="exp_filter_crop_sn" class="control-select">
+                <option value="ALL">전체 작기 (기간)</option>
+              </select>
+            </div>
+            <div class="control-group">
+              <label class="control-label" for="exp_filter_sample_num">🏷️ 개체 번호 (Sample #)</label>
+              <select id="exp_filter_sample_num" class="control-select">
+                <option value="ALL">전체 개체</option>
+              </select>
+            </div>
+            <div class="control-group">
+              <label class="control-label" for="exp_filter_start_date">📅 조회 시작일</label>
+              <input type="date" id="exp_filter_start_date" class="control-input">
+            </div>
+            <div class="control-group">
+              <label class="control-label" for="exp_filter_end_date">📅 조회 종료일</label>
+              <input type="date" id="exp_filter_end_date" class="control-input">
+            </div>
+            <div class="control-group">
+              <button type="button" id="exp_filter_reset_btn" class="btn-reset">
+                <span>🔄</span> 필터 초기화
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 차트 렌더링 카드 -->
+        <div class="chart-card" id="exp_chart_card">
+          <div id="exp_prediction_chart" class="chart-dom" style="height: 500px;"></div>
+          <div id="exp_chart_loading" class="chart-loading-overlay" style="display:none;">
+            <div class="spinner"></div>
+            <span>예측 데이터를 불러오는 중입니다...</span>
+          </div>
+        </div>
+
+        <!-- 미실행 / 결과 없음 상태 표시 -->
+        <div id="exp_empty_predictions" class="chart-empty-state-large" style="display:none;">
+          <div class="empty-icon">⏳</div>
+          <div class="empty-title">전수실험 결과 대기 중 (실험 미실행)</div>
+          <div class="empty-message" id="exp_empty_predictions_msg">
+            선택하신 <strong>[<span id="exp_empty_combo_label">조합</span>]</strong>에 대한 전수실험(8개 타깃 × 6개 모델 × 127개 조합 × 3개 시드) 결과가 아직 생성되지 않았습니다.<br>
+            향후 <code>bash run_ax_exhaustive.sh</code> 실험 완료 후 <code>python sync_exhaustive_experiments.py</code>를 통해 실제 예측값과 평가지표가 자동으로 연결됩니다.
+          </div>
+        </div>
+
+        <!-- 메트릭 및 파라미터 요약 그리드 -->
+        <div class="exp-metrics-grid">
+          <!-- 1. 저장된 전체 평가 지표 -->
+          <div class="metric-card stored">
+            <div class="metric-card-header">
+              <span class="metric-icon">📑</span>
+              <div>
+                <h4 class="metric-title">저장된 전체 평가 지표</h4>
+                <p class="metric-subtitle">공식 검증 세트 전체 평가 결과</p>
+              </div>
+            </div>
+            <div class="metric-stats-row">
+              <div class="m-item">
+                <span class="m-lbl">RMSE</span>
+                <span class="m-val" id="metric_stored_rmse">-</span>
+              </div>
+              <div class="m-item">
+                <span class="m-lbl">MAE</span>
+                <span class="m-val" id="metric_stored_mae">-</span>
+              </div>
+              <div class="m-item">
+                <span class="m-lbl">R²</span>
+                <span class="m-val" id="metric_stored_r2">-</span>
+              </div>
+              <div class="m-item">
+                <span class="m-lbl">표본 수(N)</span>
+                <span class="m-val" id="metric_stored_n">-</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 2. 현재 조회 표본 기준 재계산 지표 -->
+          <div class="metric-card filtered" id="exp_filtered_metrics_card" style="display:none;">
+            <div class="metric-card-header">
+              <span class="metric-icon">🔍</span>
+              <div>
+                <h4 class="metric-title">현재 조회 표본 기준 재계산 지표</h4>
+                <p class="metric-subtitle">상단 시설/작기/개체/기간 필터 적용 결과</p>
+              </div>
+            </div>
+            <div class="metric-stats-row">
+              <div class="m-item">
+                <span class="m-lbl">RMSE (필터)</span>
+                <span class="m-val highlight" id="metric_filtered_rmse">-</span>
+              </div>
+              <div class="m-item">
+                <span class="m-lbl">MAE (필터)</span>
+                <span class="m-val" id="metric_filtered_mae">-</span>
+              </div>
+              <div class="m-item">
+                <span class="m-lbl">R² (필터)</span>
+                <span class="m-val" id="metric_filtered_r2">-</span>
+              </div>
+              <div class="m-item">
+                <span class="m-lbl">표본 수(N)</span>
+                <span class="m-val" id="metric_filtered_n">-</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 3. 하이퍼파라미터 요약 카드 -->
+          <div class="metric-card params">
+            <div class="metric-card-header">
+              <span class="metric-icon">⚙️</span>
+              <div>
+                <h4 class="metric-title">최적 하이퍼파라미터</h4>
+                <p class="metric-subtitle">공식 튜닝 결과 설정값</p>
+              </div>
+            </div>
+            <div class="params-code-wrap">
+              <pre id="exp_params_json">설정값 로딩 중...</pre>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 푸터 -->
+      <footer class="app-footer" style="margin-top: 40px;">
+        <p>꽃수·착과수 모델 실험 결과 검증 대시보드 • Agricultural Prediction Experiment Evaluation</p>
+      </footer>
+    </main>
+  </div>
+
+
+  <!-- ====================================================================
+       TAB 3: 생육 예측 분석 (관측 현황 기준 프리미엄 UI 및 3대 하위 탭)
+       ==================================================================== -->
+  <div id="tab-analysis" class="tab-pane">
+    <main class="main-content">
+      <!-- 상단 헤더 영역 (관측 현황 스타일과 통일) -->
+      <header class="anl-header">
+        <div class="anl-header-top">
+          <div class="header-title-area">
+            <div class="header-icon">📈</div>
+            <div>
+              <h1 class="header-title">생육 예측 분석</h1>
+              <p class="header-subtitle">선정 모델 오차 심층 진단 &amp; AX 추가 데이터 구축 로드맵 및 검증 체계</p>
+            </div>
+          </div>
+          <div class="anl-header-actions">
+            <a href="./ax_direction/%EC%A2%85%ED%95%A9%EB%B6%84%EC%84%9D%EB%B3%B4%EA%B3%A0%EC%84%9C.html" target="_blank" class="anl-action-btn" title="종합분석보고서 새 창 열기">
+              <span>📑</span> 종합 보고서
+            </a>
+            <a href="./ax_direction/%EB%B6%84%EC%84%9D%ED%91%9C_%EB%B0%8F_AX%EC%84%A4%EA%B3%84.xlsx" download class="anl-action-btn secondary" title="분석표 및 AX설계 엑셀 다운로드">
+              <span>📊</span> 설계표 엑셀
+            </a>
+          </div>
+        </div>
+
+        <!-- 내부 3대 서브탭 네비게이션 (관측 현황 .crop-nav-tabs 스타일과 100% 동일) -->
+        <nav class="anl-subnav-tabs" aria-label="생육 예측 분석 내부 탭">
+          <button type="button" class="anl-subnav-btn active" data-subtab="anl-subtab-perf">
+            <span>📊</span> 성능·오차 분석
+          </button>
+          <button type="button" class="anl-subnav-btn" data-subtab="anl-subtab-ax">
+            <span>🌱</span> AX 데이터 구축 방향
+          </button>
+          <button type="button" class="anl-subnav-btn" data-subtab="anl-subtab-kpi">
+            <span>🎯</span> 검증 계획·KPI
+          </button>
+        </nav>
+      </header>
+
+      <!-- 간결한 데이터 해석 가이드 배너 (관측 현황 .guide-banner 스타일) -->
+      <section class="guide-banner anl-guide-banner" aria-label="분석 해석 가이드">
+        <div class="guide-icon">💡</div>
+        <div class="guide-text">
+          <h4>생육 예측 분석 및 지표 해석 기준 안내</h4>
+          <p>
+            • <strong>검증 선정 기준:</strong> 모델과 변수군은 Validation 분할에서 동결 선정되었으며, Test 결과는 순수 일반화 성능 평가용입니다.<br>
+            • <strong>표본 및 R² 해석:</strong> N은 고유 평가 행 수(조사 개체)이며, 불균형 타깃에서 토마토 음수 R²는 분산 대비 잔차오차를 정직하게 반영한 수치입니다. (미정의 R²는 임의 0 처리하지 않음)<br>
+            • <strong>진단 구분:</strong> 미래 정답에 기반한 구간(수량 변화, 양수 여부 등)은 사전 입력이 아닌 <strong>[사후 진단]</strong> 항목입니다.
+          </p>
+          <div class="guide-badges">
+            <span class="badge-info">✔️ 고유 평가 N 표본 기준</span>
+            <span class="badge-info">✔️ 미검증 가설과 확인된 사실 명확 분리</span>
+            <span class="badge-info">✔️ 사전등록 전 기획 참고치 표기</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           서브탭 1: 성능·오차 분석 (anl-subtab-perf)
+           ==================================================================== -->
+      <div id="anl-subtab-perf" class="anl-subtab-pane active">
+        <!-- 1-1. 필터 툴바 (관측 현황 .filter-toolbar 규격과 100% 일치) -->
+        <div class="filter-toolbar anl-filter-toolbar">
+          <div class="filter-row-top">
+            <div class="anl-split-toggle-group">
+              <span class="anl-filter-group-lbl">평가 분할 (Split):</span>
+              <div class="mode-toggle-group" id="anl_split_toggle">
+                <button type="button" class="mode-btn anl-split-btn active" data-split="test">
+                  <span>🧪</span> 테스트 (Test)
+                </button>
+                <button type="button" class="mode-btn anl-split-btn" data-split="validation">
+                  <span>🔍</span> 검증 (Validation)
+                </button>
+              </div>
+            </div>
+            <div class="filter-status-info" id="anl_filter_status">
+              <span>선정 모델: <strong id="anl_summary_model">-</strong> | 대상: <strong id="anl_summary_group">-</strong> | 표본: <strong id="anl_summary_n">-</strong> (<span id="anl_summary_facilities">-</span>)</span>
+            </div>
+          </div>
+
+          <div class="filter-controls-grid anl-controls-grid">
+            <div class="control-group">
+              <label class="control-label">1. 작물 (Crop)</label>
+              <div class="crop-radio-pills">
+                <label class="radio-pill">
+                  <input type="radio" name="anl_crop_radio" value="tomato" checked>
+                  <span>🍅 토마토</span>
+                </label>
+                <label class="radio-pill">
+                  <input type="radio" name="anl_crop_radio" value="strawberry">
+                  <span>🍓 딸기</span>
+                </label>
+              </div>
+            </div>
+            <div class="control-group">
+              <label class="control-label" for="anl_target_select">2. 예측 대상 타깃 (Target)</label>
+              <select id="anl_target_select" class="control-select"></select>
+            </div>
+            <div class="control-group">
+              <label class="control-label" for="anl_dimension_select">3. 오차 분석 차원 (Dimension)</label>
+              <select id="anl_dimension_select" class="control-select">
+                <option value="all">전체 (All)</option>
+                <option value="facility">🏢 시설별 (Facility)</option>
+                <option value="crop_cycle">🌱 작기별 (Crop Cycle)</option>
+                <option value="crop_age_bin">📅 작기 경과일 (Crop Age)</option>
+                <option value="previous_gap_bin">⏱️ 직전 조사 간격 (Prev Gap)</option>
+                <option value="target_gap_bin">⌛ 다음 실제 조사 간격 (사후 진단)</option>
+                <option value="change_bin">📈 수량 변화 구간 (사후 진단)</option>
+                <option value="positive_bin">➕ 정답 양수 여부 (사후 진단)</option>
+                <option value="input_missing_bin">⚠️ 입력 결측 여부 (Input Missing)</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- 1-2. 4대 KPI 요약 카드 (관측 현황 .summary-card 규격과 100% 일치) -->
+        <section class="anl-kpi-cards-grid" aria-label="선정 모델 핵심 성능 지표">
+          <div class="summary-card anl-metric-card" id="card_anl_rmse">
+            <div class="summary-card-header">
+              <div class="summary-card-title">
+                <span>📉</span> <span>RMSE (평균 오차)</span>
+              </div>
+              <span class="summary-card-badge" id="badge_anl_rmse">개체당 오차</span>
+            </div>
+            <div class="anl-stat-main" id="anl_summary_rmse">-</div>
+            <div class="anl-stat-subtext" id="anl_summary_rmse_sub">seed 표준편차: -</div>
+          </div>
+
+          <div class="summary-card anl-metric-card" id="card_anl_mae">
+            <div class="summary-card-header">
+              <div class="summary-card-title">
+                <span>📏</span> <span>MAE (절대 오차)</span>
+              </div>
+              <span class="summary-card-badge" id="badge_anl_mae">평균 편차</span>
+            </div>
+            <div class="anl-stat-main" id="anl_summary_mae">-</div>
+            <div class="anl-stat-subtext" id="anl_summary_mae_sub">seed 표준편차: -</div>
+          </div>
+
+          <div class="summary-card anl-metric-card" id="card_anl_r2">
+            <div class="summary-card-header">
+              <div class="summary-card-title">
+                <span>📊</span> <span>R² (결정계수)</span>
+              </div>
+              <span class="summary-card-badge" id="badge_anl_r2">설명력</span>
+            </div>
+            <div class="anl-stat-main" id="anl_summary_r2">-</div>
+            <div class="anl-stat-subtext" id="anl_summary_r2_sub">불균형 0-heavy 분포 특성</div>
+          </div>
+
+          <div class="summary-card anl-metric-card" id="card_anl_ccc">
+            <div class="summary-card-header">
+              <div class="summary-card-title">
+                <span>🎯</span> <span>CCC (일치도)</span>
+              </div>
+              <span class="summary-card-badge" id="badge_anl_ccc">일치상관계수</span>
+            </div>
+            <div class="anl-stat-main" id="anl_summary_ccc">-</div>
+            <div class="anl-stat-subtext" id="anl_summary_ccc_sub">실제값 vs 예측값 일치성</div>
+          </div>
+        </section>
+
+        <!-- 1-2-B. 정답 분포 및 표본 편중 (Target Distribution & Zero-Inflation Diagnosis) -->
+        <section class="anl-target-dist-section" id="anl_target_dist_section" aria-label="정답 분포 및 표본 편중">
+          <div class="anl-dist-header">
+            <div class="anl-dist-title-group">
+              <h3 class="anl-dist-title"><span>📊</span> 정답 분포 및 표본 편중 (Zero-Inflation Diagnosis)</h3>
+              <p class="anl-dist-subtitle">선택된 예측 평가 코호트의 실제 다음 조사값 정답 분포와 0 편중 현황을 정밀 진단합니다.</p>
+            </div>
+            <div class="anl-dist-badge-wrap">
+              <span class="chart-mode-badge" id="anl_dist_cohort_badge">평가 코호트 로딩 중...</span>
+            </div>
+          </div>
+
+          <!-- 동적 경고 요약 카드 (토마토 타깃 시 강조) -->
+          <div class="anl-dist-warning-card" id="anl_dist_warning_card" style="display: none;"></div>
+
+          <!-- 2열 나란한 차트 그리드 (모바일 세로) -->
+          <div class="anl-dist-charts-grid">
+            <!-- 차트 A: 0 vs 양수 구성 막대 -->
+            <div class="chart-card anl-dist-card">
+              <div class="chart-card-header">
+                <div class="chart-title-group">
+                  <h4 class="chart-title">정답 0 vs 양수 표본 구성 비율</h4>
+                  <p class="chart-subtitle">전체 평가 표본 중 0과 양수(개화/착과) 정답의 N 및 비중</p>
+                </div>
+                <div class="anl-card-badges" id="anl_dist_comp_badges">
+                  <span class="chart-mode-badge" id="badge_target_composition">100% 구성비</span>
+                </div>
+              </div>
+              <div id="anl_chart_target_composition" class="chart-dom" style="height: 330px;"></div>
+              <div class="anl-chart-footer-caption" id="anl_comp_footer_caption">
+                <!-- 동적 캡션 -->
+              </div>
+            </div>
+
+            <!-- 차트 B: 이산형 정답 히스토그램 -->
+            <div class="chart-card anl-dist-card">
+              <div class="chart-card-header">
+                <div class="chart-title-group">
+                  <h4 class="chart-title">이산형 꽃수/착과수 정답 분포</h4>
+                  <p class="chart-subtitle">실제 다음 조사값(0, 1, 2, ...)별 빈도 및 극단값 구간 (0 강조, 빈 구간 유지)</p>
+                </div>
+                <div class="anl-hist-controls">
+                  <button type="button" class="hist-toggle-btn active" id="anl_hist_toggle_count" data-mode="count">표본수 (N)</button>
+                  <button type="button" class="hist-toggle-btn" id="anl_hist_toggle_rate" data-mode="rate">비율 (%)</button>
+                </div>
+              </div>
+              <div id="anl_chart_target_histogram" class="chart-dom" style="height: 330px;"></div>
+              <!-- 대체 표 콘텐츠 (차트 로드 실패 시 제공) -->
+              <div class="anl-hist-fallback-table-wrap" id="anl_hist_fallback" style="display: none;"></div>
+              <div class="anl-chart-footer-caption" id="anl_hist_footer_caption">
+                <!-- 동적 캡션 -->
+              </div>
+            </div>
+          </div>
+
+          <!-- 해석 가이드 -->
+          <div class="anl-dist-interpretation-box">
+            <div class="anl-interp-icon">💡</div>
+            <div class="anl-interp-text">
+              <strong>현장 데이터 해석 가이드:</strong> 꽃수 0은 실제 무개화, 해당 화방 종료, 관측 불가 또는 기록 방식의 차이를 포함할 수 있습니다. 현재 분석은 0을 오류로 간주하지 않으며 현장 정의 확인이 필요합니다.
+            </div>
+          </div>
+        </section>
+
+        <!-- 1-3. 핵심 시각화 차트 그리드 (2열 .charts-grid, 관측 현황과 100% 동일 규격) -->
+        <section class="charts-grid anl-charts-grid" aria-label="오차 및 비교 핵심 그래프">
+          <!-- 차트 1: 모델별 RMSE 비교 (선정 vs 유지 vs 0예측) -->
+          <div class="chart-card anl-chart-card">
+            <div class="chart-card-header">
+              <div class="chart-title-group">
+                <h3 class="chart-title">기준 모델(Baseline) 대비 RMSE 비교</h3>
+                <p class="chart-subtitle">선정 머신러닝 vs 현재값 유지(Persistence) vs 진단용 0 예측</p>
+              </div>
+              <span class="chart-mode-badge" id="badge_chart_model_comp">RMSE 비교</span>
+            </div>
+            <div id="anl_chart_model_comp" class="chart-dom" style="height: 380px;"></div>
+          </div>
+
+          <!-- 차트 2: 구간별 오차 심층 분석 (Error Strata RMSE) -->
+          <div class="chart-card anl-chart-card">
+            <div class="chart-card-header">
+              <div class="chart-title-group">
+                <h3 class="chart-title">구간별 RMSE 심층 분포</h3>
+                <p class="chart-subtitle" id="anl_chart_strata_subtitle">선택 차원의 구간별 예측 RMSE 비교</p>
+              </div>
+              <span class="chart-mode-badge" id="badge_chart_strata">구간별 RMSE</span>
+            </div>
+            <div id="anl_chart_strata" class="chart-dom" style="height: 380px;"></div>
+          </div>
+
+          <!-- 차트 3: 표본 비중(%) vs 제곱오차 비중(SSE %) 비교 -->
+          <div class="chart-card anl-chart-card">
+            <div class="chart-card-header">
+              <div class="chart-title-group">
+                <h3 class="chart-title">표본 비중(%) vs 제곱오차 비중(SSE %) 비교</h3>
+                <p class="chart-subtitle">동일 비율(%) 축에서 오차 편중(Concentration) 구간 파악</p>
+              </div>
+              <span class="chart-mode-badge" id="badge_chart_sse">오차 집중도</span>
+            </div>
+            <div id="anl_chart_sse" class="chart-dom" style="height: 380px;"></div>
+          </div>
+
+          <!-- 카드 4: 타깃별 핵심 진단 및 후속 검증 방향 요약 -->
+          <div class="chart-card anl-chart-card anl-diagnosis-card">
+            <div class="chart-card-header">
+              <div class="chart-title-group">
+                <h3 class="chart-title">타깃별 핵심 진단 및 후속 검증 방향</h3>
+                <p class="chart-subtitle">현재 데이터의 핵심 관측 사실과 후속 검증 권장 사항</p>
+              </div>
+              <span class="chart-mode-badge" id="badge_chart_diag">종합 진단</span>
+            </div>
+            <div id="anl_diagnosis_content" class="anl-diag-container">
+              <p class="loading-row">진단 리포트를 불러오는 중입니다...</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- 1-4. 상세 데이터 근거 서랍 (접기/펼치기 아코디언) -->
+        <details class="anl-accordion" id="anl_perf_details">
+          <summary class="anl-accordion-summary">
+            <span>📋 상세 수치 데이터 및 교차 오차표 펼치기</span>
+            <span class="anl-accordion-arrow">▼</span>
+          </summary>
+          <div class="anl-accordion-content">
+            <!-- 상세 표 1: 기준 모델 성능 비교표 -->
+            <div class="anl-table-card">
+              <h4 class="anl-table-title">선정 모델 vs 단순 기준 모델 (유지 / 0 예측) 상세 지표표</h4>
+              <div class="table-responsive">
+                <table class="styled-comparison-table anl-table">
+                  <thead>
+                    <tr>
+                      <th>모델 구분</th>
+                      <th class="td-right">RMSE</th>
+                      <th class="td-right">MAE</th>
+                      <th class="td-right">R²</th>
+                      <th class="td-right">CCC</th>
+                      <th class="td-right">유지 기준 대비 개선율</th>
+                      <th>평가 특이사항 및 해석</th>
+                    </tr>
+                  </thead>
+                  <tbody id="anl_baseline_tbody"></tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- 상세 표 2: 구간별 오차 심층 상세표 -->
+            <div class="anl-table-card" style="margin-top: 16px;">
+              <h4 class="anl-table-title">선택 차원 구간별 오차 상세표 (Error Strata)</h4>
+              <div class="table-responsive">
+                <table class="styled-comparison-table anl-table">
+                  <thead>
+                    <tr>
+                      <th>구간 / 레벨</th>
+                      <th class="td-right">표본 수 (N)</th>
+                      <th class="td-right">시설 수</th>
+                      <th class="td-right">표본 비중 (%)</th>
+                      <th class="td-right">제곱오차 비중 (SSE %)</th>
+                      <th class="td-right">RMSE</th>
+                      <th class="td-right">MAE</th>
+                      <th class="td-right">R²</th>
+                      <th class="td-right">CCC</th>
+                      <th class="td-right">편향 (Bias)</th>
+                    </tr>
+                  </thead>
+                  <tbody id="anl_strata_tbody"></tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- 상세 표 3: 복합 교차 오차표 -->
+            <div class="anl-table-card" style="margin-top: 16px;">
+              <h4 class="anl-table-title">시설 × 경과일 × 간격 복합 교차 오차표 (Crossed Strata)</h4>
+              <div class="table-responsive">
+                <table class="styled-comparison-table anl-table">
+                  <thead>
+                    <tr>
+                      <th>교차 차원</th>
+                      <th>상세 구간</th>
+                      <th class="td-right">N</th>
+                      <th class="td-right">RMSE</th>
+                    </tr>
+                  </thead>
+                  <tbody id="anl_crossed_tbody"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </details>
+      </div>
+
+      <!-- ====================================================================
+           서브탭 2: AX 데이터 구축 방향 (anl-subtab-ax)
+           ==================================================================== -->
+      <div id="anl-subtab-ax" class="anl-subtab-pane">
+        <!-- 2-1. H01~H07 가설 마스터-디테일 레이아웃 -->
+        <section class="anl-master-detail-layout" aria-label="개선 가설 목록 및 세부 정보">
+          <!-- 좌측: 가설 목록 카드 (간결한 선택기) -->
+          <div class="anl-card anl-hyp-master-card">
+            <div class="anl-card-header-simple">
+              <h3 class="anl-card-title">💡 AX 추가 데이터 개선 가설 (H01 ~ H07)</h3>
+              <span class="summary-card-badge">P0/P1/P2 체계</span>
+            </div>
+            <div class="anl-hyp-list" id="anl_hyp_list"></div>
+          </div>
+
+          <!-- 우측: 선택된 가설 세부 정보 패널 -->
+          <div class="anl-card anl-hyp-detail-card" id="anl_hyp_detail_panel">
+            <div class="empty-state">가설을 선택하면 상세 분석 및 검증 계획이 표시됩니다.</div>
+          </div>
+        </section>
+
+        <!-- 2-2. AX 제안 필드 스키마 (88개 필드 동적 탐색기) -->
+        <section class="anl-card anl-schema-card" style="margin-top: 24px;" aria-label="AX 필드 스키마 탐색기">
+          <div class="anl-card-header-between">
+            <div>
+              <h3 class="anl-card-title">📐 AX 추가 데이터 제안 필드 스키마 (88개 필드)</h3>
+              <p class="anl-card-subtitle">현장 수집을 위한 표준 테이블별 필드 규격, 단위, 출처, 수집 주기 및 가용 시각 규칙</p>
+            </div>
+            <span class="crop-badge-count" id="anl_schema_count_badge">88개 필드</span>
+          </div>
+
+          <!-- 동적 테이블 탭 바 -->
+          <div class="anl-schema-tabs" id="anl_schema_tabs"></div>
+
+          <!-- 실시간 검색창 -->
+          <div class="anl-search-row">
+            <div class="anl-search-input-wrap">
+              <span class="search-icon">🔍</span>
+              <input type="text" id="anl_schema_search" class="control-input anl-search-input" placeholder="필드명, 한글설명, 출처, 연계가설 검색...">
+            </div>
+            <div class="anl-search-count-info" id="anl_schema_search_info">총 88개 표시 중</div>
+          </div>
+
+          <!-- 스키마 테이블 -->
+          <div class="table-responsive anl-schema-table-wrap">
+            <table class="styled-comparison-table anl-table">
+              <thead>
+                <tr>
+                  <th>테이블</th>
+                  <th>필드명</th>
+                  <th>타입 (단위)</th>
+                  <th>출처</th>
+                  <th>수집 주기</th>
+                  <th>조인 키</th>
+                  <th>가용 시각 규칙</th>
+                  <th>연계 가설</th>
+                </tr>
+              </thead>
+              <tbody id="anl_schema_tbody"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- 2-3. 데이터 연결 및 누수 방지 5대 원칙 배너 -->
+        <section class="anl-rules-section" style="margin-top: 24px;" aria-label="누수 방지 5대 원칙">
+          <h4 class="anl-rules-header">🛡️ 데이터 연결 및 시간 누수 방지 5대 원칙</h4>
+          <div class="anl-rules-grid">
+            <div class="anl-rule-card">
+              <span class="rule-num">01</span>
+              <strong>복합 기본 키 보장</strong>
+              <p><code>facility_id + crop_sn + sample_num + truss_id + observed_at</code>로 개체 교체 시 이력 오염 차단</p>
+            </div>
+            <div class="anl-rule-card">
+              <span class="rule-num">02</span>
+              <strong>가용 시각 규칙 (누수 방지)</strong>
+              <p>사건 발생 시각(<code>occurred_at</code>)과 시스템 등록 시각(<code>available_at</code>) 모두 예측 시점 <code>t</code> 이하만 투입</p>
+            </div>
+            <div class="anl-rule-card">
+              <span class="rule-num">03</span>
+              <strong>작업 범위(scope_type) 보존</strong>
+              <p>온실/구역 단위 작업을 개별 개체 작업으로 임의 복제하거나 시설 수량을 개체마다 전량 중복 배분하지 않음</p>
+            </div>
+            <div class="anl-rule-card">
+              <span class="rule-num">04</span>
+              <strong>정답(Ground Truth) 연결</strong>
+              <p>동일 개체·화방의 다음 실제 조사값과 1:1 연결하며, 미관측 상태를 임의 0으로 치환하지 않음</p>
+            </div>
+            <div class="anl-rule-card">
+              <span class="rule-num">05</span>
+              <strong>1~2주 현장 PoC 분리</strong>
+              <p>초기 PoC는 수집 프로세스 및 일치율 검증용이며, 성능 개선 입증은 새로운 미래 작기 코호트에서 검증</p>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- ====================================================================
+           서브탭 3: 검증 계획·KPI (anl-subtab-kpi)
+           ==================================================================== -->
+      <div id="anl-subtab-kpi" class="anl-subtab-pane">
+        <!-- 3-1. As-Is / To-Be 7개 실험군 Flow (B0 ~ ABL) -->
+        <section class="anl-card anl-pipeline-card" aria-label="As-Is / To-Be 실험군 검증 파이프라인">
+          <div class="anl-card-header-between">
+            <div>
+              <h3 class="anl-card-title">🔄 As-Is / To-Be 7개 비교 실험군 파이프라인</h3>
+              <p class="anl-card-subtitle">동일 신규 코호트에서 단계별 데이터 추가 효과를 공정하게 비교하는 7단계 실험군 설계</p>
+            </div>
+            <span class="summary-card-badge">공정 비교 체계</span>
+          </div>
+
+          <div class="anl-pipeline-container" id="anl_arms_container"></div>
+
+          <!-- 선택된 실험군 세부 정보 패널 -->
+          <div class="anl-arm-detail-panel" id="anl_arm_detail_panel"></div>
+        </section>
+
+        <!-- 3-2. 선택 타깃 KPI 기획 참고치 카드 & 안내 -->
+        <section class="anl-card anl-kpi-target-card" style="margin-top: 24px;" aria-label="타깃별 KPI 기획 참고치">
+          <div class="anl-card-header-between">
+            <div>
+              <h3 class="anl-card-title">🎯 선택 타깃 KPI 기획 제안치 (10% RMSE / 15% 변화 MAE 개선안)</h3>
+              <p class="anl-card-subtitle">선택된 타깃의 현재 기준 성능 대비 향후 AX 데이터 도입 시 목표 지표 예시</p>
+            </div>
+            <span class="anl-badge-tag warning">⚠️ 발주처 협의 전 기획 참고치</span>
+          </div>
+
+          <!-- 타깃별 KPI 4단 그리드 -->
+          <div class="anl-target-kpi-grid" id="anl_target_kpi_grid"></div>
+
+          <div class="guide-banner anl-kpi-notice" style="margin-top: 16px; margin-bottom: 0;">
+            <div class="guide-icon">⚠️</div>
+            <div class="guide-text">
+              <h4>KPI 기획 예시 안내</h4>
+              <p>위 목표치는 연구개발 기획안 작성을 위한 <strong>참고용 예시 수치</strong>이며, 확정 통과 기준이나 달성 실적이 아닙니다. 실제 달성률은 향후 신규 코호트 PoC 실측을 통해 검증되어야 합니다.</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- 3-3. 8개 전체 타깃 KPI 기획표 접기/펼치기 -->
+        <details class="anl-accordion" id="anl_kpi_details" style="margin-top: 24px;">
+          <summary class="anl-accordion-summary">
+            <span>📋 8개 예측 타깃 전체 KPI 기획 참고치 표 펼치기</span>
+            <span class="anl-accordion-arrow">▼</span>
+          </summary>
+          <div class="anl-accordion-content">
+            <div class="table-responsive">
+              <table class="styled-comparison-table anl-table">
+                <thead>
+                  <tr>
+                    <th>타깃 과제</th>
+                    <th class="td-right">현 기준 RMSE</th>
+                    <th class="td-right text-primary font-bold">10% 개선 기획치</th>
+                    <th class="td-right">현 변화 MAE</th>
+                    <th class="td-right text-primary font-bold">15% 개선 기획치</th>
+                    <th class="td-right text-muted">유지 기준 RMSE</th>
+                    <th class="td-right text-muted">0 예측 RMSE</th>
+                    <th>상태 구분</th>
+                  </tr>
+                </thead>
+                <tbody id="anl_kpi_tbody"></tbody>
+              </table>
+            </div>
+          </div>
+        </details>
+
+        <!-- 3-4. 세부 보고서 바로가기 링크 바 -->
+        <div class="anl-doc-links-bar" style="margin-top: 24px;">
+          <div class="doc-links-title">📄 관련 세부 보고서 원문 문서 열기:</div>
+          <div class="doc-links-list">
+            <a href="./ax_direction/01_%EC%84%B1%EB%8A%A5_%EC%98%A4%EC%B0%A8_%EC%9B%90%EC%9D%B8%EB%B6%84%EC%84%9D.md" target="_blank" class="doc-link">01. 성능 및 오차 원인 분석</a>
+            <a href="./ax_direction/02_AX_%EC%B6%94%EA%B0%80%EB%8D%B0%EC%9D%B4%ED%84%B0_%EA%B5%AC%EC%B6%95%EB%B0%A9%ED%96%A5.md" target="_blank" class="doc-link">02. AX 추가 데이터 구축 방향</a>
+            <a href="./ax_direction/03_AsIs_ToBe_%EA%B2%80%EC%A6%9D%EC%B2%B4%EA%B3%84_KPI.md" target="_blank" class="doc-link">03. As-Is/To-Be 검증 체계 및 KPI</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- 푸터 -->
+      <footer class="app-footer" style="margin-top: 40px;">
+        <p>꽃수·착과수 생육 예측 및 AX 데이터 구축 방향 분석 리포트 • Stability v2 &amp; AX Direction Platform</p>
+      </footer>
+    </main>
+  </div>
+
+
+  <!-- ====================================================================
+       MODAL 1: 127개 전수 변수군 조합 탐색기 모달 (Combination Explorer)
+       ==================================================================== -->
+  <div id="exp_combo_explorer_modal" class="modal-overlay" style="display:none;">
+    <div class="modal-dialog modal-large">
+      <div class="modal-header">
+        <div class="modal-title-wrap">
+          <span class="modal-badge">127 Combinations Explorer</span>
+          <h3 class="modal-title">🧭 전수실험 127개 입력 변수군 조합 탐색기</h3>
+          <p class="modal-subtitle">E1~E7 비공집합 127개 전체 조합 목록을 필터링하고 즉시 선택할 수 있습니다.</p>
+        </div>
+        <button type="button" class="btn-modal-close" id="combo_modal_close_btn" aria-label="닫기">✕</button>
+      </div>
+
+      <div class="modal-body">
+        <!-- 모달 내부 빠른 필터 툴바 -->
+        <div class="combo-explorer-toolbar" style="margin-top: 0; background: #ffffff;">
+          <div class="combo-filter-row">
+            <span class="combo-filter-label">🔢 변수군 수:</span>
+            <div class="combo-pills-wrap" id="modal_combo_count_pills">
+              <button type="button" class="combo-pill active" data-count="ALL">전체 (127)</button>
+              <button type="button" class="combo-pill" data-count="1">1개 (7)</button>
+              <button type="button" class="combo-pill" data-count="2">2개 (21)</button>
+              <button type="button" class="combo-pill" data-count="3">3개 (35)</button>
+              <button type="button" class="combo-pill" data-count="4">4개 (35)</button>
+              <button type="button" class="combo-pill" data-count="5">5개 (21)</button>
+              <button type="button" class="combo-pill" data-count="6">6개 (7)</button>
+              <button type="button" class="combo-pill" data-count="7">7개 (1)</button>
+            </div>
+          </div>
+
+          <div class="combo-filter-row">
+            <span class="combo-filter-label">🏷️ 포함 변수군:</span>
+            <div class="combo-pills-wrap" id="modal_combo_grp_pills">
+              <button type="button" class="combo-pill grp-pill" data-grp="E1">E1: 목표·생식</button>
+              <button type="button" class="combo-pill grp-pill" data-grp="E2">E2: 영양생장</button>
+              <button type="button" class="combo-pill grp-pill" data-grp="E3">E3: 시설내환경</button>
+              <button type="button" class="combo-pill grp-pill" data-grp="E4">E4: 외부기상</button>
+              <button type="button" class="combo-pill grp-pill" data-grp="E5">E5: 근권양액</button>
+              <button type="button" class="combo-pill grp-pill" data-grp="E6">E6: 시설제어</button>
+              <button type="button" class="combo-pill grp-pill" data-grp="E7">E7: 시설작기맥락</button>
+              <button type="button" class="btn-reset-filter" id="modal_btn_reset_filters" style="display:none;">
+                <span>🔄</span> 필터 초기화
+              </button>
+            </div>
+          </div>
+
+          <div class="combo-search-row">
+            <div class="combo-search-box" style="max-width: 100%;">
+              <input type="text" id="modal_combo_search_input" class="combo-search-input" placeholder="🔍 변수군 코드(E1~E7), 이름, 조합명 검색...">
+              <button type="button" id="modal_combo_search_clear" class="combo-search-clear" style="display:none;">✕</button>
+            </div>
+            <span class="combo-count-badge" id="modal_combo_count_badge">127개 중 127개 표시</span>
+          </div>
+        </div>
+
+        <!-- 127개 조합 카드 그리드 -->
+        <div class="combo-cards-grid" id="modal_combo_cards_grid">
+          <!-- 동적 카드 렌더링 -->
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn-modal-confirm" id="combo_modal_confirm_btn">창 닫기</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====================================================================
+       MODAL 2: 변수군 상세 정보 모달
+       ==================================================================== -->
+  <div id="exp_variable_modal" class="modal-overlay" style="display:none;">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <div class="modal-title-wrap">
+          <span class="modal-badge">Variable Group Details</span>
+          <h3 class="modal-title" id="modal_group_name">입력변수군 상세</h3>
+          <p class="modal-subtitle" id="modal_group_readable">-</p>
+        </div>
+        <button type="button" class="btn-modal-close" id="modal_close_btn" aria-label="닫기">✕</button>
+      </div>
+
+      <div class="modal-body">
+        <div class="modal-summary-box">
+          <div class="m-summary-item">
+            <span class="lbl">고유 ID:</span>
+            <span class="val font-mono" id="modal_group_id">-</span>
+          </div>
+          <div class="m-summary-item">
+            <span class="lbl">총 변수 수:</span>
+            <span class="val font-bold" id="modal_group_count">-</span>
+          </div>
+          <div class="m-summary-item">
+            <span class="lbl">포함 범주:</span>
+            <div class="val-tags" id="modal_categories_list">-</div>
+          </div>
+        </div>
+
+        <div class="modal-features-section">
+          <h4 class="modal-section-title">포함된 전체 변수 목록</h4>
+          <div class="modal-features-list" id="modal_features_container">
+            <!-- 동적 변수 목록 주입 -->
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn-modal-confirm" id="modal_confirm_btn">확인 및 닫기</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 알림 토스트 -->
+  <div id="alert_toast" class="alert-toast"></div>
+
+
+  <!-- 메인 애플리케이션 진입점 -->
+  <script type="module" src="./src/app.js?v=12"></script>
+</body>
+</html>
+

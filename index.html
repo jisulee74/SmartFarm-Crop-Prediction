@@ -2,12 +2,8 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <meta http-equiv="refresh" content="0; url=./flower_fruit_prediction/">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SmartFarm 꽃수·착과수 예측 대시보드</title>
-  <script>
-    window.location.replace("./flower_fruit_prediction/");
-  </script>
+  <title>스마트팜 꽃수·착과수 예측 대시보드</title>
   <style>
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
@@ -15,39 +11,107 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      height: 100vh;
+      min-height: 100vh;
       margin: 0;
       background: #0f172a;
       color: #f8fafc;
+      padding: 20px;
+      box-sizing: border-box;
     }
     .card {
       background: #1e293b;
       padding: 2.5rem;
-      border-radius: 12px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+      border-radius: 16px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.5);
       text-align: center;
-      max-width: 480px;
+      max-width: 620px;
+      width: 100%;
+      border: 1px solid #334155;
     }
-    h1 { font-size: 1.5rem; margin-bottom: 0.75rem; font-weight: 700; color: #38bdf8; }
-    p { color: #94a3b8; font-size: 0.95rem; margin-bottom: 1.5rem; line-height: 1.5; }
+    .logo { font-size: 3rem; margin-bottom: 0.5rem; }
+    h1 { font-size: 1.6rem; margin-bottom: 0.75rem; font-weight: 700; color: #38bdf8; }
+    p.desc { color: #94a3b8; font-size: 0.95rem; margin-bottom: 2rem; line-height: 1.6; }
+    .btn-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
     a.btn {
-      display: inline-block;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
       background: #2563eb;
       color: white;
-      padding: 0.75rem 1.5rem;
-      border-radius: 8px;
+      padding: 1rem 1.4rem;
+      border-radius: 10px;
       text-decoration: none;
       font-weight: 600;
-      transition: background 0.2s;
+      transition: all 0.2s ease;
+      text-align: left;
     }
-    a.btn:hover { background: #1d4ed8; }
+    a.btn.btn-exhaustive {
+      background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+      border: 1px solid #60a5fa;
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
+    }
+    a.btn.btn-legacy {
+      background: #334155;
+      color: #cbd5e1;
+      border: 1px solid #475569;
+    }
+    a.btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 18px rgba(0,0,0,0.4);
+    }
+    a.btn.btn-exhaustive:hover {
+      background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%);
+    }
+    a.btn.btn-legacy:hover {
+      background: #475569;
+      color: #ffffff;
+    }
+    .btn-title { font-size: 1.05rem; font-weight: 700; display: block; }
+    .btn-sub { font-size: 0.82rem; opacity: 0.85; margin-top: 3px; display: block; }
+    .btn-arrow { font-size: 1.2rem; }
+    .footer {
+      margin-top: 2rem;
+      font-size: 0.8rem;
+      color: #64748b;
+    }
   </style>
 </head>
 <body>
   <div class="card">
+    <div class="logo">🌱</div>
     <h1>스마트팜 생육 및 수확 예측 대시보드</h1>
-    <p>꽃수·착과수 관측 및 AI 생육 예측 대시보드로 이동합니다.</p>
-    <a class="btn" href="./flower_fruit_prediction/">대시보드 바로가기</a>
+    <p class="desc">
+      토마토 꽃 수 및 딸기 착과수 관측 데이터 시계열 탐색과<br>
+      머신러닝 예측 모델 실험 검증 플랫폼입니다.
+    </p>
+
+    <div class="btn-grid">
+      <!-- 1. 신규 127개 변수군 전수실험 대시보드 -->
+      <a class="btn btn-exhaustive" href="./flower_fruit_prediction_exhaustive/">
+        <div>
+          <span class="btn-title">🧪 127개 변수군 전수실험 대시보드 (신규)</span>
+          <span class="btn-sub">E1~E7 127개 조합 탐색기 · 8개 타깃 · 6개 모델 · 3개 시드 전수실험</span>
+        </div>
+        <span class="btn-arrow">➔</span>
+      </a>
+
+      <!-- 2. 기존 관측 및 안정성 검증 대시보드 -->
+      <a class="btn btn-legacy" href="./flower_fruit_prediction/">
+        <div>
+          <span class="btn-title">📊 관측 현황 및 생육 예측 대시보드 (기존)</span>
+          <span class="btn-sub">8개 시계열 관측 탐색 및 이전 안정성 검증 결과 비교</span>
+        </div>
+        <span class="btn-arrow">➔</span>
+      </a>
+    </div>
+
+    <div class="footer">
+      SmartFarm Crop Growth & Prediction • jisulee74
+    </div>
   </div>
 </body>
 </html>
