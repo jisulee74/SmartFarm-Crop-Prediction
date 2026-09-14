@@ -1,0 +1,17 @@
+﻿target,reason,n
+tomato_first,target_missing,1859
+tomato_first,no_next_observation,162
+tomato_first,current_target_missing,26
+tomato_second,target_missing,1825
+tomato_second,no_next_observation,162
+tomato_second,current_target_missing,88
+tomato_third,target_missing,1836
+tomato_third,no_next_observation,162
+tomato_third,current_target_missing,99
+tomato_sum123,target_missing,1930
+tomato_sum123,no_next_observation,162
+tomato_sum123,current_target_missing,63
+strawberry_first,no_next_observation,250
+strawberry_second,no_next_observation,250
+strawberry_third,no_next_observation,250
+strawberry_sum123,no_next_observation,250

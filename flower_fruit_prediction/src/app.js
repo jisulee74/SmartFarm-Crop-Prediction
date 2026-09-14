@@ -12,6 +12,8 @@ import {
   extractIndividualTrends
 } from './analytics.js';
 import { ChartManager, METRIC_CONFIGS } from './charts.js';
+import { ExperimentViewController } from './experiment_view.js';
+import { AnalysisViewController } from './analysis_view.js';
 
 // 전역 상태
 const state = {
@@ -54,6 +56,8 @@ const state = {
 };
 
 let chartManager = null;
+let expViewController = null;
+let anlViewController = null;
 
 // 토스트 메시지 표시
 function showToast(message, duration = 3500) {
@@ -70,18 +74,23 @@ function showToast(message, duration = 3500) {
 async function initApp() {
   try {
     chartManager = new ChartManager();
+    expViewController = new ExperimentViewController();
+    anlViewController = new AnalysisViewController();
 
-    // 1. 네비게이션 탭 이벤트 설정
+    // 1. 주 네비게이션 탭 (관측 현황 vs 실험 결과 비교 vs 생육 예측 분석)
+    initPrimaryTabs();
+
+    // 2. 네비게이션 탭 이벤트 설정 (관측 뷰 전체/토마토/딸기)
     initNavTabs();
 
-    // 2. CSV 파일 로드 및 파싱
+    // 3. CSV 파일 로드 및 파싱
     await loadDatasets();
 
-    // 3. 필터 UI 및 이벤트 바인딩
+    // 4. 필터 UI 및 이벤트 바인딩
     setupFilters('tomato');
     setupFilters('strawberry');
 
-    // 4. 초기 차트 렌더링
+    // 5. 초기 차트 렌더링
     updateCropView('tomato');
     updateCropView('strawberry');
 
@@ -89,6 +98,43 @@ async function initApp() {
     console.error('[Dashboard Error]', error);
     showToast(`⚠️ 오류 발생: ${error.message}`, 6000);
   }
+}
+
+// 주 네비게이션 탭 바인딩 (관측 현황 vs 실험 결과 비교 vs 생육 예측 분석)
+function initPrimaryTabs() {
+  const primaryTabs = document.querySelectorAll('.primary-tab-btn');
+  primaryTabs.forEach(btn => {
+    btn.addEventListener('click', async () => {
+      primaryTabs.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      const targetTabId = btn.dataset.tab;
+      document.querySelectorAll('.tab-pane').forEach(pane => {
+        pane.classList.remove('active');
+      });
+
+      const targetPane = document.getElementById(targetTabId);
+      if (targetPane) {
+        targetPane.classList.add('active');
+      }
+
+      // 실험 뷰 탭 활성화 시 초기화 및 차트 리사이즈
+      if (targetTabId === 'tab-experiments') {
+        if (!expViewController.initialized) {
+          await expViewController.init();
+        } else if (expViewController.chartInstance) {
+          setTimeout(() => expViewController.chartInstance.resize(), 100);
+        }
+      } else if (targetTabId === 'tab-analysis') {
+        // 생육 예측 분석 탭 활성화 시 초기화
+        if (!anlViewController.initialized) {
+          await anlViewController.init();
+        }
+      } else if (targetTabId === 'tab-observation') {
+        setTimeout(() => chartManager.resizeAll(), 100);
+      }
+    });
+  });
 }
 
 // 상단 네비게이션 탭 바인딩

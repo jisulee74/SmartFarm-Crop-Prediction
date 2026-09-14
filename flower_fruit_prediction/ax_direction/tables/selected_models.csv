@@ -1,0 +1,9 @@
+﻿target,model,group_id,feature_count,categories,params,selection_validation_rmse
+tomato_first,tabm,VG_Flower_first_d0edfb3a_V2,37,관측 화방 범위 + 꽃수 관측 이력 + 시간 정보,"{""k"": 32, ""n_blocks"": 3, ""dropout"": 0.1, ""learning_rate"": 0.002, ""weight_decay"": 0.0003, ""batch_size"": 128, ""max_epochs"": 500, ""early_stopping_rounds"": 50}",0.30570339417753123
+tomato_second,catboost,VG_Flower_second_0fe0650e_V2,13,기존 복합 입력(legacy),"{""iterations"": 2000, ""depth"": 6, ""learning_rate"": 0.07, ""l2_leaf_reg"": 7, ""early_stopping_rounds"": 150}",0.2471387509438423
+tomato_third,random_forest,VG_Flower_third_0fe0650e_V2,13,기존 복합 입력(legacy),"{""n_estimators"": 500, ""max_depth"": 4, ""min_samples_leaf"": 8, ""max_features"": 0.7}",0.3927950791189704
+tomato_sum123,mlp,VG_Flower_sum123_8e22b3ec_V2,32,관측 화방 범위 + 꽃수 관측 이력,"{""hidden"": [128, 64], ""dropout"": 0.1, ""learning_rate"": 0.001, ""batch_size"": 64, ""max_epochs"": 500, ""early_stopping_rounds"": 50}",0.44624427802015143
+strawberry_first,mlp,VG_Fruit_first_6e61b2c4_V2,17,착과수 관측 이력,"{""hidden"": [256, 128], ""dropout"": 0.1, ""learning_rate"": 0.0003, ""batch_size"": 128, ""max_epochs"": 500, ""early_stopping_rounds"": 50}",1.2894019920492135
+strawberry_second,mlp,VG_Fruit_second_74085953_V2,23,착과수 관측 이력 + 시간 정보,"{""hidden"": [256, 128], ""dropout"": 0.3, ""learning_rate"": 0.001, ""batch_size"": 128, ""max_epochs"": 500, ""early_stopping_rounds"": 50}",0.919869728006281
+strawberry_third,catboost,VG_Fruit_third_bfa2aa29_V2,23,착과수 관측 이력 + 시간 정보 + 조사 횟수,"{""iterations"": 2000, ""depth"": 6, ""learning_rate"": 0.03, ""l2_leaf_reg"": 7, ""early_stopping_rounds"": 150}",0.9626153612279612
+strawberry_sum123,random_forest,VG_Fruit_sum123_74085953_V2,23,착과수 관측 이력 + 시간 정보,"{""n_estimators"": 500, ""max_depth"": 4, ""min_samples_leaf"": 8, ""max_features"": 0.7}",1.747982018990152

@@ -1,0 +1,1640 @@
+{
+  "version": "2026-09-14",
+  "notes": {
+    "target": "In CSV metrics tables: task ID. In selected_predictions.parquet: actual numeric count. Use target_id for task in predictions.",
+    "target_id": "Prediction task ID in prediction rows.",
+    "n": "Unique evaluation observation rows in this stratum; seeds do not multiply n.",
+    "rmse_mean": "Arithmetic mean of per-seed RMSE values, not RMSE of the average prediction.",
+    "rmse_seed_std": "Sample SD (ddof=1) across seed metrics; not facility/generalization confidence interval.",
+    "squared_error_share": "Sum of per-row mean-over-seeds squared error in stratum / same sum in full target/split.",
+    "bias_mean": "Average(prediction-actual), then average over seeds; positive=overprediction.",
+    "row_share": "Stratum n divided by full target/split n.",
+    "posthoc_label_based": "True if segmentation needs future actual target (change/positive); not a forecast-time feature.",
+    "level": "Dimension-dependent category; dimensions documented below.",
+    "small_n": "n<30 descriptive warning, not a statistically derived universal threshold.",
+    "within1_mean": "Fraction of errors within ±1 count, averaged over seeds; diagnostic only.",
+    "output_clip_rate": "Fraction of raw != bounded predictions across seeds and rows.",
+    "delta_rmse": "Added-category RMSE minus base RMSE; negative means improvement in validation.",
+    "skill_vs_persistence_pct": "100*(1-selected_model_rmse_mean/persistence_rmse); negative=worse.",
+    "illustrative_10pct_rmse": "0.9*current reference RMSE; planning only; rebaseline on future paired cohort.",
+    "record_status": "observed_no_event/event_recorded/unknown must remain distinct."
+  },
+  "dimensions": {
+    "all": "All rows in selected target/split.",
+    "facility": "facility_id.",
+    "crop_cycle": "facility_id / crop_sn composite.",
+    "horizon_days": "target_date-feature_date: (0,7],(7,14],(14,28],(28,infinity); retrospective, unknown at original forecast unless schedule exists.",
+    "previous_gap_days": "days_since_previous: (0,7],(7,14],(14,28],(28,infinity); missing kept separate.",
+    "crop_age_days": "days_since_crop_start <=60,61-120,121-180,181+; descriptive elapsed time, not verified physiological phase.",
+    "change": "actual next count-current count: <=-2,(-2,0),0,(0,2),>=2; posthoc.",
+    "changed_binary": "actual next count != current count; posthoc.",
+    "label_positive": "actual next count >0; posthoc.",
+    "current_positive": "current count >0, known at feature time.",
+    "history_count": "prior/available history_count numeric cut <=1,2-3,4+.",
+    "selected_input_missing": "Any nonfinite/missing selected input in evaluation row before imputation.",
+    "selected_input_outside_train": "Any selected numeric input outside train min-max; missing counted separately."
+  },
+  "tables": {
+    "all_group_validation_metrics.csv": {
+      "rows": 4832,
+      "description": "See the three reports and generating scripts for exact derivation.",
+      "columns": [
+        {
+          "name": "Target_ID",
+          "dtype": "str",
+          "description": ""
+        },
+        {
+          "name": "Variable_Group_ID",
+          "dtype": "str",
+          "description": ""
+        },
+        {
+          "name": "Model_Type",
+          "dtype": "str",
+          "description": ""
+        },
+        {
+          "name": "Eval_Split",
+          "dtype": "str",
+          "description": ""
+        },
+        {
+          "name": "Prediction_Variant",
+          "dtype": "str",
+          "description": ""
+        },
+        {
+          "name": "Metric_Name",
+          "dtype": "str",
+          "description": ""
+        },
+        {
+          "name": "Eval_Row_Hash",
+          "dtype": "str",
+          "description": ""
+        },
+        {
+          "name": "Mean",
+          "dtype": "float64",
+          "description": ""
+        },
+        {
+          "name": "Std",
+          "dtype": "float64",
+          "description": ""
+        },
+        {
+          "name": "Seed_Count",
+          "dtype": "int64",
+          "description": ""
+        }
+      ]
+    },
+    "ax_field_schema.csv": {
+      "rows": 88,
+      "description": "Proposed logical field schema, not collected data; records with missing required scope keys cannot be joined.",
+      "columns": [
+        {
+          "name": "table",
+          "dtype": "str",
+          "description": ""
+        },
+        {
+          "name": "field",
+          "dtype": "str",
+          "description": ""
+        },
+        {
+          "name": "type",
+          "dtype": "str",
+          "description": ""
+        },
+        {
+          "name": "unit",
+          "dtype": "str",
+          "description": ""
+        },
+        {
+          "name": "source",
+          "dtype": "str",
+          "description": ""
+        },
+        {
+          "name": "cadence",
+          "dtype": "str",
+          "description": ""
+        },
+        {
+          "name": "join_key",
+          "dtype": "str",
+          "description": ""
+        },
+        {
+          "name": "availability_rule",
+          "dtype": "str",
+          "description": ""
+        },
+        {
+          "name": "use_role",
+          "dtype": "str",
+          "description": ""
+        },
+        {
+          "name": "required",
+          "dtype": "str",
+          "description": ""
+        },
+        {
+          "name": "hypothesis",
+          "dtype": "str",
+          "description": ""
+        }
+      ]
+    },
+    "baseline_performance.csv": {
+      "rows": 16,
+      "description": "One frozen overall winner per target and evaluation split; bounded per-seed metrics then mean. Includes baselines/raw sensitivity.",
+      "columns": [
+        {
+          "name": "target",
+          "dtype": "str",
+          "description": "In CSV metrics tables: task ID. In selected_predictions.parquet: actual numeric count. Use target_id for task in predictions."
+        },
+        {
+          "name": "split",
+          "dtype": "str",
+          "description": ""
+        },
+        {
+          "name": "model",
+          "dtype": "str",
+          "description": ""
+        },
+        {
+          "name": "dimension",
+          "dtype": "str",
+          "description": ""
+        },
+        {
+          "name": "level",
+          "dtype": "str",
+          "description": "Dimension-dependent category; dimensions documented below."
+        },
+        {
+          "name": "n",
+          "dtype": "int64",
+          "description": "Unique evaluation observation rows in this stratum; seeds do not multiply n."
+        },
+        {
+          "name": "facilities",
+          "dtype": "int64",
+          "description": ""
+        },
+        {
+          "name": "crop_cycles",
+          "dtype": "int64",
+          "description": ""
+        },
+        {
+          "name": "row_share",
+          "dtype": "float64",
+          "description": "Stratum n divided by full target/split n."
+        },
+        {
+          "name": "zero_rate",
+          "dtype": "float64",
+          "description": ""
+        },
+        {
+          "name": "mean_actual",
+          "dtype": "float64",
+          "description": ""
+        },
+        {
+          "name": "squared_error_share",
+          "dtype": "float64",
+          "description": "Sum of per-row mean-over-seeds squared error in stratum / same sum in full target/split."
+        },
+        {
+          "name": "small_n",
+          "dtype": "bool",
+          "description": "n<30 descriptive warning, not a statistically derived universal threshold."
+        },
+        {
+          "name": "posthoc_label_based",
+          "dtype": "bool",
+          "description": "True if segmentation needs future actual target (change/positive); not a forecast-time feature."
+        },
+        {
+          "name": "rmse_mean",
+          "dtype": "float64",
+          "description": "Arithmetic mean of per-seed RMSE values, not RMSE of the average prediction."
+        },
+        {
+          "name": "rmse_seed_std",
+          "dtype": "float64",
+          "description": "Sample SD (ddof=1) across seed metrics; not facility/generalization confidence interval."
+        },
+        {
+          "name": "mae_mean",
+          "dtype": "float64",
+          "description": ""
+        },
+        {
+          "name": "mae_seed_std",
+          "dtype": "float64",
+          "description": ""
+        },
+        {
+          "name": "r2_mean",
+          "dtype": "float64",
+          "description": ""
+        },
+        {
+          "name": "r2_seed_std",
+          "dtype": "float64",
+          "description": ""
+        },
+        {
+          "name": "ccc_mean",
+          "dtype": "float64",
+          "description": ""
+        },
+        {
+          "name": "ccc_seed_std",
+          "dtype": "float64",
+          "description": ""
+        },
+        {
+          "name": "bias_mean",
+          "dtype": "float64",
+          "description": "Average(prediction-actual), then average over seeds; positive=overprediction."
+        },
+        {
+          "name": "bias_seed_std",
+          "dtype": "float64",
+          "description": ""
+        },
+        {
+          "name": "p90_ae_mean",
+          "dtype": "float64",
+          "description": ""
+        },
+        {
+          "name": "p90_ae_seed_std",
+          "dtype": "float64",
+          "description": ""
+        },
+        {
+          "name": "within1_mean",
+          "dtype": "float64",
+          "description": "Fraction of errors within ±1 count, averaged over seeds; diagnostic only."
+        },
+        {
+          "name": "within1_seed_std",
+          "dtype": "float64",
+          "description": ""
+        },
+        {
+          "name": "persistence_rmse",
+          "dtype": "float64",
+          "description": ""
+        },
+        {
+          "name": "persistence_mae",
+          "dtype": "float64",
+          "description": ""
+        },
+        {
+          "name": "persistence_r2",
+          "dtype": "float64",
+          "description": ""
+        },
+        {
+          "name": "persistence_ccc",
+          "dtype": "float64",
+          "description": ""
+        },
+        {
+          "name": "persistence_bias",
+          "dtype": "float64",
+          "description": ""
+        },
+        {
+          "name": "persistence_p90_ae",
+          "dtype": "float64",
+          "description": ""
+        },
+        {
+          "name": "persistence_within1",
+          "dtype": "float64",
+          "description": ""
+        },
+        {
+          "name": "zero_predictor_rmse",
+          "dtype": "float64",
+          "description": ""
+        },
+        {
+          "name": "group_id",
+          "dtype": "str",
+          "description": ""
+        },
+        {
+          "name": "feature_count",
+          "dtype": "int64",
+          "description": ""
+        },
+        {
+          "name": "skill_vs_persistence_pct",
+          "dtype": "float64",
+          "description": "100*(1-selected_model_rmse_mean/persistence_rmse); negative=worse."
+        },
+        {
+          "name": "raw_rmse_mean",
+          "dtype": "float64",
+          "description": ""
+        },
+        {
+          "name": "output_clip_rate",
+          "dtype": "float64",
+          "description": "Fraction of raw != bounded predictions across seeds and rows."
+        },
+        {
+          "name": "target_above_train_bound_rate",
+          "dtype": "float64",
+          "description": ""
+        },
+        {
+          "name": "upper_bound",
+          "dtype": "float64",
+          "description": ""
+        }
+      ]
+    },
+    "category_effect_summary.csv": {
+      "rows": 40,
+      "description": "See the three reports and generating scripts for exact derivation.",
+      "columns": [
+        {
+          "name": "target",
+          "dtype": "str",
+          "description": "In CSV metrics tables: task ID. In selected_predictions.parquet: actual numeric count. Use target_id for task in predictions."
+        },
+        {
+          "name": "added_category",
+          "dtype": "str",
+          "description": ""
+        },
+        {
+          "name": "comparisons",
+          "dtype": "int64",
+          "description": ""
+        },
+        {
+          "name": "median_rmse_delta",
+          "dtype": "float64",
+          "description": ""
+        },
+        {
+          "name": "min_rmse_delta",
+          "dtype": "float64",
+          "description": ""
+        },
+        {
+          "name": "max_rmse_delta",
+          "dtype": "float64",
+          "description": ""
+        },
+        {
+          "name": "improved_comparisons",
+          "dtype": "int64",
+          "description": ""
+        }
+      ]
+    },
+    "cohort_profile.csv": {
+      "rows": 24,
+      "description": "See the three reports and generating scripts for exact derivation.",
+      "columns": [
+        {
+          "name": "target",
+          "dtype": "str",
+          "description": "In CSV metrics tables: task ID. In selected_predictions.parquet: actual numeric count. Use target_id for task in predictions."
+        },
+        {
+          "name": "split",
+          "dtype": "str",
+          "description": ""
+        },
+        {
+          "name": "n",
+          "dtype": "int64",
+          "description": "Unique evaluation observation rows in this stratum; seeds do not multiply n."
+        },
+        {
+          "name": "facilities",
+          "dtype": "int64",
+          "description": ""
+        },
+        {
+          "name": "crop_cycles",
+          "dtype": "int64",
+          "description": ""
+        },
+        {
+          "name": "entities",
+          "dtype": "int64",
+          "description": ""
+        },
+        {
+          "name": "feature_start",
+          "dtype": "str",
+          "description": ""
+        },
+        {
+          "name": "target_end",
+          "dtype": "str",
+          "description": ""
+        },
+        {
+          "name": "zero_rate",
+          "dtype": "float64",
+          "description": ""
+        },
+        {
+          "name": "changed_rate",
+          "dtype": "float64",
+          "description": ""
+        },
+        {
+          "name": "large_change_rate",
+          "dtype": "float64",
+          "description": ""
+        },
+        {
+          "name": "positive_n",
+          "dtype": "int64",
+          "description": ""
+        },
+        {
+          "name": "target_mean",
+          "dtype": "float64",
+          "description": ""
+        },
+        {
+          "name": "target_std",
+          "dtype": "float64",
+          "description": ""
+        },
+        {
+          "name": "target_max",
+          "dtype": "float64",
+          "description": ""
+        },
+        {
+          "name": "horizon_median",
+          "dtype": "float64",
+          "description": ""
+        },
+        {
+          "name": "horizon_max",
+          "dtype": "float64",
+          "description": ""
+        },
+        {
+          "name": "previous_gap_median",
+          "dtype": "float64",
+          "description": ""
+        }
+      ]
+    },
+    "comparison_arms.csv": {
+      "rows": 7,
+      "description": "See the three reports and generating scripts for exact derivation.",
+      "columns": [
+        {
+          "name": "arm",
+          "dtype": "str",
+          "description": ""
+        },
+        {
+          "name": "name",
+          "dtype": "str",
+          "description": ""
+        },
+        {
+          "name": "inputs",
+          "dtype": "str",
+          "description": ""
+        },
+        {
+          "name": "purpose",
+          "dtype": "str",
+          "description": ""
+        },
+        {
+          "name": "comparison",
+          "dtype": "str",
+          "description": ""
+        }
+      ]
+    },
+    "crossed_error_strata.csv": {
+      "rows": 167,
+      "description": "Test-only descriptive crossing of facility/age/horizon/change; not causal adjustment.",
+      "columns": [
+        {
+          "name": "target",
+          "dtype": "str",
+          "description": "In CSV metrics tables: task ID. In selected_predictions.parquet: actual numeric count. Use target_id for task in predictions."
+        },
+        {
+          "name": "dimensions",
+          "dtype": "str",
+          "description": ""
+        },
+        {
+          "name": "level",
+          "dtype": "str",
+          "description": "Dimension-dependent category; dimensions documented below."
+        },
+        {
+          "name": "n",
+          "dtype": "int64",
+          "description": "Unique evaluation observation rows in this stratum; seeds do not multiply n."
+        },
+        {
+          "name": "rmse_mean",
+          "dtype": "float64",
+          "description": "Arithmetic mean of per-seed RMSE values, not RMSE of the average prediction."
+        },
+        {
+          "name": "small_n",
+          "dtype": "bool",
+          "description": "n<30 descriptive warning, not a statistically derived universal threshold."
+        }
+      ]
+    },
+    "error_strata.csv": {
+      "rows": 565,
+      "description": "Same frozen winner, per dimension/level; n counts unique evaluation rows, not seed repetitions.",
+      "columns": [
+        {
+          "name": "target",
+          "dtype": "str",
+          "description": "In CSV metrics tables: task ID. In selected_predictions.parquet: actual numeric count. Use target_id for task in predictions."
+        },
+        {
+          "name": "split",
+          "dtype": "str",
+          "description": ""
+        },
+        {
+          "name": "model",
+          "dtype": "str",
+          "description": ""
+        },
+        {
+          "name": "dimension",
+          "dtype": "str",
+          "description": ""
+        },
+        {
+          "name": "level",
+          "dtype": "str",
+          "description": "Dimension-dependent category; dimensions documented below."
+        },
+        {
+          "name": "n",
+          "dtype": "int64",
+          "description": "Unique evaluation observation rows in this stratum; seeds do not multiply n."
+        },
+        {
+          "name": "facilities",
+          "dtype": "int64",
+          "description": ""
+        },
+        {
+          "name": "crop_cycles",
+          "dtype": "int64",
+          "description": ""
+        },
+        {
+          "name": "row_share",
+          "dtype": "float64",
+          "description": "Stratum n divided by full target/split n."
+        },
+        {
+          "name": "zero_rate",
+          "dtype": "float64",
+          "description": ""
+        },
+        {
+          "name": "mean_actual",
+          "dtype": "float64",
+          "description": ""
+        },
+        {
+          "name": "squared_error_share",
+          "dtype": "float64",
+          "description": "Sum of per-row mean-over-seeds squared error in stratum / same sum in full target/split."
+        },
+        {
+          "name": "small_n",
+          "dtype": "bool",
+          "description": "n<30 descriptive warning, not a statistically derived universal threshold."
+        },
+        {
+          "name": "posthoc_label_based",
+          "dtype": "bool",
+          "description": "True if segmentation needs future actual target (change/positive); not a forecast-time feature."
+        },
+        {
+          "name": "rmse_mean",
+          "dtype": "float64",
+          "description": "Arithmetic mean of per-seed RMSE values, not RMSE of the average prediction."
+        },
+        {
+          "name": "rmse_seed_std",
+          "dtype": "float64",
+          "description": "Sample SD (ddof=1) across seed metrics; not facility/generalization confidence interval."
+        },
+        {
+          "name": "mae_mean",
+          "dtype": "float64",
+          "description": ""
+        },
+        {
+          "name": "mae_seed_std",
+          "dtype": "float64",
+          "description": ""
+        },
+        {
+          "name": "r2_mean",
+          "dtype": "float64",
+          "description": ""
+        },
+        {
+          "name": "r2_seed_std",
+          "dtype": "float64",
+          "description": ""
+        },
+        {
+          "name": "ccc_mean",
+          "dtype": "float64",
+          "description": ""
+        },
+        {
+          "name": "ccc_seed_std",
+          "dtype": "float64",
+          "description": ""
+        },
+        {
+          "name": "bias_mean",
+          "dtype": "float64",
+          "description": "Average(prediction-actual), then average over seeds; positive=overprediction."
+        },
+        {
+          "name": "bias_seed_std",
+          "dtype": "float64",
+          "description": ""
+        },
+        {
+          "name": "p90_ae_mean",
+          "dtype": "float64",
+          "description": ""
+        },
+        {
+          "name": "p90_ae_seed_std",
+          "dtype": "float64",
+          "description": ""
+        },
+        {
+          "name": "within1_mean",
+          "dtype": "float64",
+          "description": "Fraction of errors within ±1 count, averaged over seeds; diagnostic only."
+        },
+        {
+          "name": "within1_seed_std",
+          "dtype": "float64",
+          "description": ""
+        },
+        {
+          "name": "persistence_rmse",
+          "dtype": "float64",
+          "description": ""
+        },
+        {
+          "name": "persistence_mae",
+          "dtype": "float64",
+          "description": ""
+        },
+        {
+          "name": "persistence_r2",
+          "dtype": "float64",
+          "description": ""
+        },
+        {
+          "name": "persistence_ccc",
+          "dtype": "float64",
+          "description": ""
+        },
+        {
+          "name": "persistence_bias",
+          "dtype": "float64",
+          "description": ""
+        },
+        {
+          "name": "persistence_p90_ae",
+          "dtype": "float64",
+          "description": ""
+        },
+        {
+          "name": "persistence_within1",
+          "dtype": "float64",
+          "description": ""
+        },
+        {
+          "name": "zero_predictor_rmse",
+          "dtype": "float64",
+          "description": ""
+        }
+      ]
+    },
+    "excluded_observations.csv": {
+      "rows": 16,
+      "description": "See the three reports and generating scripts for exact derivation.",
+      "columns": [
+        {
+          "name": "target",
+          "dtype": "str",
+          "description": "In CSV metrics tables: task ID. In selected_predictions.parquet: actual numeric count. Use target_id for task in predictions."
+        },
+        {
+          "name": "reason",
+          "dtype": "str",
+          "description": ""
+        },
+        {
+          "name": "n",
+          "dtype": "int64",
+          "description": "Unique evaluation observation rows in this stratum; seeds do not multiply n."
+        }
+      ]
+    },
+    "feature_coverage.csv": {
+      "rows": 656,
+      "description": "See the three reports and generating scripts for exact derivation.",
+      "columns": [
+        {
+          "name": "target",
+          "dtype": "str",
+          "description": "In CSV metrics tables: task ID. In selected_predictions.parquet: actual numeric count. Use target_id for task in predictions."
+        },
+        {
+          "name": "feature",
+          "dtype": "str",
+          "description": ""
+        },
+        {
+          "name": "in_any_registered_group",
+          "dtype": "bool",
+          "description": ""
+        },
+        {
+          "name": "nonmissing_rate",
+          "dtype": "float64",
+          "description": ""
+        },
+        {
+          "name": "unique_values",
+          "dtype": "int64",
+          "description": ""
+        }
+      ]
+    },
+    "hypotheses.csv": {
+      "rows": 7,
+      "description": "See the three reports and generating scripts for exact derivation.",
+      "columns": [
+        {
+          "name": "id",
+          "dtype": "str",
+          "description": ""
+        },
+        {
+          "name": "priority",
+          "dtype": "str",
+          "description": ""
+        },
+        {
+          "name": "category",
+          "dtype": "str",
+          "description": ""
+        },
+        {
+          "name": "evidence",
+          "dtype": "str",
+          "description": ""
+        },
+        {
+          "name": "hypothesis",
+          "dtype": "str",
+          "description": ""
+        },
+        {
+          "name": "candidate",
+          "dtype": "str",
+          "description": ""
+        },
+        {
+          "name": "validation",
+          "dtype": "str",
+          "description": ""
+        },
+        {
+          "name": "kpi",
+          "dtype": "str",
+          "description": ""
+        },
+        {
+          "name": "status",
+          "dtype": "str",
+          "description": ""
+        }
+      ]
+    },
+    "integrity_checks.csv": {
+      "rows": 4932,
+      "description": "See the three reports and generating scripts for exact derivation.",
+      "columns": [
+        {
+          "name": "check",
+          "dtype": "str",
+          "description": ""
+        },
+        {
+          "name": "passed",
+          "dtype": "bool",
+          "description": ""
+        },
+        {
+          "name": "detail",
+          "dtype": "float64",
+          "description": ""
+        }
+      ]
+    },
+    "kpi_planning_reference.csv": {
+      "rows": 8,
+      "description": "Reference test metrics and illustrative proposed targets only; not measured To-Be outcomes.",
+      "columns": [
+        {
+          "name": "target",
+          "dtype": "str",
+          "description": "In CSV metrics tables: task ID. In selected_predictions.parquet: actual numeric count. Use target_id for task in predictions."
+        },
+        {
+          "name": "reference_rmse",
+          "dtype": "float64",
+          "description": ""
+        },
+        {
+          "name": "illustrative_10pct_rmse",
+          "dtype": "float64",
+          "description": "0.9*current reference RMSE; planning only; rebaseline on future paired cohort."
+        },
+        {
+          "name": "reference_change_mae",
+          "dtype": "float64",
+          "description": ""
+        },
+        {
+          "name": "illustrative_15pct_change_mae",
+          "dtype": "float64",
+          "description": ""
+        },
+        {
+          "name": "reference_persistence_rmse",
+          "dtype": "float64",
+          "description": ""
+        },
+        {
+          "name": "reference_zero_rmse",
+          "dtype": "float64",
+          "description": ""
+        },
+        {
+          "name": "status",
+          "dtype": "str",
+          "description": ""
+        }
+      ]
+    },
+    "largest_error_cases.csv": {
+      "rows": 240,
+      "description": "See the three reports and generating scripts for exact derivation.",
+      "columns": [
+        {
+          "name": "row_id",
+          "dtype": "str",
+          "description": ""
+        },
+        {
+          "name": "facility_id",
+          "dtype": "str",
+          "description": ""
+        },
+        {
+          "name": "crop_sn",
+          "dtype": "str",
+          "description": ""
+        },
+        {
+          "name": "sample_num",
+          "dtype": "int64",
+          "description": ""
+        },
+        {
+          "name": "feature_date",
+          "dtype": "str",
+          "description": ""
+        },
+        {
+          "name": "target_date",
+          "dtype": "str",
+          "description": ""
+        },
+        {
+          "name": "target",
+          "dtype": "float64",
+          "description": "In CSV metrics tables: task ID. In selected_predictions.parquet: actual numeric count. Use target_id for task in predictions."
+        },
+        {
+          "name": "target_id",
+          "dtype": "str",
+          "description": "Prediction task ID in prediction rows."
+        },
+        {
+          "name": "split",
+          "dtype": "str",
+          "description": ""
+        },
+        {
+          "name": "current_count",
+          "dtype": "float64",
+          "description": ""
+        },
+        {
+          "name": "actual_change",
+          "dtype": "float64",
+          "description": ""
+        },
+        {
+          "name": "prediction_seed_mean",
+          "dtype": "float64",
+          "description": ""
+        },
+        {
+          "name": "mean_absolute_error_across_seeds",
+          "dtype": "float64",
+          "description": ""
+        },
+        {
+          "name": "mean_squared_error_across_seeds",
+          "dtype": "float64",
+          "description": ""
+        },
+        {
+          "name": "horizon_days",
+          "dtype": "float64",
+          "description": ""
+        },
+        {
+          "name": "crop_age_days",
+          "dtype": "int64",
+          "description": ""
+        },
+        {
+          "name": "selected_input_missing_fraction",
+          "dtype": "float64",
+          "description": ""
+        }
+      ]
+    },
+    "leave_one_facility_sensitivity.csv": {
+      "rows": 40,
+      "description": "See the three reports and generating scripts for exact derivation.",
+      "columns": [
+        {
+          "name": "target",
+          "dtype": "str",
+          "description": "In CSV metrics tables: task ID. In selected_predictions.parquet: actual numeric count. Use target_id for task in predictions."
+        },
+        {
+          "name": "split",
+          "dtype": "str",
+          "description": ""
+        },
+        {
+          "name": "removed_facility",
+          "dtype": "str",
+          "description": ""
+        },
+        {
+          "name": "remaining_n",
+          "dtype": "int64",
+          "description": ""
+        },
+        {
+          "name": "rmse_mean",
+          "dtype": "float64",
+          "description": "Arithmetic mean of per-seed RMSE values, not RMSE of the average prediction."
+        },
+        {
+          "name": "persistence_rmse",
+          "dtype": "float64",
+          "description": ""
+        }
+      ]
+    },
+    "model_comparison.csv": {
+      "rows": 224,
+      "description": "See the three reports and generating scripts for exact derivation.",
+      "columns": [
+        {
+          "name": "target",
+          "dtype": "str",
+          "description": "In CSV metrics tables: task ID. In selected_predictions.parquet: actual numeric count. Use target_id for task in predictions."
+        },
+        {
+          "name": "split",
+          "dtype": "str",
+          "description": ""
+        },
+        {
+          "name": "model",
+          "dtype": "str",
+          "description": ""
+        },
+        {
+          "name": "group_id",
+          "dtype": "str",
+          "description": ""
+        },
+        {
+          "name": "variant",
+          "dtype": "str",
+          "description": ""
+        },
+        {
+          "name": "n",
+          "dtype": "int64",
+          "description": "Unique evaluation observation rows in this stratum; seeds do not multiply n."
+        },
+        {
+          "name": "seed_count",
+          "dtype": "int64",
+          "description": ""
+        },
+        {
+          "name": "rmse_mean",
+          "dtype": "float64",
+          "description": "Arithmetic mean of per-seed RMSE values, not RMSE of the average prediction."
+        },
+        {
+          "name": "rmse_seed_std",
+          "dtype": "float64",
+          "description": "Sample SD (ddof=1) across seed metrics; not facility/generalization confidence interval."
+        },
+        {
+          "name": "mae_mean",
+          "dtype": "float64",
+          "description": ""
+        },
+        {
+          "name": "r2_mean",
+          "dtype": "float64",
+          "description": ""
+        },
+        {
+          "name": "ccc_mean",
+          "dtype": "float64",
+          "description": ""
+        }
+      ]
+    },
+    "model_seed_metrics.csv": {
+      "rows": 992,
+      "description": "Recomputed raw and bounded metrics for each model-specific validation winner and persistence; per seed/split.",
+      "columns": [
+        {
+          "name": "target",
+          "dtype": "str",
+          "description": "In CSV metrics tables: task ID. In selected_predictions.parquet: actual numeric count. Use target_id for task in predictions."
+        },
+        {
+          "name": "split",
+          "dtype": "str",
+          "description": ""
+        },
+        {
+          "name": "model",
+          "dtype": "str",
+          "description": ""
+        },
+        {
+          "name": "group_id",
+          "dtype": "str",
+          "description": ""
+        },
+        {
+          "name": "seed",
+          "dtype": "int64",
+          "description": ""
+        },
+        {
+          "name": "variant",
+          "dtype": "str",
+          "description": ""
+        },
+        {
+          "name": "n",
+          "dtype": "int64",
+          "description": "Unique evaluation observation rows in this stratum; seeds do not multiply n."
+        },
+        {
+          "name": "run_id",
+          "dtype": "str",
+          "description": ""
+        },
+        {
+          "name": "rmse",
+          "dtype": "float64",
+          "description": ""
+        },
+        {
+          "name": "mae",
+          "dtype": "float64",
+          "description": ""
+        },
+        {
+          "name": "r2",
+          "dtype": "float64",
+          "description": ""
+        },
+        {
+          "name": "ccc",
+          "dtype": "float64",
+          "description": ""
+        },
+        {
+          "name": "bias",
+          "dtype": "float64",
+          "description": ""
+        },
+        {
+          "name": "p90_ae",
+          "dtype": "float64",
+          "description": ""
+        },
+        {
+          "name": "within1",
+          "dtype": "float64",
+          "description": ""
+        }
+      ]
+    },
+    "paired_category_comparisons.csv": {
+      "rows": 1848,
+      "description": "Validation-only addition of one category within same model and exact category subset; separately tuned; not causal.",
+      "columns": [
+        {
+          "name": "target",
+          "dtype": "str",
+          "description": "In CSV metrics tables: task ID. In selected_predictions.parquet: actual numeric count. Use target_id for task in predictions."
+        },
+        {
+          "name": "model",
+          "dtype": "str",
+          "description": ""
+        },
+        {
+          "name": "base_group",
+          "dtype": "str",
+          "description": ""
+        },
+        {
+          "name": "added_group",
+          "dtype": "str",
+          "description": ""
+        },
+        {
+          "name": "added_category",
+          "dtype": "str",
+          "description": ""
+        },
+        {
+          "name": "added_category_id",
+          "dtype": "str",
+          "description": ""
+        },
+        {
+          "name": "base_rmse",
+          "dtype": "float64",
+          "description": ""
+        },
+        {
+          "name": "added_rmse",
+          "dtype": "float64",
+          "description": ""
+        },
+        {
+          "name": "delta_rmse",
+          "dtype": "float64",
+          "description": "Added-category RMSE minus base RMSE; negative means improvement in validation."
+        },
+        {
+          "name": "relative_improvement_pct",
+          "dtype": "float64",
+          "description": ""
+        },
+        {
+          "name": "stage",
+          "dtype": "str",
+          "description": ""
+        },
+        {
+          "name": "interpretation",
+          "dtype": "str",
+          "description": ""
+        }
+      ]
+    },
+    "registered_categories.csv": {
+      "rows": 540,
+      "description": "One row per target/group/category. Category IDs can differ for equivalent meaning; preserve exact feature membership.",
+      "columns": [
+        {
+          "name": "target",
+          "dtype": "str",
+          "description": "In CSV metrics tables: task ID. In selected_predictions.parquet: actual numeric count. Use target_id for task in predictions."
+        },
+        {
+          "name": "group_id",
+          "dtype": "str",
+          "description": ""
+        },
+        {
+          "name": "category_id",
+          "dtype": "str",
+          "description": ""
+        },
+        {
+          "name": "category",
+          "dtype": "str",
+          "description": ""
+        },
+        {
+          "name": "features",
+          "dtype": "str",
+          "description": ""
+        },
+        {
+          "name": "category_feature_count",
+          "dtype": "int64",
+          "description": ""
+        },
+        {
+          "name": "group_feature_count",
+          "dtype": "int64",
+          "description": ""
+        }
+      ]
+    },
+    "selected_input_diagnostics.csv": {
+      "rows": 362,
+      "description": "See the three reports and generating scripts for exact derivation.",
+      "columns": [
+        {
+          "name": "Variable_ID",
+          "dtype": "str",
+          "description": ""
+        },
+        {
+          "name": "Missing_Rate",
+          "dtype": "float64",
+          "description": ""
+        },
+        {
+          "name": "Train_Mean",
+          "dtype": "float64",
+          "description": ""
+        },
+        {
+          "name": "Train_Std",
+          "dtype": "float64",
+          "description": ""
+        },
+        {
+          "name": "Train_Min",
+          "dtype": "float64",
+          "description": ""
+        },
+        {
+          "name": "Train_Max",
+          "dtype": "float64",
+          "description": ""
+        },
+        {
+          "name": "Eval_Min",
+          "dtype": "float64",
+          "description": ""
+        },
+        {
+          "name": "Eval_Max",
+          "dtype": "float64",
+          "description": ""
+        },
+        {
+          "name": "Unbounded_Abs_Max",
+          "dtype": "float64",
+          "description": ""
+        },
+        {
+          "name": "Input_Clip_Rate",
+          "dtype": "float64",
+          "description": ""
+        },
+        {
+          "name": "Outside_Train_Range_Rate",
+          "dtype": "float64",
+          "description": ""
+        },
+        {
+          "name": "target",
+          "dtype": "str",
+          "description": "In CSV metrics tables: task ID. In selected_predictions.parquet: actual numeric count. Use target_id for task in predictions."
+        },
+        {
+          "name": "split",
+          "dtype": "str",
+          "description": ""
+        }
+      ]
+    },
+    "selected_models.csv": {
+      "rows": 8,
+      "description": "See the three reports and generating scripts for exact derivation.",
+      "columns": [
+        {
+          "name": "target",
+          "dtype": "str",
+          "description": "In CSV metrics tables: task ID. In selected_predictions.parquet: actual numeric count. Use target_id for task in predictions."
+        },
+        {
+          "name": "model",
+          "dtype": "str",
+          "description": ""
+        },
+        {
+          "name": "group_id",
+          "dtype": "str",
+          "description": ""
+        },
+        {
+          "name": "feature_count",
+          "dtype": "int64",
+          "description": ""
+        },
+        {
+          "name": "categories",
+          "dtype": "str",
+          "description": ""
+        },
+        {
+          "name": "params",
+          "dtype": "str",
+          "description": ""
+        },
+        {
+          "name": "selection_validation_rmse",
+          "dtype": "float64",
+          "description": ""
+        }
+      ]
+    },
+    "source_data_quality.csv": {
+      "rows": 29,
+      "description": "See the three reports and generating scripts for exact derivation.",
+      "columns": [
+        {
+          "name": "Crop",
+          "dtype": "str",
+          "description": ""
+        },
+        {
+          "name": "Reason",
+          "dtype": "str",
+          "description": ""
+        },
+        {
+          "name": "Rows",
+          "dtype": "int64",
+          "description": ""
+        },
+        {
+          "name": "Target_ID",
+          "dtype": "str",
+          "description": ""
+        },
+        {
+          "name": "Split",
+          "dtype": "str",
+          "description": ""
+        },
+        {
+          "name": "Zero_Rate",
+          "dtype": "float64",
+          "description": ""
+        },
+        {
+          "name": "Target_Max",
+          "dtype": "float64",
+          "description": ""
+        },
+        {
+          "name": "Target_Mean",
+          "dtype": "float64",
+          "description": ""
+        },
+        {
+          "name": "Target_Std",
+          "dtype": "float64",
+          "description": ""
+        }
+      ]
+    },
+    "source_sum_comparisons.csv": {
+      "rows": 1920,
+      "description": "See the three reports and generating scripts for exact derivation.",
+      "columns": [
+        {
+          "name": "Crop",
+          "dtype": "str",
+          "description": ""
+        },
+        {
+          "name": "Model_Type",
+          "dtype": "str",
+          "description": ""
+        },
+        {
+          "name": "Seed",
+          "dtype": "int64",
+          "description": ""
+        },
+        {
+          "name": "Eval_Split",
+          "dtype": "str",
+          "description": ""
+        },
+        {
+          "name": "Prediction_Variant",
+          "dtype": "str",
+          "description": ""
+        },
+        {
+          "name": "Method",
+          "dtype": "str",
+          "description": ""
+        },
+        {
+          "name": "N_Eval",
+          "dtype": "int64",
+          "description": ""
+        },
+        {
+          "name": "Metric_Name",
+          "dtype": "str",
+          "description": ""
+        },
+        {
+          "name": "Metric_Value",
+          "dtype": "float64",
+          "description": ""
+        }
+      ]
+    },
+    "target_diagnosis.csv": {
+      "rows": 8,
+      "description": "See the three reports and generating scripts for exact derivation.",
+      "columns": [
+        {
+          "name": "target",
+          "dtype": "str",
+          "description": "In CSV metrics tables: task ID. In selected_predictions.parquet: actual numeric count. Use target_id for task in predictions."
+        },
+        {
+          "name": "finding",
+          "dtype": "str",
+          "description": ""
+        },
+        {
+          "name": "next_validation",
+          "dtype": "str",
+          "description": ""
+        },
+        {
+          "name": "evidence",
+          "dtype": "str",
+          "description": ""
+        }
+      ]
+    },
+    "selected_predictions.parquet": {
+      "rows": 43950,
+      "description": "Five seeds of overall validation-selected model predictions with target_id task, target actual count; no averaging performed.",
+      "columns": [
+        {
+          "name": "row_id",
+          "dtype": "str"
+        },
+        {
+          "name": "facility_id",
+          "dtype": "str"
+        },
+        {
+          "name": "crop_sn",
+          "dtype": "str"
+        },
+        {
+          "name": "sample_num",
+          "dtype": "str"
+        },
+        {
+          "name": "feature_date",
+          "dtype": "datetime64[us]"
+        },
+        {
+          "name": "target_date",
+          "dtype": "datetime64[us]"
+        },
+        {
+          "name": "target",
+          "dtype": "float64"
+        },
+        {
+          "name": "prediction_raw",
+          "dtype": "float64"
+        },
+        {
+          "name": "prediction_bounded",
+          "dtype": "float64"
+        },
+        {
+          "name": "upper_bound",
+          "dtype": "float64"
+        },
+        {
+          "name": "was_constrained",
+          "dtype": "bool"
+        },
+        {
+          "name": "Run_ID",
+          "dtype": "str"
+        },
+        {
+          "name": "Eval_Split",
+          "dtype": "str"
+        },
+        {
+          "name": "seed",
+          "dtype": "int64"
+        },
+        {
+          "name": "model",
+          "dtype": "str"
+        },
+        {
+          "name": "group_id",
+          "dtype": "str"
+        },
+        {
+          "name": "target_id",
+          "dtype": "str"
+        },
+        {
+          "name": "current_count",
+          "dtype": "float64"
+        },
+        {
+          "name": "horizon_days",
+          "dtype": "float64"
+        }
+      ]
+    }
+  }
+}

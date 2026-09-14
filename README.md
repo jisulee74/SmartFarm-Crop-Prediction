@@ -1,6 +1,8 @@
 # SmartFarm Crop Prediction
-
+ 
 토마토 꽃 수·딸기 착과수 관측 대시보드와 예측 실험 코드 및 결과를 관리하는 저장소입니다.
+
+- **웹 대시보드 배포 주소**: [https://jisulee74.github.io/SmartFarm-Crop-Prediction/](https://jisulee74.github.io/SmartFarm-Crop-Prediction/)
 
 ## 폴더 구성
 
