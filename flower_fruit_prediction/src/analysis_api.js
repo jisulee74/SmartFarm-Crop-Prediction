@@ -21,15 +21,23 @@ export async function fetchAnalysisBundle() {
     console.warn('[AnalysisAPI] Server API unavailable, attempting static fallback:', err);
   }
 
-  // Fallback for static GitHub Pages / file hosting
-  try {
-    const staticRes = await fetch('./ax_direction/dashboard_bundle.json');
-    if (staticRes.ok) {
-      cachedBundle = await staticRes.json();
-      return cachedBundle;
+  // Fallback for static GitHub Pages / file hosting with cache busting
+  const fallbackPaths = [
+    './ax_direction/dashboard_bundle.json',
+    './flower_fruit_prediction/ax_direction/dashboard_bundle.json',
+    '../flower_fruit_prediction/ax_direction/dashboard_bundle.json'
+  ];
+
+  for (const p of fallbackPaths) {
+    try {
+      const staticRes = await fetch(`${p}?v=${Date.now()}`);
+      if (staticRes.ok) {
+        cachedBundle = await staticRes.json();
+        return cachedBundle;
+      }
+    } catch (e) {
+      // Continue to next path
     }
-  } catch (err) {
-    console.error('[AnalysisAPI] Static fallback failed:', err);
   }
 
   throw new Error('Failed to load analysis bundle from API and static fallback');

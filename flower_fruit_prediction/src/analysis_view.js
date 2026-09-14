@@ -83,6 +83,7 @@ export class AnalysisViewController {
       this.render();
       this.initCharts();
       this.initialized = true;
+      setTimeout(() => this.resizeCharts(), 100);
 
       // Global resize listener
       window.addEventListener('resize', () => this.resizeCharts());

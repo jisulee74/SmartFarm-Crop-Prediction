@@ -126,10 +126,11 @@ function initPrimaryTabs() {
           setTimeout(() => expViewController.chartInstance.resize(), 100);
         }
       } else if (targetTabId === 'tab-analysis') {
-        // 생육 예측 분석 탭 활성화 시 초기화
+        // 생육 예측 분석 탭 활성화 시 초기화 및 차트 리사이즈
         if (!anlViewController.initialized) {
           await anlViewController.init();
         }
+        setTimeout(() => anlViewController.resizeCharts(), 100);
       } else if (targetTabId === 'tab-observation') {
         setTimeout(() => chartManager.resizeAll(), 100);
       }
