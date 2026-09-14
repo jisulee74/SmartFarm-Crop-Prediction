@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>꽃수·착과수 예측 모델 검증</title>
-  <link rel="stylesheet" href="./src/styles.css?v=10">
+  <link rel="stylesheet" href="./src/styles.css?v=11">
   <!-- Apache ECharts CDN (최신 안정 버전) -->
   <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
 </head>
@@ -193,9 +193,12 @@
               <option value="ALL">전체 작기 (기간)</option>
             </select>
           </div>
-          <div class="control-group">
-            <label class="control-label" for="tomato_sample_select">🏷️ 개체 번호 (Sample #)</label>
-            <select id="tomato_sample_select" class="control-select">
+          <div class="control-group" id="tomato_sample_control_group">
+            <div class="control-label-row">
+              <label class="control-label" for="tomato_sample_select">🏷️ 개체 번호 (Sample #)</label>
+              <span class="sample-mode-hint" id="tomato_sample_hint">개체당 평균 모드에서는 전체 개체를 대상으로 계산합니다.</span>
+            </div>
+            <select id="tomato_sample_select" class="control-select" disabled>
               <option value="ALL">전체 개체</option>
             </select>
           </div>
@@ -325,9 +328,12 @@
               <option value="ALL">전체 작기 (기간)</option>
             </select>
           </div>
-          <div class="control-group">
-            <label class="control-label" for="strawberry_sample_select">🏷️ 개체 번호 (Sample #)</label>
-            <select id="strawberry_sample_select" class="control-select">
+          <div class="control-group" id="strawberry_sample_control_group">
+            <div class="control-label-row">
+              <label class="control-label" for="strawberry_sample_select">🏷️ 개체 번호 (Sample #)</label>
+              <span class="sample-mode-hint" id="strawberry_sample_hint">개체당 평균 모드에서는 전체 개체를 대상으로 계산합니다.</span>
+            </div>
+            <select id="strawberry_sample_select" class="control-select" disabled>
               <option value="ALL">전체 개체</option>
             </select>
           </div>

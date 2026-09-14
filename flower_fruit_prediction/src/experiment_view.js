@@ -67,6 +67,8 @@ export class ExperimentViewController {
 
     this.chartInstance = null;
     this.initialized = false;
+    this.metadataError = false;
+    this.comparisonError = false;
   }
 
   async init() {
@@ -126,14 +128,16 @@ export class ExperimentViewController {
       });
     }
 
-    // 5. Split select (validation / test)
-    const splitSelect = document.getElementById('exp_split_select');
-    if (splitSelect) {
-      splitSelect.addEventListener('change', (e) => {
-        this.state.split = e.target.value;
-        this.onSplitChange();
+    // 5. Split buttons (validation / test)
+    const splitBtns = document.querySelectorAll('#tab-experiments button[data-split]');
+    splitBtns.forEach(btn => {
+      btn.addEventListener('click', async () => {
+        if (this.state.split === btn.dataset.split) return;
+        this.state.split = btn.dataset.split;
+        this.updateSplitButtons();
+        await this.onSplitChange();
       });
-    }
+    });
 
     // 6. Seed select
     const seedSelect = document.getElementById('exp_seed_select');
@@ -144,13 +148,13 @@ export class ExperimentViewController {
       });
     }
 
-    // 7. Variant toggle (Bounded vs Raw)
-    const variantBtns = document.querySelectorAll('.variant-btn');
+    // 7. Variant buttons (Bounded vs Raw)
+    const variantBtns = document.querySelectorAll('#tab-experiments button[data-variant]');
     variantBtns.forEach(btn => {
       btn.addEventListener('click', () => {
-        variantBtns.forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
+        if (this.state.variant === btn.dataset.variant) return;
         this.state.variant = btn.dataset.variant;
+        this.updateVariantButtons();
         this.renderComparisonTable();
         this.renderChartAndMetrics();
       });
@@ -277,14 +281,110 @@ export class ExperimentViewController {
     }
   }
 
+  updateSplitButtons() {
+    const splitBtns = document.querySelectorAll('#tab-experiments button[data-split]');
+    splitBtns.forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.split === this.state.split);
+    });
+  }
+
+  updateVariantButtons() {
+    const variantBtns = document.querySelectorAll('#tab-experiments button[data-variant]');
+    variantBtns.forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.variant === this.state.variant);
+    });
+  }
+
+  updateGroupMetaBar() {
+    const countEl = document.getElementById('exp_meta_feature_count');
+    const catEl = document.getElementById('exp_meta_categories');
+    const winnerEl = document.getElementById('exp_meta_winner_status');
+
+    if (!countEl || !catEl || !winnerEl) return;
+
+    // 메타데이터 로드 실패 상태 처리
+    if (this.metadataError) {
+      countEl.innerHTML = '<span class="text-error" style="color:#ef4444;font-size:12px;">메타데이터 로드 실패</span>';
+      catEl.innerHTML = '<span class="text-error" style="color:#ef4444;font-size:12px;">메타데이터 로드 실패</span>';
+      winnerEl.innerHTML = '<span class="text-error" style="color:#ef4444;font-size:12px;">메타데이터 로드 실패</span>';
+      return;
+    }
+
+    const tMeta = this.metadata?.targets?.[this.state.target];
+    const groupMeta = tMeta?.groups?.[this.state.group_id];
+    const compRow = this.currentComparison?.rows?.find(r => r.group_id === this.state.group_id);
+
+    // 1. 포함 변수 수
+    const featureCount = groupMeta?.feature_count ?? compRow?.feature_count;
+    if (featureCount !== undefined && featureCount !== null) {
+      countEl.textContent = `${featureCount}개`;
+    } else if (!this.state.group_id) {
+      countEl.innerHTML = '<span class="text-muted" style="color:#94a3b8;font-size:12px;">변수군 미선택</span>';
+    } else {
+      countEl.innerHTML = '<span class="text-muted" style="color:#94a3b8;font-size:12px;">변수 정보 없음</span>';
+    }
+
+    // 2. 포함 범주
+    const categories = groupMeta?.category_names ?? compRow?.category_names ?? [];
+    if (Array.isArray(categories) && categories.length > 0) {
+      catEl.innerHTML = '';
+      categories.forEach(c => {
+        const tag = document.createElement('span');
+        tag.className = 'cat-tag';
+        tag.textContent = c;
+        catEl.appendChild(tag);
+      });
+    } else if (!this.state.group_id) {
+      catEl.innerHTML = '<span class="text-muted" style="color:#94a3b8;font-size:12px;">변수군 미선택</span>';
+    } else {
+      catEl.innerHTML = '<span class="text-muted" style="color:#94a3b8;font-size:12px;">범주 정보 없음</span>';
+    }
+
+    // 3. 최적 선정 여부
+    if (this.comparisonError) {
+      winnerEl.innerHTML = '<span class="text-error" style="color:#ef4444;font-size:12px;">비교 결과 로드 실패</span>';
+      return;
+    }
+
+    const frozenWinner = this.currentComparison?.frozen_winner;
+    const provWinner = this.currentComparison?.provisional_winner;
+
+    if (!this.state.group_id) {
+      winnerEl.innerHTML = '<span class="text-muted" style="color:#94a3b8;font-size:12px;">변수군 미선택</span>';
+    } else if (frozenWinner && this.state.group_id === frozenWinner) {
+      winnerEl.innerHTML = '<span class="badge-winner">🏆 최적 확정 (Frozen Winner)</span>';
+    } else if (provWinner && this.state.group_id === provWinner) {
+      winnerEl.innerHTML = '<span class="badge-provisional">⏳ 잠정 1위 (Provisional Winner)</span>';
+    } else if (compRow) {
+      if (compRow.rank === 1 && !frozenWinner) {
+        winnerEl.innerHTML = '<span class="badge-provisional">⏳ 잠정 1위</span>';
+      } else if (compRow.rank) {
+        winnerEl.innerHTML = `<span class="badge-candidate" style="display:inline-block;padding:3px 8px;font-size:11px;font-weight:600;color:#475569;background:#f1f5f9;border:1px solid #cbd5e1;border-radius:9999px;">후보군 (${compRow.rank}위)</span>`;
+      } else if (this.state.split === 'test') {
+        winnerEl.innerHTML = '<span style="display:inline-block;padding:3px 8px;font-size:11px;font-weight:600;color:#64748b;background:#f8fafc;border:1px solid #e2e8f0;border-radius:9999px;">Test 미평가 (최적군 전용)</span>';
+      } else {
+        winnerEl.innerHTML = '<span class="text-muted" style="color:#94a3b8;font-size:12px;">후보군</span>';
+      }
+    } else if (this.state.split === 'test') {
+      winnerEl.innerHTML = '<span style="display:inline-block;padding:3px 8px;font-size:11px;font-weight:600;color:#64748b;background:#f8fafc;border:1px solid #e2e8f0;border-radius:9999px;">Test 미평가 (최적군 전용)</span>';
+    } else {
+      winnerEl.innerHTML = '<span class="text-muted" style="color:#94a3b8;font-size:12px;">선정 정보 없음</span>';
+    }
+  }
+
   async loadInitialData() {
     try {
+      this.metadataError = false;
       this.metadata = await fetchMetadata();
+      this.updateSplitButtons();
+      this.updateVariantButtons();
       this.updateTargetDropdown();
       this.updateModelDropdown();
       await this.onTargetOrModelChange();
     } catch (err) {
       console.error('[ExperimentView] loadInitialData failed:', err);
+      this.metadataError = true;
+      this.updateGroupMetaBar();
       this.showToast(`메타데이터 로드 실패: ${err.message}`);
     }
   }
@@ -337,6 +437,7 @@ export class ExperimentViewController {
     this.renderCampaignStatus();
 
     try {
+      this.comparisonError = false;
       // Fetch comparison table for selected target, model, split
       this.currentComparison = await fetchComparison(this.state.target, this.state.model, this.state.split);
       this.updateGroupDropdown();
@@ -352,10 +453,13 @@ export class ExperimentViewController {
       const groupSelect = document.getElementById('exp_group_select');
       if (groupSelect) groupSelect.value = this.state.group_id;
 
+      this.updateGroupMetaBar();
       this.renderComparisonTable();
       await this.loadPredictionsAndRender();
     } catch (err) {
       console.error('[ExperimentView] onTargetOrModelChange error:', err);
+      this.comparisonError = true;
+      this.updateGroupMetaBar();
       this.showToast(`실험 결과 로드 실패: ${err.message}`);
     }
   }
@@ -382,6 +486,7 @@ export class ExperimentViewController {
   async onGroupChange() {
     // Update selection in comparison table
     this.highlightComparisonTableRow();
+    this.updateGroupMetaBar();
     await this.loadPredictionsAndRender();
   }
 
@@ -395,6 +500,7 @@ export class ExperimentViewController {
         testNotice.style.display = 'none';
       }
     }
+    this.updateSplitButtons();
     await this.onTargetOrModelChange();
   }
 
@@ -543,6 +649,7 @@ export class ExperimentViewController {
         const groupSelect = document.getElementById('exp_group_select');
         if (groupSelect) groupSelect.value = r.group_id;
         this.highlightComparisonTableRow();
+        this.updateGroupMetaBar();
         this.loadPredictionsAndRender();
       });
 

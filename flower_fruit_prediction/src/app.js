@@ -242,6 +242,21 @@ function setupFilters(cropKey) {
   const resetBtn = document.getElementById(`${cropKey}_btn_reset`);
   const modeGroup = document.getElementById(`${cropKey}_mode_toggle`);
 
+  const sampleHint = document.getElementById(`${cropKey}_sample_hint`);
+
+  // 개체번호 컨트롤 상태 동기화 (개체당 평균 모드 vs 개체별 상세 모드)
+  function syncSampleControlState() {
+    if (cropState.mode === 'average') {
+      cropState.filters.sample_num = 'ALL';
+      sampleSelect.value = 'ALL';
+      sampleSelect.disabled = true;
+      if (sampleHint) sampleHint.style.display = 'inline-block';
+    } else {
+      sampleSelect.disabled = false;
+      if (sampleHint) sampleHint.style.display = 'none';
+    }
+  }
+
   // 드롭다운 옵션 갱신
   function updateDropdownOptions() {
     const { facilities, cropSns, allCropSns, sampleNums } = getFilterOptions(rawRows, cropState.filters);
@@ -307,9 +322,12 @@ function setupFilters(cropKey) {
       if (s === currentSample) opt.selected = true;
       sampleSelect.appendChild(opt);
     });
+
+    syncSampleControlState();
   }
 
   updateDropdownOptions();
+  syncSampleControlState();
 
   // 시설 변경 이벤트
   facilitySelect.addEventListener('change', (e) => {
@@ -340,6 +358,11 @@ function setupFilters(cropKey) {
 
   // 개체 변경 이벤트
   sampleSelect.addEventListener('change', (e) => {
+    if (cropState.mode === 'average') {
+      cropState.filters.sample_num = 'ALL';
+      sampleSelect.value = 'ALL';
+      return;
+    }
     cropState.filters.sample_num = e.target.value;
     updateCropView(cropKey);
   });
@@ -367,6 +390,7 @@ function setupFilters(cropKey) {
     startDateInput.value = '';
     endDateInput.value = '';
     updateDropdownOptions();
+    syncSampleControlState();
     updateCropView(cropKey);
     showToast('필터가 초기화되었습니다.');
   });
@@ -378,6 +402,7 @@ function setupFilters(cropKey) {
       modeBtns.forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
       cropState.mode = btn.dataset.mode;
+      syncSampleControlState();
       updateCropView(cropKey);
     });
   });
@@ -387,6 +412,11 @@ function setupFilters(cropKey) {
 function updateCropView(cropKey) {
   const cropState = state[cropKey];
   const { rawRows, filters, mode, metrics } = cropState;
+
+  // 개체당 평균 모드인 경우 실제 데이터 필터에서도 특정 개체 선택 강제 제거
+  if (mode === 'average') {
+    filters.sample_num = 'ALL';
+  }
 
   // 1. 행 필터링
   const filtered = filterRows(rawRows, filters);
@@ -412,7 +442,7 @@ function updateCropView(cropKey) {
   const statusEl = document.getElementById(`${cropKey}_filter_status`);
   if (statusEl) {
     const facText = filters.facility_id === 'ALL' ? '전체 시설' : filters.facility_id;
-    const sampleText = filters.sample_num === 'ALL' ? '전체 개체' : `#${filters.sample_num}`;
+    const sampleText = (mode === 'average' || filters.sample_num === 'ALL') ? '전체 개체' : `#${filters.sample_num}`;
 
     if (mode === 'average') {
       statusEl.innerHTML = `<span>ℹ️ <strong>개체당 평균 모드</strong> (${facText} / ${selectedCropLabel} / ${sampleText})</span>`;
