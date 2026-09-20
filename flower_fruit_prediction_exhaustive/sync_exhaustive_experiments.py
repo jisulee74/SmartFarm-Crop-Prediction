@@ -1,26 +1,27 @@
-"""
-sync_exhaustive_experiments.py - Exhaustive Experiment Index Builder & Sync
-Compiles 127 Variable Group Combinations x 8 Targets x 6 Models x 3 Seeds (42, 52, 62)
-outputs into a unified experiment_index.json for the web dashboard.
+"""Build the static exhaustive-experiment dashboard cache.
+
+The builder supports both a finished campaign and a live campaign.  During a
+live campaign it publishes only validation/test groups whose three configured
+seeds all completed successfully.  This prevents half-written runs from being
+presented as comparable results.
 """
 
-import os
-import sys
 import json
+import math
+import os
+from collections import Counter, defaultdict
+from datetime import datetime, timezone
 from pathlib import Path
+
 import numpy as np
 import pandas as pd
+
 
 LOCAL_DIR = Path(__file__).parent.resolve()
 CACHE_DIR = LOCAL_DIR / "cache"
 PREDICTIONS_CACHE_DIR = CACHE_DIR / "predictions"
 INDEX_FILE = CACHE_DIR / "experiment_index.json"
 CATALOG_FILE = CACHE_DIR / "combination_catalog.json"
-
-# Base path to exhaustive outputs
-OUTPUTS_BASE = (LOCAL_DIR.parent / "ax_catalog_experiments" / "outputs" / "exhaustive_e1_e7_v1").resolve()
-HANDOFF_BASE = OUTPUTS_BASE / "handoff"
-CSV_BASE = OUTPUTS_BASE / "csv"
 
 TARGET_NAMES_KR = {
     "tomato_first": {"crop": "tomato", "crop_kr": "토마토", "target_kr": "1화방 꽃수", "part": "first"},
@@ -32,18 +33,76 @@ TARGET_NAMES_KR = {
     "strawberry_third": {"crop": "strawberry", "crop_kr": "딸기", "target_kr": "3화방 착과수", "part": "third"},
     "strawberry_sum123": {"crop": "strawberry", "crop_kr": "딸기", "target_kr": "1~3화방 합계 착과수", "part": "sum123"},
 }
-
 MODELS = ["poisson", "random_forest", "catboost", "mlp", "tabm", "tft"]
 SEEDS = [42, 52, 62]
-
 _index_cache = None
 
 
+def _resolve_outputs_base():
+    configured = os.environ.get("AX_EXHAUSTIVE_OUTPUTS")
+    candidates = [
+        Path(configured).expanduser() if configured else None,
+        LOCAL_DIR.parent / "ax_catalog_experiments" / "outputs" / "exhaustive_e1_e7_v1",
+        LOCAL_DIR.parent / "AXData" / "ax_catalog_experiments" / "outputs" / "exhaustive_e1_e7_v1",
+    ]
+    for candidate in candidates:
+        if candidate and candidate.resolve().exists():
+            return candidate.resolve()
+    return candidates[1].resolve()
+
+
+OUTPUTS_BASE = _resolve_outputs_base()
+
+
 def load_catalog():
-    if CATALOG_FILE.exists():
-        with open(CATALOG_FILE, encoding="utf-8") as f:
-            return json.load(f)
-    raise FileNotFoundError(f"Catalog file not found: {CATALOG_FILE}")
+    if not CATALOG_FILE.exists():
+        raise FileNotFoundError(f"Catalog file not found: {CATALOG_FILE}")
+    return json.loads(CATALOG_FILE.read_text(encoding="utf-8"))
+
+
+def _read_json(path):
+    try:
+        return json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as exc:
+        print(f"[Sync] Skipping unreadable JSON {path}: {exc}")
+        return None
+
+
+def _metric_stats(runs, variant):
+    result = {}
+    for metric in ("rmse", "mae", "r2", "ccc"):
+        values = []
+        for run in runs:
+            value = run.get("Metrics", {}).get(variant, {}).get(metric)
+            try:
+                value = float(value)
+            except (TypeError, ValueError):
+                continue
+            if math.isfinite(value):
+                values.append(value)
+        if values:
+            result[f"{metric}_mean"] = float(np.mean(values))
+            result[f"{metric}_std"] = float(np.std(values, ddof=1)) if len(values) > 1 else 0.0
+    return result
+
+
+def _write_prediction_cache(run):
+    run_id = run["Run_ID"]
+    source = OUTPUTS_BASE / "runs" / run_id / "predictions.parquet"
+    if not source.exists():
+        return False
+    frame = pd.read_parquet(source)
+    predictions = json.loads(frame.to_json(orient="records", date_format="iso"))
+    payload = {
+        "run_id": run_id,
+        "generated_at": datetime.now(timezone.utc).isoformat(),
+        "predictions": predictions,
+    }
+    (PREDICTIONS_CACHE_DIR / f"{run_id}.json").write_text(
+        json.dumps(payload, ensure_ascii=False, separators=(",", ":")),
+        encoding="utf-8",
+    )
+    return True
 
 
 def build_index():
@@ -51,152 +110,170 @@ def build_index():
     CACHE_DIR.mkdir(parents=True, exist_ok=True)
     PREDICTIONS_CACHE_DIR.mkdir(parents=True, exist_ok=True)
 
+    for stale in PREDICTIONS_CACHE_DIR.glob("*.json"):
+        stale.unlink()
+
     targets_dict = {}
-    for t_id, t_info in TARGET_NAMES_KR.items():
-        groups_dict = {}
-        for c in catalog["combinations"]:
-            cid = c["combination_id"]
-            groups_dict[cid] = {
+    for target_id, info in TARGET_NAMES_KR.items():
+        groups = {}
+        for combo in catalog["combinations"]:
+            cid = combo["combination_id"]
+            groups[cid] = {
                 "group_id": cid,
-                "readable_name": c["label"],
-                "display_name": c["display_name"],
-                "feature_count": c["feature_count"],
-                "category_names": c["group_names"],
-                "category_ids": c["groups"],
-                "features": c["features"],
+                "readable_name": combo["label"],
+                "display_name": combo["display_name"],
+                "feature_count": combo["feature_count"],
+                "category_names": combo["group_names"],
+                "category_ids": combo["groups"],
+                "features": combo["features"],
             }
-        targets_dict[t_id] = {
-            "target_id": t_id,
-            "crop": t_info["crop"],
-            "crop_kr": t_info["crop_kr"],
-            "target_kr": t_info["target_kr"],
-            "part": t_info["part"],
+        targets_dict[target_id] = {
+            "target_id": target_id,
+            **info,
             "status": "pending_experiment",
             "frozen": {"overall": None, "winners": {}},
-            "groups": groups_dict,
+            "groups": groups,
             "results": {},
         }
 
-    # Check if actual outputs exist in OUTPUTS_BASE
-    runs_file = CSV_BASE / "Runs.csv"
-    metrics_file = CSV_BASE / "Metrics.csv"
-    summary_file = CSV_BASE / "Combination_Summary.csv"
-    best_file = CSV_BASE / "Best_Configurations.csv"
-    handoff_bundle_file = HANDOFF_BASE / "dashboard_bundle.json"
+    summary_by_key = {}
+    status_counts = Counter()
+    for path in OUTPUTS_BASE.glob("summaries/*/*/*.json"):
+        item = _read_json(path)
+        if not item:
+            continue
+        status_counts[str(item.get("Status", "unknown"))] += 1
+        key = (str(item.get("Target_ID")), str(item.get("Combination_ID")), str(item.get("Model_Type")))
+        summary_by_key[key] = item
 
-    has_real_results = False
-    campaign_status = "pending"
-
-    if handoff_bundle_file.exists():
+    runs_by_key = defaultdict(dict)
+    for path in OUTPUTS_BASE.glob("runs/*/result.json"):
+        run = _read_json(path)
+        if not run or run.get("Status") != "success" or run.get("Stage") not in {"validation", "test"}:
+            continue
         try:
-            with open(handoff_bundle_file, encoding="utf-8") as f:
-                bundle = json.load(f)
-            has_real_results = True
-            campaign_status = "completed"
-            print(f"[Sync] Loaded handoff bundle from {handoff_bundle_file}")
-        except Exception as e:
-            print(f"[Sync] Warning: Failed to read handoff bundle: {e}")
+            seed = int(run["Seed"])
+        except (KeyError, TypeError, ValueError):
+            continue
+        if seed not in SEEDS:
+            continue
+        key = (str(run.get("Target_ID")), str(run.get("Combination_ID")), str(run.get("Model_Type")), str(run.get("Stage")))
+        runs_by_key[key][seed] = run
 
-    elif runs_file.exists() and metrics_file.exists():
-        try:
-            runs_df = pd.read_csv(runs_file)
-            metrics_df = pd.read_csv(metrics_file)
-            summary_df = pd.read_csv(summary_file) if summary_file.exists() else None
-            best_df = pd.read_csv(best_file) if best_file.exists() else None
+    complete_entries = {}
+    for (target_id, combo_id, model, stage), seeded in runs_by_key.items():
+        if target_id not in targets_dict or model not in MODELS or set(seeded) != set(SEEDS):
+            continue
+        summary = summary_by_key.get((target_id, combo_id, model), {})
+        if stage == "validation" and summary.get("Status") != "success":
+            continue
+        runs = [seeded[seed] for seed in SEEDS]
+        result_key = f"{combo_id}::{model}::{stage}"
+        entry = {
+            "group_id": combo_id,
+            "model": model,
+            "split": stage,
+            "completed_seeds": len(SEEDS),
+            "status": "success",
+            "params": summary.get("Params") or runs[0].get("Params") or {},
+            "best_epoch": summary.get("Best_Epoch") if summary else runs[0].get("Best_Epoch"),
+            "n_eval": int(round(np.mean([r.get("N_Eval", 0) or 0 for r in runs]))),
+            "bounded": _metric_stats(runs, "bounded"),
+            "raw": _metric_stats(runs, "raw"),
+            "seeds": {
+                str(seed): {"run_id": seeded[seed]["Run_ID"], "seed": seed, "status": "success"}
+                for seed in SEEDS
+            },
+        }
+        if entry["bounded"].get("rmse_mean") is None:
+            continue
+        targets_dict[target_id]["results"][result_key] = entry
+        targets_dict[target_id]["status"] = "running"
+        complete_entries[(target_id, combo_id, model, stage)] = (entry, runs)
 
-            has_real_results = True
-            campaign_status = "running" if len(runs_df[runs_df.Status == "running"]) > 0 else "completed"
+    # Keep chart data compact: cache the current best validation combination for
+    # each target/model plus the catalog's default (first) combination when it is complete.
+    chart_keys = set()
+    default_combo = catalog["combinations"][0]["combination_id"] if catalog.get("combinations") else None
+    for target_id in TARGET_NAMES_KR:
+        for model in MODELS:
+            choices = [
+                (key, value)
+                for key, value in complete_entries.items()
+                if key[0] == target_id and key[2] == model and key[3] == "validation"
+            ]
+            if choices:
+                best_key, _ = min(
+                    choices,
+                    key=lambda pair: (
+                        pair[1][0]["bounded"]["rmse_mean"],
+                        pair[1][0]["bounded"].get("mae_mean", float("inf")),
+                        pair[0][1],
+                    ),
+                )
+                chart_keys.add(best_key)
+            default_key = (target_id, default_combo, model, "validation")
+            if default_key in complete_entries:
+                chart_keys.add(default_key)
 
-            # Parse results by (target, group, model, split)
-            # Group metrics by Run_ID and aggregate
-            for _, r in runs_df.iterrows():
-                run_id = str(r["Run_ID"])
-                target_id = str(r["Target_ID"])
-                combo_id = str(r["Combination_ID"])
-                model_type = str(r["Model_Type"])
-                stage = str(r["Stage"])  # validation or test
-                seed = int(r["Seed"]) if pd.notna(r.get("Seed")) else None
+    cached_prediction_runs = 0
+    for key in sorted(chart_keys):
+        _, runs = complete_entries[key]
+        for run in runs:
+            cached_prediction_runs += int(_write_prediction_cache(run))
 
-                if target_id not in targets_dict:
-                    continue
-
-                res_key = f"{combo_id}::{model_type}::{stage}"
-                if res_key not in targets_dict[target_id]["results"]:
-                    targets_dict[target_id]["results"][res_key] = {
-                        "group_id": combo_id,
-                        "model": model_type,
-                        "split": stage,
-                        "completed_seeds": 0,
-                        "status": "success",
-                        "params": json.loads(r["Hyperparameters"]) if "Hyperparameters" in r and pd.notna(r["Hyperparameters"]) else {},
-                        "best_epoch": int(r["Best_Epoch"]) if "Best_Epoch" in r and pd.notna(r["Best_Epoch"]) else None,
-                        "bounded": {},
-                        "raw": {},
-                        "seeds": {},
-                    }
-
-                entry = targets_dict[target_id]["results"][res_key]
-                if seed is not None:
-                    entry["seeds"][str(seed)] = {
-                        "run_id": run_id,
-                        "seed": seed,
-                        "status": str(r.get("Status", "success")),
-                    }
-                    entry["completed_seeds"] = len(entry["seeds"])
-
-            # Compute summary means from metrics_df
-            for res_key_full, res_entry in targets_dict[target_id]["results"].items():
-                cid, mtype, stg = res_key_full.split("::")
-                sub_m = metrics_df[
-                    (metrics_df.Target_ID == target_id) &
-                    (metrics_df.Combination_ID == cid) &
-                    (metrics_df.Model_Type == mtype) &
-                    (metrics_df.Stage == stg)
+    expected_summaries = len(TARGET_NAMES_KR) * len(MODELS) * len(catalog["combinations"])
+    processed_summaries = sum(status_counts.values())
+    campaign_complete = processed_summaries >= expected_summaries
+    if campaign_complete:
+        for target_id in TARGET_NAMES_KR:
+            targets_dict[target_id]["status"] = "completed"
+            for model in MODELS:
+                candidates = [
+                    (key, value[0]) for key, value in complete_entries.items()
+                    if key[0] == target_id and key[2] == model and key[3] == "validation"
                 ]
-                for variant in ["bounded", "raw"]:
-                    var_sub = sub_m[sub_m.Prediction_Variant == variant]
-                    if len(var_sub) > 0:
-                        for mname in ["RMSE", "MAE", "R2", "CCC"]:
-                            vals = var_sub[var_sub.Metric_Name == mname]["Metric_Value"].dropna()
-                            if len(vals) > 0:
-                                res_entry[variant][f"{mname.lower()}_mean"] = float(vals.mean())
-                                res_entry[variant][f"{mname.lower()}_std"] = float(vals.std()) if len(vals) > 1 else 0.0
+                if candidates:
+                    best_key, _ = min(candidates, key=lambda pair: (
+                        pair[1]["bounded"]["rmse_mean"],
+                        pair[1]["bounded"].get("mae_mean", float("inf")),
+                        pair[0][1],
+                    ))
+                    targets_dict[target_id]["frozen"]["winners"][model] = {"group": best_key[1]}
 
-            # Fill winners if best_df exists
-            if best_df is not None:
-                for _, b in best_df.iterrows():
-                    tid = str(b["Target_ID"])
-                    mtype = str(b["Model_Type"])
-                    win_grp = str(b["Combination_ID"])
-                    if tid in targets_dict:
-                        targets_dict[tid]["frozen"]["winners"][mtype] = {"group": win_grp}
-
-            print(f"[Sync] Processed real results from {runs_file}")
-        except Exception as e:
-            print(f"[Sync] Warning: Failed to parse CSV results: {e}")
-
+    generated_at = datetime.now(timezone.utc).isoformat()
     index_data = {
         "campaign": {
             "id": "exhaustive_e1_e7_v1",
             "name": "8개 타깃·6개 모델·127개 변수군 조합 전수실험",
             "description": "E1~E7 비공집합 127개 조합, 8개 타깃, 6개 모델, 3개 시드(42, 52, 62) 전수실험",
-            "status": campaign_status,
-            "has_real_results": has_real_results,
+            "status": "completed" if campaign_complete else "running",
+            "has_real_results": bool(complete_entries),
+            "partial_results": not campaign_complete,
+            "snapshot_generated_at": generated_at,
+            "snapshot_note": "전체 실험 진행 중에 생성한 중간 결과입니다. 성공한 3개 시드 검증 결과만 반영했습니다." if not campaign_complete else "전체 실험 완료 결과입니다.",
             "total_combinations": len(catalog["combinations"]),
             "total_targets": len(TARGET_NAMES_KR),
             "total_models": len(MODELS),
             "total_seeds": len(SEEDS),
             "seeds": SEEDS,
+            "expected_combination_summaries": expected_summaries,
+            "processed_combination_summaries": processed_summaries,
+            "progress_percent": round(processed_summaries / expected_summaries * 100, 1),
+            "summary_status_counts": dict(sorted(status_counts.items())),
+            "published_result_groups": len(complete_entries),
+            "cached_prediction_runs": cached_prediction_runs,
         },
         "targets": targets_dict,
     }
 
-    with open(INDEX_FILE, "w", encoding="utf-8") as f:
-        json.dump(index_data, f, ensure_ascii=False, indent=2)
-
+    INDEX_FILE.write_text(json.dumps(index_data, ensure_ascii=False, indent=2), encoding="utf-8")
     global _index_cache
     _index_cache = index_data
-    print(f"[Sync] Saved index to {INDEX_FILE} (has_real_results={has_real_results})")
+    print(
+        f"[Sync] Saved {INDEX_FILE}: {len(complete_entries)} completed result groups, "
+        f"{processed_summaries}/{expected_summaries} summaries, {cached_prediction_runs} prediction files"
+    )
     return index_data
 
 
@@ -205,81 +282,56 @@ def load_index(force=False):
     if not force and _index_cache is not None:
         return _index_cache
     if not force and INDEX_FILE.exists():
-        with open(INDEX_FILE, encoding="utf-8") as f:
-            _index_cache = json.load(f)
-            return _index_cache
+        _index_cache = json.loads(INDEX_FILE.read_text(encoding="utf-8"))
+        return _index_cache
     return build_index()
 
 
 def get_comparison_data(target, model, split):
     index = load_index()
-    t_data = index.get("targets", {}).get(target, {})
-    groups_dict = t_data.get("groups", {})
-    results_dict = t_data.get("results", {})
-    frozen_winners = t_data.get("frozen", {}).get("winners", {})
-    winner_group = frozen_winners.get(model, {}).get("group") or t_data.get("frozen", {}).get("overall")
-
+    target_data = index.get("targets", {}).get(target, {})
+    results = target_data.get("results", {})
+    winner = target_data.get("frozen", {}).get("winners", {}).get(model, {}).get("group") or target_data.get("frozen", {}).get("overall")
     rows = []
-    for gid, ginfo in groups_dict.items():
-        key = f"{gid}::{model}::{split}"
-        res_item = results_dict.get(key)
-        if not res_item:
-            rows.append({
-                "group_id": gid,
-                "readable_name": ginfo.get("readable_name", ""),
-                "display_name": ginfo.get("display_name", ""),
-                "feature_count": ginfo.get("feature_count", 0),
-                "category_names": ginfo.get("category_names", []),
-                "category_ids": ginfo.get("category_ids", []),
-                "completed_seeds": 0,
-                "status": "unstarted",
-                "is_winner": (gid == winner_group),
-                "params": {},
-                "bounded": {},
-                "raw": {},
-            })
-        else:
-            rows.append({
-                "group_id": gid,
-                "readable_name": ginfo.get("readable_name", ""),
-                "display_name": ginfo.get("display_name", ""),
-                "feature_count": ginfo.get("feature_count", 0),
-                "category_names": ginfo.get("category_names", []),
-                "category_ids": ginfo.get("category_ids", []),
-                "completed_seeds": res_item.get("completed_seeds", 0),
-                "status": res_item.get("status", "unstarted"),
-                "is_winner": (gid == winner_group),
-                "params": res_item.get("params", {}),
-                "best_epoch": res_item.get("best_epoch"),
-                "bounded": res_item.get("bounded", {}),
-                "raw": res_item.get("raw", {}),
-            })
-
-    # Sort: completed results with valid RMSE first (ascending), unstarted last
-    rows.sort(key=lambda r: (
-        0 if r.get("bounded", {}).get("rmse_mean") is not None else 1,
-        r.get("bounded", {}).get("rmse_mean") if r.get("bounded", {}).get("rmse_mean") is not None else 999999,
-        r.get("feature_count", 999)
+    for group_id, info in target_data.get("groups", {}).items():
+        result = results.get(f"{group_id}::{model}::{split}")
+        row = {
+            "group_id": group_id,
+            "readable_name": info.get("readable_name", ""),
+            "display_name": info.get("display_name", ""),
+            "feature_count": info.get("feature_count", 0),
+            "category_names": info.get("category_names", []),
+            "category_ids": info.get("category_ids", []),
+            "completed_seeds": result.get("completed_seeds", 0) if result else 0,
+            "status": result.get("status", "unstarted") if result else "unstarted",
+            "is_winner": group_id == winner,
+            "params": result.get("params", {}) if result else {},
+            "bounded": result.get("bounded", {}) if result else {},
+            "raw": result.get("raw", {}) if result else {},
+        }
+        if result:
+            row["best_epoch"] = result.get("best_epoch")
+        rows.append(row)
+    rows.sort(key=lambda row: (
+        0 if row.get("bounded", {}).get("rmse_mean") is not None else 1,
+        row.get("bounded", {}).get("rmse_mean", float("inf")),
+        row.get("bounded", {}).get("mae_mean", float("inf")),
+        row["group_id"],
     ))
-
-    # Assign rank only to completed rows
-    rank_idx = 1
-    for r in rows:
-        if r.get("bounded", {}).get("rmse_mean") is not None:
-            r["rank"] = rank_idx
-            rank_idx += 1
+    rank = 1
+    for row in rows:
+        if row.get("bounded", {}).get("rmse_mean") is not None:
+            row["rank"] = rank
+            rank += 1
         else:
-            r["rank"] = None
-
-    provisional_winner = rows[0]["group_id"] if rows and rows[0].get("bounded", {}).get("rmse_mean") is not None else None
-
+            row["rank"] = None
     return {
         "target": target,
         "model": model,
         "split": split,
-        "target_status": t_data.get("status", "pending_experiment"),
-        "frozen_winner": winner_group,
-        "provisional_winner": provisional_winner,
+        "target_status": target_data.get("status", "pending_experiment"),
+        "frozen_winner": winner,
+        "provisional_winner": rows[0]["group_id"] if rows and rows[0].get("rank") else None,
         "total_candidates": len(rows),
         "rows": rows,
     }
@@ -287,98 +339,45 @@ def get_comparison_data(target, model, split):
 
 def get_predictions_data(target, group, model, split, seed="all"):
     index = load_index()
-    t_data = index.get("targets", {}).get(target, {})
-    key = f"{group}::{model}::{split}"
-    res_entry = t_data.get("results", {}).get(key)
-    if not res_entry:
-        return {
-            "status": "no_results",
-            "group_id": group,
-            "model": model,
-            "split": split,
-            "target": target,
-            "predictions": [],
-            "metadata": {},
-        }
-
-    seeds_dict = res_entry.get("seeds", {})
-    available_seeds = sorted([int(s) for s in seeds_dict.keys()])
-
-    if str(seed).lower() in ("all", "ensemble"):
-        all_pred_runs = []
-        for s in available_seeds:
-            run_id = seeds_dict.get(str(s), {}).get("run_id")
-            if not run_id:
-                continue
-            pred_file = PREDICTIONS_CACHE_DIR / f"{run_id}.json"
-            if pred_file.exists():
-                with open(pred_file, encoding="utf-8") as pf:
-                    pj = json.load(pf)
-                    if pj.get("predictions"):
-                        all_pred_runs.append(pj["predictions"])
-
-        if not all_pred_runs:
-            return {"status": "no_predictions", "predictions": [], "metadata": res_entry}
-
-        n_rows = len(all_pred_runs[0])
-        ensemble_preds = []
-        for i in range(n_rows):
-            row0 = all_pred_runs[0][i]
-            raw_vals = [run[i]["prediction_raw"] for run in all_pred_runs if i < len(run) and run[i].get("prediction_raw") is not None]
-            bnd_vals = [run[i]["prediction_bounded"] for run in all_pred_runs if i < len(run) and run[i].get("prediction_bounded") is not None]
-            ensemble_preds.append({
-                "facility_id": row0.get("facility_id"),
-                "crop_sn": str(row0.get("crop_sn")),
-                "sample_num": str(row0.get("sample_num")),
-                "row_id": row0.get("row_id"),
-                "feature_date": row0.get("feature_date"),
-                "target_date": row0.get("target_date"),
-                "target": row0.get("target"),
-                "prediction_raw": float(np.mean(raw_vals)) if raw_vals else None,
-                "prediction_bounded": float(np.mean(bnd_vals)) if bnd_vals else None,
-                "upper_bound": row0.get("upper_bound"),
-                "seeds_averaged": len(raw_vals),
+    target_data = index.get("targets", {}).get(target, {})
+    entry = target_data.get("results", {}).get(f"{group}::{model}::{split}")
+    if not entry:
+        return {"status": "no_results", "predictions": [], "metadata": {}}
+    available = sorted(int(value) for value in entry.get("seeds", {}))
+    if str(seed).lower() in {"all", "ensemble"}:
+        runs = []
+        for value in available:
+            run_id = entry["seeds"][str(value)].get("run_id")
+            path = PREDICTIONS_CACHE_DIR / f"{run_id}.json"
+            if path.exists():
+                predictions = _read_json(path).get("predictions", [])
+                if predictions:
+                    runs.append(predictions)
+        if not runs:
+            return {"status": "no_predictions", "predictions": [], "metadata": entry}
+        output = []
+        for index_row, first in enumerate(runs[0]):
+            raw = [rows[index_row].get("prediction_raw") for rows in runs if index_row < len(rows) and rows[index_row].get("prediction_raw") is not None]
+            bounded = [rows[index_row].get("prediction_bounded") for rows in runs if index_row < len(rows) and rows[index_row].get("prediction_bounded") is not None]
+            output.append({
+                **first,
+                "crop_sn": str(first.get("crop_sn")),
+                "sample_num": str(first.get("sample_num")),
+                "prediction_raw": float(np.mean(raw)) if raw else None,
+                "prediction_bounded": float(np.mean(bounded)) if bounded else None,
+                "seeds_averaged": len(raw),
             })
-        return {
-            "status": "success",
-            "mode": "ensemble",
-            "seeds_count": len(all_pred_runs),
-            "available_seeds": available_seeds,
-            "target": target,
-            "group_id": group,
-            "model": model,
-            "split": split,
-            "metadata": res_entry,
-            "predictions": ensemble_preds,
-        }
-    else:
-        s_int = int(seed)
-        seed_item = seeds_dict.get(str(s_int))
-        if not seed_item or not seed_item.get("run_id"):
-            return {"status": "seed_not_found", "available_seeds": available_seeds, "predictions": [], "metadata": res_entry}
-        run_id = seed_item["run_id"]
-        pred_file = PREDICTIONS_CACHE_DIR / f"{run_id}.json"
-        if not pred_file.exists():
-            return {"status": "prediction_file_missing", "available_seeds": available_seeds, "predictions": [], "metadata": res_entry}
-        with open(pred_file, encoding="utf-8") as pf:
-            pj = json.load(pf)
-        preds = [{**r, "crop_sn": str(r.get("crop_sn")), "sample_num": str(r.get("sample_num"))} for r in pj.get("predictions", [])]
-        return {
-            "status": "success",
-            "mode": "single_seed",
-            "seed": s_int,
-            "run_id": run_id,
-            "available_seeds": available_seeds,
-            "target": target,
-            "group_id": group,
-            "model": model,
-            "split": split,
-            "metadata": res_entry,
-            "predictions": preds,
-        }
+        return {"status": "success", "mode": "ensemble", "available_seeds": available, "metadata": entry, "predictions": output}
+    selected = int(seed)
+    seed_data = entry.get("seeds", {}).get(str(selected), {})
+    path = PREDICTIONS_CACHE_DIR / f"{seed_data.get('run_id')}.json"
+    if not path.exists():
+        return {"status": "prediction_file_missing", "available_seeds": available, "predictions": [], "metadata": entry}
+    predictions = _read_json(path).get("predictions", [])
+    return {"status": "success", "mode": "single_seed", "seed": selected, "available_seeds": available, "metadata": entry, "predictions": predictions}
 
 
 if __name__ == "__main__":
-    print("Building Exhaustive Experiment Index...")
-    index = build_index()
-    print("Index successfully built with", len(index["targets"]), "targets.")
+    print(f"Building exhaustive experiment index from {OUTPUTS_BASE}")
+    built = build_index()
+    print(f"Index built with {len(built['targets'])} targets")
