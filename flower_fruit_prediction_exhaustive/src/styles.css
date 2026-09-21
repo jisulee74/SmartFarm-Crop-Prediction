@@ -3768,26 +3768,31 @@ body {
   max-height: 90vh;
 }
 
+#exp_variable_modal .modal-features-list {
+  grid-template-columns: minmax(0, 1fr);
+  gap: 20px;
+}
+
 #exp_variable_modal .modal-feature-group {
+  width: 100%;
   max-width: 100%;
-  overflow-x: auto;
+  min-width: 0;
+  overflow-x: visible;
 }
 
 #exp_variable_modal .variable-table {
-  min-width: 980px;
-  table-layout: auto;
+  width: 100%;
+  min-width: 0;
+  table-layout: fixed;
 }
 
 #exp_variable_modal .variable-table th,
 #exp_variable_modal .variable-table td {
-  min-width: 110px;
+  min-width: 0;
   vertical-align: top;
+  white-space: normal;
   overflow-wrap: anywhere;
-}
-
-#exp_variable_modal .variable-table th:nth-child(3),
-#exp_variable_modal .variable-table td:nth-child(3) {
-  min-width: 190px;
+  word-break: break-word;
 }
 
 .variable-table {
