@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>꽃수·착과수 예측 모델 검증</title>
-  <link rel="stylesheet" href="./src/styles.css?v=12">
+  <link rel="stylesheet" href="./src/styles.css?v=13">
   <!-- Apache ECharts CDN (최신 안정 버전) -->
   <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
 </head>
@@ -83,6 +83,119 @@
           <span class="badge-info">✔️ 실제 날짜 간격 반영 시간축</span>
           <span class="badge-info">✔️ 마우스 휠 및 하단 슬라이더 확대/축소 지원</span>
         </div>
+      </div>
+    </section>
+
+    <!-- 관측 데이터 특성 및 예측 시 주의사항 -->
+    <section class="observation-profile-section" aria-labelledby="observation_profile_title">
+      <div class="observation-profile-heading">
+        <div>
+          <span class="observation-profile-eyebrow">DATA QUALITY SNAPSHOT</span>
+          <h2 id="observation_profile_title">관측 데이터 특성 한눈에 보기</h2>
+          <p>2024년 이후 원천 관측과 다음 조사 시점 예측 타깃을 함께 점검한 결과입니다. NULL은 미관측, 0은 실제 기록값으로 구분합니다.</p>
+        </div>
+        <span class="observation-profile-scope">원천 관측 · 학습 타깃 · 개체별 연속성</span>
+      </div>
+
+      <div class="observation-profile-grid">
+        <article class="observation-profile-card profile-tomato">
+          <div class="observation-profile-card-head">
+            <div>
+              <span class="observation-profile-crop">🍅 토마토 꽃수</span>
+              <h3>양수 관측이 매우 드문 희소 이벤트 데이터</h3>
+            </div>
+            <span class="observation-risk-badge risk-high">예측 난이도 높음</span>
+          </div>
+
+          <div class="observation-metric-grid" aria-label="토마토 데이터 핵심 통계">
+            <div class="observation-metric">
+              <span class="observation-metric-label">원천 NULL</span>
+              <strong>46.8~48.4%</strong>
+              <small>1~3화방별 미관측 비율</small>
+            </div>
+            <div class="observation-metric">
+              <span class="observation-metric-label">비NULL 중 0</span>
+              <strong>89.6~91.6%</strong>
+              <small>양수 꽃수 기록이 매우 적음</small>
+            </div>
+            <div class="observation-metric">
+              <span class="observation-metric-label">예측 타깃 0</span>
+              <strong>90.1~96.2%</strong>
+              <small>다음 조사 시점 기준</small>
+            </div>
+            <div class="observation-metric metric-alert">
+              <span class="observation-metric-label">양수 연속 ≤2회</span>
+              <strong>83.1~98.6%</strong>
+              <small>개체별 양수 구간이 짧음</small>
+            </div>
+          </div>
+
+          <div class="observation-profile-insight insight-warn">
+            <span class="observation-profile-insight-icon">!</span>
+            <div>
+              <strong>왜 예측이 어려운가</strong>
+              <p>대부분이 0이라 0에 가까운 예측은 MAE가 작아도 드문 개화 시점을 놓칩니다. 이 경우 결정계수(R²)는 낮거나 음수가 될 수 있습니다.</p>
+            </div>
+          </div>
+
+          <ul class="observation-issue-list">
+            <li><strong>표본 한계</strong><span>1화방 양수 타깃은 2,242건 중 85건뿐입니다.</span></li>
+            <li><strong>연속성 한계</strong><span>1화방 개체의 52.5%는 양수 관측이 한 번도 없습니다.</span></li>
+            <li><strong>실험 주의</strong><span>현재 준비 캐시에서는 E1 과거 꽃수 이력과 E2 영양생장 변수가 제외돼 있습니다.</span></li>
+          </ul>
+        </article>
+
+        <article class="observation-profile-card profile-strawberry">
+          <div class="observation-profile-card-head">
+            <div>
+              <span class="observation-profile-crop">🍓 딸기 착과수</span>
+              <h3>연속 양수 구간이 충분하지만 결측과 이상치가 존재</h3>
+            </div>
+            <span class="observation-risk-badge risk-medium">학습 신호 있음</span>
+          </div>
+
+          <div class="observation-metric-grid" aria-label="딸기 데이터 핵심 통계">
+            <div class="observation-metric">
+              <span class="observation-metric-label">원천 NULL</span>
+              <strong>39.0~46.1%</strong>
+              <small>1~3화방별 미관측 비율</small>
+            </div>
+            <div class="observation-metric">
+              <span class="observation-metric-label">비NULL 중 0</span>
+              <strong>62.1~71.6%</strong>
+              <small>토마토보다 양수 관측이 많음</small>
+            </div>
+            <div class="observation-metric">
+              <span class="observation-metric-label">예측 타깃 0</span>
+              <strong>58.3~72.1%</strong>
+              <small>다음 조사 시점 기준</small>
+            </div>
+            <div class="observation-metric metric-positive">
+              <span class="observation-metric-label">양수 연속 &gt;2회</span>
+              <strong>73.2~87.9%</strong>
+              <small>개체별 연속 학습 가능</small>
+            </div>
+          </div>
+
+          <div class="observation-profile-insight insight-info">
+            <span class="observation-profile-insight-icon">i</span>
+            <div>
+              <strong>토마토와 다른 점</strong>
+              <p>개체별 양수 착과수가 최대 14~21회 연속 관측돼 시간 변화 패턴을 학습할 여지가 큽니다. 다만 0 편중은 여전히 별도로 평가해야 합니다.</p>
+            </div>
+          </div>
+
+          <ul class="observation-issue-list">
+            <li><strong>이상치 후보</strong><span>2화방 99% 분위수는 10이지만 최대 110인 기록 1건은 원자료 확인이 필요합니다.</span></li>
+            <li><strong>연결 손실</strong><span>원천 행의 9.5%가 작기 연결 실패 또는 중복으로 제외됐습니다.</span></li>
+            <li><strong>실험 주의</strong><span>현재 준비 캐시에서는 E1 과거 착과 이력과 E2 영양생장 변수가 제외돼 있습니다.</span></li>
+          </ul>
+        </article>
+      </div>
+
+      <div class="observation-profile-footnote">
+        <strong>해석 원칙</strong>
+        <span>NULL을 0으로 대체하지 않습니다. 전체 회귀 지표와 함께 0/양수 발생 성능, 양수 구간 오차, 시설·작기별 표본 수를 분리해 확인해야 합니다.</span>
       </div>
     </section>
 
