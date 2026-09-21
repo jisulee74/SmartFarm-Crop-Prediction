@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>꽃수·착과수 예측 모델 검증</title>
-  <link rel="stylesheet" href="./src/styles.css?v=13">
+  <link rel="stylesheet" href="./src/styles.css?v=14">
   <!-- Apache ECharts CDN (최신 안정 버전) -->
   <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
 </head>
@@ -141,7 +141,6 @@
           <ul class="observation-issue-list">
             <li><strong>표본 한계</strong><span>1화방 양수 타깃은 2,242건 중 85건뿐입니다.</span></li>
             <li><strong>연속성 한계</strong><span>1화방 개체의 52.5%는 양수 관측이 한 번도 없습니다.</span></li>
-            <li><strong>실험 주의</strong><span>현재 준비 캐시에서는 E1 과거 꽃수 이력과 E2 영양생장 변수가 제외돼 있습니다.</span></li>
           </ul>
         </article>
 
@@ -188,7 +187,6 @@
           <ul class="observation-issue-list">
             <li><strong>이상치 후보</strong><span>2화방 99% 분위수는 10이지만 최대 110인 기록 1건은 원자료 확인이 필요합니다.</span></li>
             <li><strong>연결 손실</strong><span>원천 행의 9.5%가 작기 연결 실패 또는 중복으로 제외됐습니다.</span></li>
-            <li><strong>실험 주의</strong><span>현재 준비 캐시에서는 E1 과거 착과 이력과 E2 영양생장 변수가 제외돼 있습니다.</span></li>
           </ul>
         </article>
       </div>
@@ -1523,7 +1521,7 @@
        MODAL 2: 변수군 상세 정보 모달
        ==================================================================== -->
   <div id="exp_variable_modal" class="modal-overlay" style="display:none;">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-variable-details">
       <div class="modal-header">
         <div class="modal-title-wrap">
           <span class="modal-badge">Variable Group Details</span>

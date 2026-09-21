@@ -3762,6 +3762,34 @@ body {
 }
 
 /* Variable Table in Modal */
+#exp_variable_modal .modal-variable-details {
+  width: min(1200px, calc(100vw - 40px));
+  max-width: 1200px;
+  max-height: 90vh;
+}
+
+#exp_variable_modal .modal-feature-group {
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+#exp_variable_modal .variable-table {
+  min-width: 980px;
+  table-layout: auto;
+}
+
+#exp_variable_modal .variable-table th,
+#exp_variable_modal .variable-table td {
+  min-width: 110px;
+  vertical-align: top;
+  overflow-wrap: anywhere;
+}
+
+#exp_variable_modal .variable-table th:nth-child(3),
+#exp_variable_modal .variable-table td:nth-child(3) {
+  min-width: 190px;
+}
+
 .variable-table {
   width: 100%;
   border-collapse: collapse;
