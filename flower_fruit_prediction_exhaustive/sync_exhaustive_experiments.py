@@ -191,6 +191,32 @@ def build_index():
         targets_dict[target_id]["status"] = "running"
         complete_entries[(target_id, combo_id, model, stage)] = (entry, runs)
 
+    # Preserve terminal non-success states so the dashboard does not present
+    # ineligible or failed combinations as pending work.
+    for (target_id, combo_id, model), summary in summary_by_key.items():
+        status = str(summary.get("Status", "unknown"))
+        if status not in {"ineligible", "failed"}:
+            continue
+        if target_id not in targets_dict or model not in MODELS:
+            continue
+        result_key = f"{combo_id}::{model}::validation"
+        if result_key in targets_dict[target_id]["results"]:
+            continue
+        targets_dict[target_id]["results"][result_key] = {
+            "group_id": combo_id,
+            "model": model,
+            "split": "validation",
+            "completed_seeds": 0,
+            "status": status,
+            "reason": summary.get("Reason"),
+            "params": summary.get("Params") or {},
+            "best_epoch": summary.get("Best_Epoch"),
+            "n_eval": 0,
+            "bounded": {},
+            "raw": {},
+            "seeds": {},
+        }
+
     # Keep chart data compact: cache the current best validation combination for
     # each target/model plus the catalog's default (first) combination when it is complete.
     chart_keys = set()
@@ -261,7 +287,8 @@ def build_index():
             "processed_combination_summaries": processed_summaries,
             "progress_percent": round(processed_summaries / expected_summaries * 100, 1),
             "summary_status_counts": dict(sorted(status_counts.items())),
-            "published_result_groups": len(complete_entries),
+            "published_result_groups": sum(len(target["results"]) for target in targets_dict.values()),
+            "published_success_groups": len(complete_entries),
             "cached_prediction_runs": cached_prediction_runs,
         },
         "targets": targets_dict,
@@ -303,7 +330,8 @@ def get_comparison_data(target, model, split):
             "category_names": info.get("category_names", []),
             "category_ids": info.get("category_ids", []),
             "completed_seeds": result.get("completed_seeds", 0) if result else 0,
-            "status": result.get("status", "unstarted") if result else "unstarted",
+            "status": result.get("status", "unstarted") if result else ("not_evaluated" if split == "test" else "unstarted"),
+            "reason": result.get("reason") if result else None,
             "is_winner": group_id == winner,
             "params": result.get("params", {}) if result else {},
             "bounded": result.get("bounded", {}) if result else {},

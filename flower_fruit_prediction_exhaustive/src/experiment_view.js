@@ -11,7 +11,7 @@
  * - Hyperparameters card
  */
 
-import { fetchCatalog, fetchMetadata, fetchComparison, fetchPredictions, refreshExperiments } from './experiment_api.js';
+import { fetchCatalog, fetchMetadata, fetchComparison, fetchPredictions, refreshExperiments } from './experiment_api.js?v=2';
 
 const CROP_TARGETS = {
   tomato: [
@@ -568,9 +568,18 @@ export class ExperimentViewController {
       const rankBadge = r.rank != null ? `<span class="rank-pill font-bold">#${r.rank}</span>` : `<span class="text-muted">-</span>`;
       const winnerBadge = isWinner ? `<span class="badge-winner">🏆 우승</span>` : `-`;
 
-      const statusTag = hasResult
-        ? `<span class="status-tag complete">완료 (${r.completed_seeds}/3)</span>`
-        : `<span class="badge-status pending">⏳ 결과 대기 (0/3)</span>`;
+      let statusTag;
+      if (hasResult) {
+        statusTag = `<span class="status-tag complete">완료 (${r.completed_seeds}/3)</span>`;
+      } else if (r.status === 'ineligible') {
+        statusTag = `<span class="status-tag unstarted">실행 불가</span>`;
+      } else if (r.status === 'failed') {
+        statusTag = `<span class="status-tag partial">실패</span>`;
+      } else if (r.status === 'not_evaluated') {
+        statusTag = `<span class="status-tag unstarted">테스트 미실행</span>`;
+      } else {
+        statusTag = `<span class="badge-status pending">⏳ 결과 대기 (0/3)</span>`;
+      }
 
       const catBadges = (r.category_ids || []).map(g => `<span class="combo-grp-tag">${g}</span>`).join(' ');
 
