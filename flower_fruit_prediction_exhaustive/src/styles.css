@@ -3860,4 +3860,258 @@ body {
   font-weight: 700;
 }
 
+/* Experiment comparison: exact feature selection detail (local preview) */
+.combo-feature-detail-btn {
+  width: 100%;
+  padding: 3px 2px;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 5px;
+  border-radius: 6px;
+}
 
+.combo-feature-detail-btn:hover .combo-feature-detail-name,
+.combo-feature-detail-btn:focus-visible .combo-feature-detail-name {
+  color: #1d4ed8;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.combo-feature-detail-btn:focus-visible {
+  outline: 2px solid #93c5fd;
+  outline-offset: 2px;
+}
+
+.combo-feature-detail-name {
+  font-weight: 800;
+}
+
+.combo-feature-detail-hint {
+  font-size: 10.5px;
+  font-weight: 700;
+  color: #2563eb;
+}
+
+.experiment-selection-dialog {
+  max-width: 1180px !important;
+}
+
+.selection-loading,
+.selection-empty {
+  padding: 36px 24px;
+  border: 1px dashed #cbd5e1;
+  border-radius: 10px;
+  background: #f8fafc;
+  color: #475569;
+  text-align: center;
+}
+
+.selection-empty p {
+  margin: 8px 0 0;
+  font-size: 12.5px;
+}
+
+.selection-scope-note {
+  padding: 12px 14px;
+  border: 1px solid #bfdbfe;
+  border-radius: 8px;
+  background: #eff6ff;
+  color: #334155;
+  font-size: 12.5px;
+  line-height: 1.6;
+}
+
+.selection-context-row {
+  display: grid;
+  grid-template-columns: 1.5fr repeat(3, minmax(110px, .6fr));
+  gap: 10px;
+  margin: 14px 0 20px;
+}
+
+.selection-context-row > div {
+  min-width: 0;
+  padding: 11px 13px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.selection-context-row span:first-child {
+  color: #64748b;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.selection-context-row strong {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  color: #0f172a;
+  font-size: 13px;
+}
+
+.selection-count-kept { color: #047857 !important; }
+.selection-count-excluded { color: #b45309 !important; }
+
+.selection-section + .selection-section {
+  margin-top: 20px;
+}
+
+.selection-section-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 8px;
+}
+
+.selection-section-heading h4 {
+  margin: 0;
+  color: #0f172a;
+  font-size: 14px;
+}
+
+.selection-section-heading p {
+  margin: 3px 0 0;
+  color: #64748b;
+  font-size: 11.5px;
+}
+
+.selection-total-badge {
+  flex: 0 0 auto;
+  padding: 4px 9px;
+  border-radius: 12px;
+  background: #dcfce7;
+  color: #047857;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.selection-total-badge.muted {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.selection-table-wrap {
+  width: 100%;
+  max-height: 390px;
+  overflow: auto;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+}
+
+.selection-table {
+  min-width: 880px;
+  margin: 0;
+}
+
+.selection-table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.selection-variable-id {
+  color: #0f172a;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.selection-excluded-section details {
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  background: #fff;
+}
+
+.selection-excluded-section summary {
+  padding: 13px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  cursor: pointer;
+  color: #334155;
+}
+
+.selection-excluded-section summary span:first-child {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.selection-excluded-section summary small {
+  color: #64748b;
+  font-size: 11px;
+  font-weight: 400;
+}
+
+.selection-reason-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 2px 14px 12px;
+}
+
+.selection-reason-chip {
+  padding: 4px 8px;
+  border-radius: 5px;
+  background: #fff7ed;
+  color: #9a3412;
+  font-size: 11px;
+}
+
+@media (max-width: 760px) {
+  .selection-context-row { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* Comparison rank sort indicator and feature meaning cells */
+#exp_comparison_table th[data-sort] {
+  cursor: pointer;
+}
+
+#exp_comparison_table th[data-sort].sort-active::after {
+  margin-left: 5px;
+  color: #2563eb;
+  font-size: 10px;
+}
+
+#exp_comparison_table th[data-sort].sort-active.sort-asc::after { content: '▲'; }
+#exp_comparison_table th[data-sort].sort-active.sort-desc::after { content: '▼'; }
+
+.selection-table {
+  min-width: 1080px;
+}
+
+.selection-meaning {
+  min-width: 230px;
+  color: #334155;
+  line-height: 1.55;
+}
+
+.selection-source-cell {
+  min-width: 150px;
+}
+
+.selection-source-cell strong,
+.selection-source-cell small {
+  display: block;
+}
+
+.selection-source-cell strong {
+  color: #0f172a;
+  margin-bottom: 3px;
+}
+
+.selection-source-cell small {
+  color: #64748b;
+  font-size: 10.5px;
+}

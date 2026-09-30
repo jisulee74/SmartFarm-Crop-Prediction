@@ -11,7 +11,7 @@
  * - Hyperparameters card
  */
 
-import { fetchCatalog, fetchMetadata, fetchComparison, fetchPredictions, refreshExperiments } from './experiment_api.js?v=2';
+import { fetchCatalog, fetchMetadata, fetchComparison, fetchPredictions, fetchFeatureSelection, refreshExperiments } from './experiment_api.js?v=4';
 
 const CROP_TARGETS = {
   tomato: [
@@ -67,7 +67,7 @@ export class ExperimentViewController {
         includedGroups: new Set(), // Set of 'E1'..'E7'
         searchQuery: '',
       },
-      sortField: 'rmse',
+      sortField: 'rank',
       sortAsc: true,
     };
 
@@ -274,6 +274,11 @@ export class ExperimentViewController {
     const varModalConfirm = document.getElementById('modal_confirm_btn');
     if (varModalClose) varModalClose.addEventListener('click', () => this.closeVariableModal());
     if (varModalConfirm) varModalConfirm.addEventListener('click', () => this.closeVariableModal());
+
+    const selectionModalClose = document.getElementById('selection_modal_close_btn');
+    const selectionModalConfirm = document.getElementById('selection_modal_confirm_btn');
+    if (selectionModalClose) selectionModalClose.addEventListener('click', () => this.closeFeatureSelectionModal());
+    if (selectionModalConfirm) selectionModalConfirm.addEventListener('click', () => this.closeFeatureSelectionModal());
 
     // 16. Chart mode toggle (Individual vs Average)
     const modeBtns = document.querySelectorAll('#exp_mode_toggle_group .exp-chart-mode-btn');
@@ -520,6 +525,13 @@ export class ExperimentViewController {
 
     // Sort rows
     const { sortField, sortAsc, variant } = this.state;
+    document.querySelectorAll('#exp_comparison_table th[data-sort]').forEach(th => {
+      const active = th.dataset.sort === sortField;
+      th.classList.toggle('sort-active', active);
+      th.classList.toggle('sort-asc', active && sortAsc);
+      th.classList.toggle('sort-desc', active && !sortAsc);
+      th.setAttribute('aria-sort', active ? (sortAsc ? 'ascending' : 'descending') : 'none');
+    });
     rows.sort((a, b) => {
       let vA, vB;
       if (sortField === 'rank') {
@@ -588,10 +600,11 @@ export class ExperimentViewController {
           <td class="td-center">${rankBadge}</td>
           <td class="td-center">${winnerBadge}</td>
           <td>
-            <div class="combo-name-cell">
-              <strong>${r.readable_name}</strong>
-              <div class="combo-cell-tags">${catBadges} <span class="text-muted text-xs">(${r.group_id})</span></div>
-            </div>
+            <button type="button" class="combo-feature-detail-btn" data-feature-group-id="${r.group_id}" aria-label="${r.readable_name} 실험 실제 사용 변수 보기">
+              <span class="combo-feature-detail-name">${r.readable_name}</span>
+              <span class="combo-cell-tags">${catBadges} <span class="text-muted text-xs">(${r.group_id})</span></span>
+              <span class="combo-feature-detail-hint">실제 사용 변수 보기</span>
+            </button>
           </td>
           <td class="td-center font-bold">${r.feature_count}</td>
           <td class="td-center"><span class="split-pill ${this.state.split}">${this.state.split}</span></td>
@@ -604,6 +617,14 @@ export class ExperimentViewController {
         </tr>
       `;
     }).join('');
+
+    // Combination-name click: show the exact validation-stage feature selection.
+    tbody.querySelectorAll('.combo-feature-detail-btn').forEach(btn => {
+      btn.addEventListener('click', (event) => {
+        event.stopPropagation();
+        this.openFeatureSelectionModal(btn.dataset.featureGroupId);
+      });
+    });
 
     // Bind row clicks
     tbody.querySelectorAll('tr[data-group-id]').forEach(tr => {
@@ -1192,6 +1213,161 @@ export class ExperimentViewController {
 
   closeVariableModal() {
     const modal = document.getElementById('exp_variable_modal');
+    if (modal) modal.style.display = 'none';
+  }
+
+  escapeHtml(value) {
+    return String(value ?? '').replace(/[&<>'"]/g, char => ({
+      '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'
+    })[char]);
+  }
+
+  featureSelectionReason(reason) {
+    if (!reason) return '선택 기록이 없습니다.';
+    if (reason.startsWith('unavailable_groups:')) {
+      return `준비 캐시에 포함되지 않은 변수군: ${reason.split(':', 2)[1]}`;
+    }
+    const labels = {
+      all_variables_excluded: '선별 기준 적용 후 사용할 수 있는 변수가 남지 않았습니다.',
+      missing_over_50_percent: '후보 변수의 결측률이 50%를 초과했습니다.',
+    };
+    return labels[reason] || reason;
+  }
+
+  exclusionEvidence(item) {
+    if (item.reason === 'missing_over_50_percent') {
+      return item.missing_rate != null ? `결측률 ${(item.missing_rate * 100).toFixed(1)}%` : '결측률 50% 초과';
+    }
+    if (item.reason === 'pearson_abs_gte_0.95') {
+      const coefficient = item.correlation != null ? `|r|=${Math.abs(item.correlation).toFixed(3)}` : '|r|≥0.95';
+      const related = item.related_variable ? ` · 비교 변수 ${item.related_variable_name || item.related_variable} (${item.related_variable})` : '';
+      return `${coefficient}${related}`;
+    }
+    if (item.reason === 'vif_over_10') {
+      const value = item.vif_is_infinite ? 'VIF=∞' : (item.vif != null ? `VIF=${item.vif.toFixed(2)}` : 'VIF>10');
+      if (item.iteration === 0) return `${value} · VIF가 가장 높아 첫 번째로 제외`;
+      if (item.iteration != null) return `${value} · 고VIF 변수 ${item.iteration}개를 먼저 제외한 뒤에도 기준 초과`;
+      return `${value} · 다중공선성 기준 초과`;
+    }
+    if (item.reason === 'exact_duplicate') {
+      return item.related_variable ? `중복 변수 ${item.related_variable_name || item.related_variable} (${item.related_variable})` : '다른 변수와 값이 완전히 동일';
+    }
+    if (item.reason === 'constant_or_empty') return '유효한 고유값이 1개 이하';
+    return '-';
+  }
+
+  async openFeatureSelectionModal(groupId) {
+    const modal = document.getElementById('exp_selection_modal');
+    const title = document.getElementById('selection_modal_title');
+    const subtitle = document.getElementById('selection_modal_subtitle');
+    const content = document.getElementById('selection_modal_content');
+    if (!modal || !content || !groupId) return;
+
+    const combo = this.catalog?.combinations?.find(c => c.combination_id === groupId);
+    const target = Object.values(CROP_TARGETS).flat().find(t => t.id === this.state.target);
+    if (title) title.textContent = `${combo?.label || groupId} · 실제 사용 변수`;
+    if (subtitle) subtitle.textContent = `${target?.label || this.state.target} · ${MODEL_LABELS[this.state.model] || this.state.model}`;
+    content.innerHTML = '<div class="selection-loading">선택 변수 기록을 불러오는 중입니다.</div>';
+    modal.style.display = 'flex';
+
+    try {
+      const detail = await fetchFeatureSelection(this.state.target, groupId);
+      if (!detail) throw new Error('해당 조합의 선택 변수 기록이 없습니다.');
+      this.renderFeatureSelectionDetail(detail, content);
+    } catch (err) {
+      console.error('[ExperimentView] Feature selection detail failed:', err);
+      content.innerHTML = `<div class="selection-empty"><strong>선택 변수 기록을 불러오지 못했습니다.</strong><p>${this.escapeHtml(err.message)}</p></div>`;
+    }
+  }
+
+  renderFeatureSelectionDetail(detail, content) {
+    const selected = detail.selected || [];
+    const excluded = detail.excluded || [];
+    const groups = (detail.groups || []).map(g => `<span class="combo-grp-tag">${this.escapeHtml(g)}</span>`).join(' ');
+
+    const selectedRows = selected.map(item => `
+      <tr>
+        <td><span class="combo-grp-tag">${this.escapeHtml(item.group)}</span></td>
+        <td class="font-mono selection-variable-id">${this.escapeHtml(item.variable_id)}</td>
+        <td class="selection-meaning">${this.escapeHtml(item.meaning)}</td>
+        <td class="selection-source-cell"><strong>${this.escapeHtml(item.source_name)}</strong><small class="font-mono">${this.escapeHtml(item.base_variable)}${item.unit ? ` · ${this.escapeHtml(item.unit)}` : ''}</small></td>
+        <td>${this.escapeHtml(item.window)}</td>
+        <td>${this.escapeHtml(item.statistic)}</td>
+        <td><span class="badge-vtype">${this.escapeHtml(item.variable_type)}</span></td>
+      </tr>
+    `).join('');
+
+    const exclusionChips = (detail.exclusion_summary || []).map(item => `
+      <span class="selection-reason-chip">${this.escapeHtml(item.reason_label)} <strong>${item.count}</strong></span>
+    `).join('');
+    const excludedRows = excluded.map(item => `
+      <tr>
+        <td><span class="combo-grp-tag">${this.escapeHtml(item.group)}</span></td>
+        <td class="font-mono selection-variable-id">${this.escapeHtml(item.variable_id)}</td>
+        <td class="selection-meaning">${this.escapeHtml(item.meaning)}</td>
+        <td class="selection-source-cell"><strong>${this.escapeHtml(item.source_name)}</strong><small class="font-mono">${this.escapeHtml(item.base_variable)}${item.unit ? ` · ${this.escapeHtml(item.unit)}` : ''}</small></td>
+        <td>${this.escapeHtml(item.window)}</td>
+        <td>${this.escapeHtml(item.statistic)}</td>
+        <td>${this.escapeHtml(item.reason_label)}</td>
+        <td class="font-mono">${this.escapeHtml(this.exclusionEvidence(item))}</td>
+      </tr>
+    `).join('');
+
+    const unavailable = selected.length === 0 ? `
+      <div class="selection-empty">
+        <strong>이 조합은 실제 학습 변수 목록이 생성되지 않았습니다.</strong>
+        <p>${this.escapeHtml(this.featureSelectionReason(detail.reason))}</p>
+      </div>
+    ` : '';
+
+    content.innerHTML = `
+      <div class="selection-scope-note">
+        <strong>표시 기준:</strong> 검증(Validation) 평가 직전, 학습 데이터만으로 확정한 변수 목록입니다.
+        같은 타깃·조합의 6개 모델이 이 목록을 공통으로 사용하며, 테스트 우승 조합도 이 목록을 동결해 사용합니다.
+      </div>
+      <div class="selection-context-row">
+        <div><span>조합</span><strong>${groups || this.escapeHtml(detail.label)}</strong></div>
+        <div><span>파생 후보</span><strong>${detail.candidate_count}개</strong></div>
+        <div><span>최종 선택</span><strong class="selection-count-kept">${detail.selected_count}개</strong></div>
+        <div><span>제외</span><strong class="selection-count-excluded">${detail.excluded_count}개</strong></div>
+      </div>
+      ${unavailable}
+      ${selected.length ? `
+        <section class="selection-section">
+          <div class="selection-section-heading">
+            <div><h4>최종 선택된 파생변수</h4><p>모델에 실제 입력된 변수와 계산 방식을 표시합니다.</p></div>
+            <span class="selection-total-badge">${selected.length}개</span>
+          </div>
+          <div class="selection-table-wrap">
+            <table class="variable-table selection-table">
+              <thead><tr><th>변수군</th><th>실제 입력 변수 ID</th><th>파생변수 정의</th><th>원천 항목</th><th>집계 범위</th><th>계산 통계</th><th>형식</th></tr></thead>
+              <tbody>${selectedRows}</tbody>
+            </table>
+          </div>
+        </section>
+      ` : ''}
+      ${excluded.length ? `
+        <section class="selection-section selection-excluded-section">
+          <details>
+            <summary>
+              <span><strong>제외된 파생변수와 사유</strong><small>조합 후 결측·상관관계·VIF 등의 기준으로 제외된 항목</small></span>
+              <span class="selection-total-badge muted">${excluded.length}개</span>
+            </summary>
+            <div class="selection-reason-chips">${exclusionChips}</div>
+            <div class="selection-table-wrap">
+              <table class="variable-table selection-table">
+                <thead><tr><th>변수군</th><th>제외 변수 ID</th><th>파생변수 정의</th><th>원천 항목</th><th>집계 범위</th><th>계산 통계</th><th>제외 사유</th><th>판단 근거</th></tr></thead>
+                <tbody>${excludedRows}</tbody>
+              </table>
+            </div>
+          </details>
+        </section>
+      ` : ''}
+    `;
+  }
+
+  closeFeatureSelectionModal() {
+    const modal = document.getElementById('exp_selection_modal');
     if (modal) modal.style.display = 'none';
   }
 

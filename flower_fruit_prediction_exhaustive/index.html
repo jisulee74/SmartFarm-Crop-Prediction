@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>꽃수·착과수 예측 모델 검증</title>
-  <link rel="stylesheet" href="./src/styles.css?v=15">
+  <link rel="stylesheet" href="./src/styles.css?v=16">
   <!-- Apache ECharts CDN (최신 안정 버전) -->
   <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
 </head>
@@ -67,7 +67,7 @@
 
   <!-- 메인 컨텐츠 영역 -->
   <main class="main-content">
-    
+
     <!-- 안내 및 해석 가이드 배너 -->
     <section class="guide-banner" aria-label="데이터 해석 안내">
       <div class="guide-icon">💡</div>
@@ -661,7 +661,7 @@
               <button type="button" class="combo-pill grp-pill" data-grp="E4">E4: 외부기상 (4)</button>
               <button type="button" class="combo-pill grp-pill" data-grp="E5">E5: 근권양액 (4)</button>
               <button type="button" class="combo-pill grp-pill" data-grp="E6">E6: 시설제어 (4)</button>
-              <button type="button" class="combo-pill grp-pill" data-grp="E7">E7: 시설작기맥락 (11)</button>
+              <button type="button" class="combo-pill grp-pill" data-grp="E7">E7: 시설작기맥락 (10)</button>
               <button type="button" class="btn-reset-filter" id="btn_reset_combo_filters" style="display:none;">
                 <span>🔄</span> 필터 초기화
               </button>
@@ -1561,12 +1561,32 @@
     </div>
   </div>
 
+  <!-- 실험별 실제 선택 변수 상세 모달 -->
+  <div id="exp_selection_modal" class="modal-overlay" style="display:none;">
+    <div class="modal-dialog modal-large experiment-selection-dialog">
+      <div class="modal-header">
+        <div class="modal-title-wrap">
+          <span class="modal-badge">Actual Feature Selection</span>
+          <h3 class="modal-title" id="selection_modal_title">실험 실제 사용 변수</h3>
+          <p class="modal-subtitle" id="selection_modal_subtitle">-</p>
+        </div>
+        <button type="button" class="btn-modal-close" id="selection_modal_close_btn" aria-label="닫기">✕</button>
+      </div>
+      <div class="modal-body" id="selection_modal_content">
+        <div class="selection-loading">선택 변수 기록을 불러오는 중입니다.</div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn-modal-confirm" id="selection_modal_confirm_btn">확인 및 닫기</button>
+      </div>
+    </div>
+  </div>
+
   <!-- 알림 토스트 -->
   <div id="alert_toast" class="alert-toast"></div>
 
 
   <!-- 메인 애플리케이션 진입점 -->
-  <script type="module" src="./src/app.js?v=13"></script>
+  <script type="module" src="./src/app.js?v=22"></script>
 </body>
 </html>
 

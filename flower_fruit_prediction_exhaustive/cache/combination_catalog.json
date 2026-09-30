@@ -432,17 +432,8 @@
       "code": "E7",
       "name": "기존 시설·설비·작기 맥락",
       "description": "E7: 기존 시설·설비·작기 맥락",
-      "feature_count": 11,
+      "feature_count": 10,
       "features": [
-        {
-          "feature_id": "crop_nm",
-          "feature_name": "crop_nm",
-          "desc": "작물",
-          "type": "VARCHAR",
-          "source_table": "cltv",
-          "role": "후보입력",
-          "note": ""
-        },
         {
           "feature_id": "cltv_strt_dt",
           "feature_name": "cltv_strt_dt",
@@ -980,17 +971,8 @@
         "기존 시설·설비·작기 맥락"
       ],
       "display_name": "E7 (기존 시설·설비·작기 맥락)",
-      "feature_count": 11,
+      "feature_count": 10,
       "features": [
-        {
-          "feature_id": "crop_nm",
-          "feature_name": "crop_nm",
-          "desc": "작물",
-          "type": "VARCHAR",
-          "source_table": "cltv",
-          "role": "후보입력",
-          "note": ""
-        },
         {
           "feature_id": "cltv_strt_dt",
           "feature_name": "cltv_strt_dt",
@@ -1955,7 +1937,7 @@
         "기존 시설·설비·작기 맥락"
       ],
       "display_name": "E1+E7 (기존 목표·생식생육 이력 + 기존 시설·설비·작기 맥락)",
-      "feature_count": 23,
+      "feature_count": 22,
       "features": [
         {
           "feature_id": "flclstr_cnt",
@@ -2062,15 +2044,6 @@
           "desc": "PED",
           "type": "FLOAT",
           "source_table": "crop_stts",
-          "role": "후보입력",
-          "note": ""
-        },
-        {
-          "feature_id": "crop_nm",
-          "feature_name": "crop_nm",
-          "desc": "작물",
-          "type": "VARCHAR",
-          "source_table": "cltv",
           "role": "후보입력",
           "note": ""
         },
@@ -2724,7 +2697,7 @@
         "기존 시설·설비·작기 맥락"
       ],
       "display_name": "E2+E7 (기존 영양생장 + 기존 시설·설비·작기 맥락)",
-      "feature_count": 20,
+      "feature_count": 19,
       "features": [
         {
           "feature_id": "crop_stts.leaf_len",
@@ -2804,15 +2777,6 @@
           "desc": "화방높이 (cm)",
           "type": "FLOAT",
           "source_table": "crop_stts",
-          "role": "후보입력",
-          "note": ""
-        },
-        {
-          "feature_id": "crop_nm",
-          "feature_name": "crop_nm",
-          "desc": "작물",
-          "type": "VARCHAR",
-          "source_table": "cltv",
           "role": "후보입력",
           "note": ""
         },
@@ -3215,7 +3179,7 @@
         "기존 시설·설비·작기 맥락"
       ],
       "display_name": "E3+E7 (기존 시설내 환경 + 기존 시설·설비·작기 맥락)",
-      "feature_count": 16,
+      "feature_count": 15,
       "features": [
         {
           "feature_id": "rcv_lgt_qty",
@@ -3261,15 +3225,6 @@
           "source_table": "env_stts",
           "role": "후보입력",
           "note": "sect_cd=EI (동일 구조를 E4·E5에도 조건별 재사용)"
-        },
-        {
-          "feature_id": "crop_nm",
-          "feature_name": "crop_nm",
-          "desc": "작물",
-          "type": "VARCHAR",
-          "source_table": "cltv",
-          "role": "후보입력",
-          "note": ""
         },
         {
           "feature_id": "cltv_strt_dt",
@@ -3554,7 +3509,7 @@
         "기존 시설·설비·작기 맥락"
       ],
       "display_name": "E4+E7 (기존 외부 기상 + 기존 시설·설비·작기 맥락)",
-      "feature_count": 15,
+      "feature_count": 14,
       "features": [
         {
           "feature_id": "env_stts.fld_cd",
@@ -3591,15 +3546,6 @@
           "source_table": "env_stts",
           "role": "후보입력",
           "note": "sect_cd=EO"
-        },
-        {
-          "feature_id": "crop_nm",
-          "feature_name": "crop_nm",
-          "desc": "작물",
-          "type": "VARCHAR",
-          "source_table": "cltv",
-          "role": "후보입력",
-          "note": ""
         },
         {
           "feature_id": "cltv_strt_dt",
@@ -3795,7 +3741,7 @@
         "기존 시설·설비·작기 맥락"
       ],
       "display_name": "E5+E7 (기존 근권·양액·관수 + 기존 시설·설비·작기 맥락)",
-      "feature_count": 15,
+      "feature_count": 14,
       "features": [
         {
           "feature_id": "env_stts.fld_cd",
@@ -3832,15 +3778,6 @@
           "source_table": "env_stts",
           "role": "후보입력",
           "note": "sect_cd=NT"
-        },
-        {
-          "feature_id": "crop_nm",
-          "feature_name": "crop_nm",
-          "desc": "작물",
-          "type": "VARCHAR",
-          "source_table": "cltv",
-          "role": "후보입력",
-          "note": ""
         },
         {
           "feature_id": "cltv_strt_dt",
@@ -3947,7 +3884,7 @@
         "기존 시설·설비·작기 맥락"
       ],
       "display_name": "E6+E7 (기존 시설 제어 이력 + 기존 시설·설비·작기 맥락)",
-      "feature_count": 15,
+      "feature_count": 14,
       "features": [
         {
           "feature_id": "ctrl_stts.fld_cd",
@@ -3984,15 +3921,6 @@
           "source_table": "ctrl_stts",
           "role": "후보입력",
           "note": "sect_cd=CR"
-        },
-        {
-          "feature_id": "crop_nm",
-          "feature_name": "crop_nm",
-          "desc": "작물",
-          "type": "VARCHAR",
-          "source_table": "cltv",
-          "role": "후보입력",
-          "note": ""
         },
         {
           "feature_id": "cltv_strt_dt",
@@ -5086,7 +5014,7 @@
         "기존 시설·설비·작기 맥락"
       ],
       "display_name": "E1+E2+E7 (기존 목표·생식생육 이력 + 기존 영양생장 + 기존 시설·설비·작기 맥락)",
-      "feature_count": 32,
+      "feature_count": 31,
       "features": [
         {
           "feature_id": "flclstr_cnt",
@@ -5274,15 +5202,6 @@
           "desc": "화방높이 (cm)",
           "type": "FLOAT",
           "source_table": "crop_stts",
-          "role": "후보입력",
-          "note": ""
-        },
-        {
-          "feature_id": "crop_nm",
-          "feature_name": "crop_nm",
-          "desc": "작물",
-          "type": "VARCHAR",
-          "source_table": "cltv",
           "role": "후보입력",
           "note": ""
         },
@@ -6017,7 +5936,7 @@
         "기존 시설·설비·작기 맥락"
       ],
       "display_name": "E1+E3+E7 (기존 목표·생식생육 이력 + 기존 시설내 환경 + 기존 시설·설비·작기 맥락)",
-      "feature_count": 28,
+      "feature_count": 27,
       "features": [
         {
           "feature_id": "flclstr_cnt",
@@ -6171,15 +6090,6 @@
           "source_table": "env_stts",
           "role": "후보입력",
           "note": "sect_cd=EI (동일 구조를 E4·E5에도 조건별 재사용)"
-        },
-        {
-          "feature_id": "crop_nm",
-          "feature_name": "crop_nm",
-          "desc": "작물",
-          "type": "VARCHAR",
-          "source_table": "cltv",
-          "role": "후보입력",
-          "note": ""
         },
         {
           "feature_id": "cltv_strt_dt",
@@ -6686,7 +6596,7 @@
         "기존 시설·설비·작기 맥락"
       ],
       "display_name": "E1+E4+E7 (기존 목표·생식생육 이력 + 기존 외부 기상 + 기존 시설·설비·작기 맥락)",
-      "feature_count": 27,
+      "feature_count": 26,
       "features": [
         {
           "feature_id": "flclstr_cnt",
@@ -6831,15 +6741,6 @@
           "source_table": "env_stts",
           "role": "후보입력",
           "note": "sect_cd=EO"
-        },
-        {
-          "feature_id": "crop_nm",
-          "feature_name": "crop_nm",
-          "desc": "작물",
-          "type": "VARCHAR",
-          "source_table": "cltv",
-          "role": "후보입력",
-          "note": ""
         },
         {
           "feature_id": "cltv_strt_dt",
@@ -7147,7 +7048,7 @@
         "기존 시설·설비·작기 맥락"
       ],
       "display_name": "E1+E5+E7 (기존 목표·생식생육 이력 + 기존 근권·양액·관수 + 기존 시설·설비·작기 맥락)",
-      "feature_count": 27,
+      "feature_count": 26,
       "features": [
         {
           "feature_id": "flclstr_cnt",
@@ -7294,15 +7195,6 @@
           "note": "sect_cd=NT"
         },
         {
-          "feature_id": "crop_nm",
-          "feature_name": "crop_nm",
-          "desc": "작물",
-          "type": "VARCHAR",
-          "source_table": "cltv",
-          "role": "후보입력",
-          "note": ""
-        },
-        {
           "feature_id": "cltv_strt_dt",
           "feature_name": "cltv_strt_dt",
           "desc": "정식일",
@@ -7409,7 +7301,7 @@
         "기존 시설·설비·작기 맥락"
       ],
       "display_name": "E1+E6+E7 (기존 목표·생식생육 이력 + 기존 시설 제어 이력 + 기존 시설·설비·작기 맥락)",
-      "feature_count": 27,
+      "feature_count": 26,
       "features": [
         {
           "feature_id": "flclstr_cnt",
@@ -7554,15 +7446,6 @@
           "source_table": "ctrl_stts",
           "role": "후보입력",
           "note": "sect_cd=CR"
-        },
-        {
-          "feature_id": "crop_nm",
-          "feature_name": "crop_nm",
-          "desc": "작물",
-          "type": "VARCHAR",
-          "source_table": "cltv",
-          "role": "후보입력",
-          "note": ""
         },
         {
           "feature_id": "cltv_strt_dt",
@@ -8214,7 +8097,7 @@
         "기존 시설·설비·작기 맥락"
       ],
       "display_name": "E2+E3+E7 (기존 영양생장 + 기존 시설내 환경 + 기존 시설·설비·작기 맥락)",
-      "feature_count": 25,
+      "feature_count": 24,
       "features": [
         {
           "feature_id": "crop_stts.leaf_len",
@@ -8341,15 +8224,6 @@
           "source_table": "env_stts",
           "role": "후보입력",
           "note": "sect_cd=EI (동일 구조를 E4·E5에도 조건별 재사용)"
-        },
-        {
-          "feature_id": "crop_nm",
-          "feature_name": "crop_nm",
-          "desc": "작물",
-          "type": "VARCHAR",
-          "source_table": "cltv",
-          "role": "후보입력",
-          "note": ""
         },
         {
           "feature_id": "cltv_strt_dt",
@@ -8802,7 +8676,7 @@
         "기존 시설·설비·작기 맥락"
       ],
       "display_name": "E2+E4+E7 (기존 영양생장 + 기존 외부 기상 + 기존 시설·설비·작기 맥락)",
-      "feature_count": 24,
+      "feature_count": 23,
       "features": [
         {
           "feature_id": "crop_stts.leaf_len",
@@ -8920,15 +8794,6 @@
           "source_table": "env_stts",
           "role": "후보입력",
           "note": "sect_cd=EO"
-        },
-        {
-          "feature_id": "crop_nm",
-          "feature_name": "crop_nm",
-          "desc": "작물",
-          "type": "VARCHAR",
-          "source_table": "cltv",
-          "role": "후보입력",
-          "note": ""
         },
         {
           "feature_id": "cltv_strt_dt",
@@ -9209,7 +9074,7 @@
         "기존 시설·설비·작기 맥락"
       ],
       "display_name": "E2+E5+E7 (기존 영양생장 + 기존 근권·양액·관수 + 기존 시설·설비·작기 맥락)",
-      "feature_count": 24,
+      "feature_count": 23,
       "features": [
         {
           "feature_id": "crop_stts.leaf_len",
@@ -9329,15 +9194,6 @@
           "note": "sect_cd=NT"
         },
         {
-          "feature_id": "crop_nm",
-          "feature_name": "crop_nm",
-          "desc": "작물",
-          "type": "VARCHAR",
-          "source_table": "cltv",
-          "role": "후보입력",
-          "note": ""
-        },
-        {
           "feature_id": "cltv_strt_dt",
           "feature_name": "cltv_strt_dt",
           "desc": "정식일",
@@ -9444,7 +9300,7 @@
         "기존 시설·설비·작기 맥락"
       ],
       "display_name": "E2+E6+E7 (기존 영양생장 + 기존 시설 제어 이력 + 기존 시설·설비·작기 맥락)",
-      "feature_count": 24,
+      "feature_count": 23,
       "features": [
         {
           "feature_id": "crop_stts.leaf_len",
@@ -9562,15 +9418,6 @@
           "source_table": "ctrl_stts",
           "role": "후보입력",
           "note": "sect_cd=CR"
-        },
-        {
-          "feature_id": "crop_nm",
-          "feature_name": "crop_nm",
-          "desc": "작물",
-          "type": "VARCHAR",
-          "source_table": "cltv",
-          "role": "후보입력",
-          "note": ""
         },
         {
           "feature_id": "cltv_strt_dt",
@@ -9951,7 +9798,7 @@
         "기존 시설·설비·작기 맥락"
       ],
       "display_name": "E3+E4+E7 (기존 시설내 환경 + 기존 외부 기상 + 기존 시설·설비·작기 맥락)",
-      "feature_count": 20,
+      "feature_count": 19,
       "features": [
         {
           "feature_id": "rcv_lgt_qty",
@@ -10033,15 +9880,6 @@
           "source_table": "env_stts",
           "role": "후보입력",
           "note": "sect_cd=EO"
-        },
-        {
-          "feature_id": "crop_nm",
-          "feature_name": "crop_nm",
-          "desc": "작물",
-          "type": "VARCHAR",
-          "source_table": "cltv",
-          "role": "후보입력",
-          "note": ""
         },
         {
           "feature_id": "cltv_strt_dt",
@@ -10286,7 +10124,7 @@
         "기존 시설·설비·작기 맥락"
       ],
       "display_name": "E3+E5+E7 (기존 시설내 환경 + 기존 근권·양액·관수 + 기존 시설·설비·작기 맥락)",
-      "feature_count": 20,
+      "feature_count": 19,
       "features": [
         {
           "feature_id": "rcv_lgt_qty",
@@ -10368,15 +10206,6 @@
           "source_table": "env_stts",
           "role": "후보입력",
           "note": "sect_cd=NT"
-        },
-        {
-          "feature_id": "crop_nm",
-          "feature_name": "crop_nm",
-          "desc": "작물",
-          "type": "VARCHAR",
-          "source_table": "cltv",
-          "role": "후보입력",
-          "note": ""
         },
         {
           "feature_id": "cltv_strt_dt",
@@ -10485,7 +10314,7 @@
         "기존 시설·설비·작기 맥락"
       ],
       "display_name": "E3+E6+E7 (기존 시설내 환경 + 기존 시설 제어 이력 + 기존 시설·설비·작기 맥락)",
-      "feature_count": 20,
+      "feature_count": 19,
       "features": [
         {
           "feature_id": "rcv_lgt_qty",
@@ -10567,15 +10396,6 @@
           "source_table": "ctrl_stts",
           "role": "후보입력",
           "note": "sect_cd=CR"
-        },
-        {
-          "feature_id": "crop_nm",
-          "feature_name": "crop_nm",
-          "desc": "작물",
-          "type": "VARCHAR",
-          "source_table": "cltv",
-          "role": "후보입력",
-          "note": ""
         },
         {
           "feature_id": "cltv_strt_dt",
@@ -10811,7 +10631,7 @@
         "기존 시설·설비·작기 맥락"
       ],
       "display_name": "E4+E5+E7 (기존 외부 기상 + 기존 근권·양액·관수 + 기존 시설·설비·작기 맥락)",
-      "feature_count": 19,
+      "feature_count": 18,
       "features": [
         {
           "feature_id": "env_stts.fld_cd",
@@ -10884,15 +10704,6 @@
           "source_table": "env_stts",
           "role": "후보입력",
           "note": "sect_cd=NT"
-        },
-        {
-          "feature_id": "crop_nm",
-          "feature_name": "crop_nm",
-          "desc": "작물",
-          "type": "VARCHAR",
-          "source_table": "cltv",
-          "role": "후보입력",
-          "note": ""
         },
         {
           "feature_id": "cltv_strt_dt",
@@ -11001,7 +10812,7 @@
         "기존 시설·설비·작기 맥락"
       ],
       "display_name": "E4+E6+E7 (기존 외부 기상 + 기존 시설 제어 이력 + 기존 시설·설비·작기 맥락)",
-      "feature_count": 19,
+      "feature_count": 18,
       "features": [
         {
           "feature_id": "env_stts.fld_cd",
@@ -11074,15 +10885,6 @@
           "source_table": "ctrl_stts",
           "role": "후보입력",
           "note": "sect_cd=CR"
-        },
-        {
-          "feature_id": "crop_nm",
-          "feature_name": "crop_nm",
-          "desc": "작물",
-          "type": "VARCHAR",
-          "source_table": "cltv",
-          "role": "후보입력",
-          "note": ""
         },
         {
           "feature_id": "cltv_strt_dt",
@@ -11191,7 +10993,7 @@
         "기존 시설·설비·작기 맥락"
       ],
       "display_name": "E5+E6+E7 (기존 근권·양액·관수 + 기존 시설 제어 이력 + 기존 시설·설비·작기 맥락)",
-      "feature_count": 19,
+      "feature_count": 18,
       "features": [
         {
           "feature_id": "env_stts.fld_cd",
@@ -11264,15 +11066,6 @@
           "source_table": "ctrl_stts",
           "role": "후보입력",
           "note": "sect_cd=CR"
-        },
-        {
-          "feature_id": "crop_nm",
-          "feature_name": "crop_nm",
-          "desc": "작물",
-          "type": "VARCHAR",
-          "source_table": "cltv",
-          "role": "후보입력",
-          "note": ""
         },
         {
           "feature_id": "cltv_strt_dt",
@@ -12256,7 +12049,7 @@
         "기존 시설·설비·작기 맥락"
       ],
       "display_name": "E1+E2+E3+E7 (기존 목표·생식생육 이력 + 기존 영양생장 + 기존 시설내 환경 + 기존 시설·설비·작기 맥락)",
-      "feature_count": 37,
+      "feature_count": 36,
       "features": [
         {
           "feature_id": "flclstr_cnt",
@@ -12491,15 +12284,6 @@
           "source_table": "env_stts",
           "role": "후보입력",
           "note": "sect_cd=EI (동일 구조를 E4·E5에도 조건별 재사용)"
-        },
-        {
-          "feature_id": "crop_nm",
-          "feature_name": "crop_nm",
-          "desc": "작물",
-          "type": "VARCHAR",
-          "source_table": "cltv",
-          "role": "후보입력",
-          "note": ""
         },
         {
           "feature_id": "cltv_strt_dt",
@@ -13174,7 +12958,7 @@
         "기존 시설·설비·작기 맥락"
       ],
       "display_name": "E1+E2+E4+E7 (기존 목표·생식생육 이력 + 기존 영양생장 + 기존 외부 기상 + 기존 시설·설비·작기 맥락)",
-      "feature_count": 36,
+      "feature_count": 35,
       "features": [
         {
           "feature_id": "flclstr_cnt",
@@ -13400,15 +13184,6 @@
           "source_table": "env_stts",
           "role": "후보입력",
           "note": "sect_cd=EO"
-        },
-        {
-          "feature_id": "crop_nm",
-          "feature_name": "crop_nm",
-          "desc": "작물",
-          "type": "VARCHAR",
-          "source_table": "cltv",
-          "role": "후보입력",
-          "note": ""
         },
         {
           "feature_id": "cltv_strt_dt",
@@ -13801,7 +13576,7 @@
         "기존 시설·설비·작기 맥락"
       ],
       "display_name": "E1+E2+E5+E7 (기존 목표·생식생육 이력 + 기존 영양생장 + 기존 근권·양액·관수 + 기존 시설·설비·작기 맥락)",
-      "feature_count": 36,
+      "feature_count": 35,
       "features": [
         {
           "feature_id": "flclstr_cnt",
@@ -14029,15 +13804,6 @@
           "note": "sect_cd=NT"
         },
         {
-          "feature_id": "crop_nm",
-          "feature_name": "crop_nm",
-          "desc": "작물",
-          "type": "VARCHAR",
-          "source_table": "cltv",
-          "role": "후보입력",
-          "note": ""
-        },
-        {
           "feature_id": "cltv_strt_dt",
           "feature_name": "cltv_strt_dt",
           "desc": "정식일",
@@ -14146,7 +13912,7 @@
         "기존 시설·설비·작기 맥락"
       ],
       "display_name": "E1+E2+E6+E7 (기존 목표·생식생육 이력 + 기존 영양생장 + 기존 시설 제어 이력 + 기존 시설·설비·작기 맥락)",
-      "feature_count": 36,
+      "feature_count": 35,
       "features": [
         {
           "feature_id": "flclstr_cnt",
@@ -14372,15 +14138,6 @@
           "source_table": "ctrl_stts",
           "role": "후보입력",
           "note": "sect_cd=CR"
-        },
-        {
-          "feature_id": "crop_nm",
-          "feature_name": "crop_nm",
-          "desc": "작물",
-          "type": "VARCHAR",
-          "source_table": "cltv",
-          "role": "후보입력",
-          "note": ""
         },
         {
           "feature_id": "cltv_strt_dt",
@@ -14983,7 +14740,7 @@
         "기존 시설·설비·작기 맥락"
       ],
       "display_name": "E1+E3+E4+E7 (기존 목표·생식생육 이력 + 기존 시설내 환경 + 기존 외부 기상 + 기존 시설·설비·작기 맥락)",
-      "feature_count": 32,
+      "feature_count": 31,
       "features": [
         {
           "feature_id": "flclstr_cnt",
@@ -15173,15 +14930,6 @@
           "source_table": "env_stts",
           "role": "후보입력",
           "note": "sect_cd=EO"
-        },
-        {
-          "feature_id": "crop_nm",
-          "feature_name": "crop_nm",
-          "desc": "작물",
-          "type": "VARCHAR",
-          "source_table": "cltv",
-          "role": "후보입력",
-          "note": ""
         },
         {
           "feature_id": "cltv_strt_dt",
@@ -15538,7 +15286,7 @@
         "기존 시설·설비·작기 맥락"
       ],
       "display_name": "E1+E3+E5+E7 (기존 목표·생식생육 이력 + 기존 시설내 환경 + 기존 근권·양액·관수 + 기존 시설·설비·작기 맥락)",
-      "feature_count": 32,
+      "feature_count": 31,
       "features": [
         {
           "feature_id": "flclstr_cnt",
@@ -15730,15 +15478,6 @@
           "note": "sect_cd=NT"
         },
         {
-          "feature_id": "crop_nm",
-          "feature_name": "crop_nm",
-          "desc": "작물",
-          "type": "VARCHAR",
-          "source_table": "cltv",
-          "role": "후보입력",
-          "note": ""
-        },
-        {
           "feature_id": "cltv_strt_dt",
           "feature_name": "cltv_strt_dt",
           "desc": "정식일",
@@ -15847,7 +15586,7 @@
         "기존 시설·설비·작기 맥락"
       ],
       "display_name": "E1+E3+E6+E7 (기존 목표·생식생육 이력 + 기존 시설내 환경 + 기존 시설 제어 이력 + 기존 시설·설비·작기 맥락)",
-      "feature_count": 32,
+      "feature_count": 31,
       "features": [
         {
           "feature_id": "flclstr_cnt",
@@ -16037,15 +15776,6 @@
           "source_table": "ctrl_stts",
           "role": "후보입력",
           "note": "sect_cd=CR"
-        },
-        {
-          "feature_id": "crop_nm",
-          "feature_name": "crop_nm",
-          "desc": "작물",
-          "type": "VARCHAR",
-          "source_table": "cltv",
-          "role": "후보입력",
-          "note": ""
         },
         {
           "feature_id": "cltv_strt_dt",
@@ -16393,7 +16123,7 @@
         "기존 시설·설비·작기 맥락"
       ],
       "display_name": "E1+E4+E5+E7 (기존 목표·생식생육 이력 + 기존 외부 기상 + 기존 근권·양액·관수 + 기존 시설·설비·작기 맥락)",
-      "feature_count": 31,
+      "feature_count": 30,
       "features": [
         {
           "feature_id": "flclstr_cnt",
@@ -16574,15 +16304,6 @@
           "source_table": "env_stts",
           "role": "후보입력",
           "note": "sect_cd=NT"
-        },
-        {
-          "feature_id": "crop_nm",
-          "feature_name": "crop_nm",
-          "desc": "작물",
-          "type": "VARCHAR",
-          "source_table": "cltv",
-          "role": "후보입력",
-          "note": ""
         },
         {
           "feature_id": "cltv_strt_dt",
@@ -16693,7 +16414,7 @@
         "기존 시설·설비·작기 맥락"
       ],
       "display_name": "E1+E4+E6+E7 (기존 목표·생식생육 이력 + 기존 외부 기상 + 기존 시설 제어 이력 + 기존 시설·설비·작기 맥락)",
-      "feature_count": 31,
+      "feature_count": 30,
       "features": [
         {
           "feature_id": "flclstr_cnt",
@@ -16874,15 +16595,6 @@
           "source_table": "ctrl_stts",
           "role": "후보입력",
           "note": "sect_cd=CR"
-        },
-        {
-          "feature_id": "crop_nm",
-          "feature_name": "crop_nm",
-          "desc": "작물",
-          "type": "VARCHAR",
-          "source_table": "cltv",
-          "role": "후보입력",
-          "note": ""
         },
         {
           "feature_id": "cltv_strt_dt",
@@ -16993,7 +16705,7 @@
         "기존 시설·설비·작기 맥락"
       ],
       "display_name": "E1+E5+E6+E7 (기존 목표·생식생육 이력 + 기존 근권·양액·관수 + 기존 시설 제어 이력 + 기존 시설·설비·작기 맥락)",
-      "feature_count": 31,
+      "feature_count": 30,
       "features": [
         {
           "feature_id": "flclstr_cnt",
@@ -17174,15 +16886,6 @@
           "source_table": "ctrl_stts",
           "role": "후보입력",
           "note": "sect_cd=CR"
-        },
-        {
-          "feature_id": "crop_nm",
-          "feature_name": "crop_nm",
-          "desc": "작물",
-          "type": "VARCHAR",
-          "source_table": "cltv",
-          "role": "후보입력",
-          "note": ""
         },
         {
           "feature_id": "cltv_strt_dt",
@@ -17731,7 +17434,7 @@
         "기존 시설·설비·작기 맥락"
       ],
       "display_name": "E2+E3+E4+E7 (기존 영양생장 + 기존 시설내 환경 + 기존 외부 기상 + 기존 시설·설비·작기 맥락)",
-      "feature_count": 29,
+      "feature_count": 28,
       "features": [
         {
           "feature_id": "crop_stts.leaf_len",
@@ -17894,15 +17597,6 @@
           "source_table": "env_stts",
           "role": "후보입력",
           "note": "sect_cd=EO"
-        },
-        {
-          "feature_id": "crop_nm",
-          "feature_name": "crop_nm",
-          "desc": "작물",
-          "type": "VARCHAR",
-          "source_table": "cltv",
-          "role": "후보입력",
-          "note": ""
         },
         {
           "feature_id": "cltv_strt_dt",
@@ -18232,7 +17926,7 @@
         "기존 시설·설비·작기 맥락"
       ],
       "display_name": "E2+E3+E5+E7 (기존 영양생장 + 기존 시설내 환경 + 기존 근권·양액·관수 + 기존 시설·설비·작기 맥락)",
-      "feature_count": 29,
+      "feature_count": 28,
       "features": [
         {
           "feature_id": "crop_stts.leaf_len",
@@ -18397,15 +18091,6 @@
           "note": "sect_cd=NT"
         },
         {
-          "feature_id": "crop_nm",
-          "feature_name": "crop_nm",
-          "desc": "작물",
-          "type": "VARCHAR",
-          "source_table": "cltv",
-          "role": "후보입력",
-          "note": ""
-        },
-        {
           "feature_id": "cltv_strt_dt",
           "feature_name": "cltv_strt_dt",
           "desc": "정식일",
@@ -18514,7 +18199,7 @@
         "기존 시설·설비·작기 맥락"
       ],
       "display_name": "E2+E3+E6+E7 (기존 영양생장 + 기존 시설내 환경 + 기존 시설 제어 이력 + 기존 시설·설비·작기 맥락)",
-      "feature_count": 29,
+      "feature_count": 28,
       "features": [
         {
           "feature_id": "crop_stts.leaf_len",
@@ -18677,15 +18362,6 @@
           "source_table": "ctrl_stts",
           "role": "후보입력",
           "note": "sect_cd=CR"
-        },
-        {
-          "feature_id": "crop_nm",
-          "feature_name": "crop_nm",
-          "desc": "작물",
-          "type": "VARCHAR",
-          "source_table": "cltv",
-          "role": "후보입력",
-          "note": ""
         },
         {
           "feature_id": "cltv_strt_dt",
@@ -19006,7 +18682,7 @@
         "기존 시설·설비·작기 맥락"
       ],
       "display_name": "E2+E4+E5+E7 (기존 영양생장 + 기존 외부 기상 + 기존 근권·양액·관수 + 기존 시설·설비·작기 맥락)",
-      "feature_count": 28,
+      "feature_count": 27,
       "features": [
         {
           "feature_id": "crop_stts.leaf_len",
@@ -19160,15 +18836,6 @@
           "source_table": "env_stts",
           "role": "후보입력",
           "note": "sect_cd=NT"
-        },
-        {
-          "feature_id": "crop_nm",
-          "feature_name": "crop_nm",
-          "desc": "작물",
-          "type": "VARCHAR",
-          "source_table": "cltv",
-          "role": "후보입력",
-          "note": ""
         },
         {
           "feature_id": "cltv_strt_dt",
@@ -19279,7 +18946,7 @@
         "기존 시설·설비·작기 맥락"
       ],
       "display_name": "E2+E4+E6+E7 (기존 영양생장 + 기존 외부 기상 + 기존 시설 제어 이력 + 기존 시설·설비·작기 맥락)",
-      "feature_count": 28,
+      "feature_count": 27,
       "features": [
         {
           "feature_id": "crop_stts.leaf_len",
@@ -19433,15 +19100,6 @@
           "source_table": "ctrl_stts",
           "role": "후보입력",
           "note": "sect_cd=CR"
-        },
-        {
-          "feature_id": "crop_nm",
-          "feature_name": "crop_nm",
-          "desc": "작물",
-          "type": "VARCHAR",
-          "source_table": "cltv",
-          "role": "후보입력",
-          "note": ""
         },
         {
           "feature_id": "cltv_strt_dt",
@@ -19552,7 +19210,7 @@
         "기존 시설·설비·작기 맥락"
       ],
       "display_name": "E2+E5+E6+E7 (기존 영양생장 + 기존 근권·양액·관수 + 기존 시설 제어 이력 + 기존 시설·설비·작기 맥락)",
-      "feature_count": 28,
+      "feature_count": 27,
       "features": [
         {
           "feature_id": "crop_stts.leaf_len",
@@ -19706,15 +19364,6 @@
           "source_table": "ctrl_stts",
           "role": "후보입력",
           "note": "sect_cd=CR"
-        },
-        {
-          "feature_id": "crop_nm",
-          "feature_name": "crop_nm",
-          "desc": "작물",
-          "type": "VARCHAR",
-          "source_table": "cltv",
-          "role": "후보입력",
-          "note": ""
         },
         {
           "feature_id": "cltv_strt_dt",
@@ -19999,7 +19648,7 @@
         "기존 시설·설비·작기 맥락"
       ],
       "display_name": "E3+E4+E5+E7 (기존 시설내 환경 + 기존 외부 기상 + 기존 근권·양액·관수 + 기존 시설·설비·작기 맥락)",
-      "feature_count": 24,
+      "feature_count": 23,
       "features": [
         {
           "feature_id": "rcv_lgt_qty",
@@ -20117,15 +19766,6 @@
           "source_table": "env_stts",
           "role": "후보입력",
           "note": "sect_cd=NT"
-        },
-        {
-          "feature_id": "crop_nm",
-          "feature_name": "crop_nm",
-          "desc": "작물",
-          "type": "VARCHAR",
-          "source_table": "cltv",
-          "role": "후보입력",
-          "note": ""
         },
         {
           "feature_id": "cltv_strt_dt",
@@ -20236,7 +19876,7 @@
         "기존 시설·설비·작기 맥락"
       ],
       "display_name": "E3+E4+E6+E7 (기존 시설내 환경 + 기존 외부 기상 + 기존 시설 제어 이력 + 기존 시설·설비·작기 맥락)",
-      "feature_count": 24,
+      "feature_count": 23,
       "features": [
         {
           "feature_id": "rcv_lgt_qty",
@@ -20354,15 +19994,6 @@
           "source_table": "ctrl_stts",
           "role": "후보입력",
           "note": "sect_cd=CR"
-        },
-        {
-          "feature_id": "crop_nm",
-          "feature_name": "crop_nm",
-          "desc": "작물",
-          "type": "VARCHAR",
-          "source_table": "cltv",
-          "role": "후보입력",
-          "note": ""
         },
         {
           "feature_id": "cltv_strt_dt",
@@ -20473,7 +20104,7 @@
         "기존 시설·설비·작기 맥락"
       ],
       "display_name": "E3+E5+E6+E7 (기존 시설내 환경 + 기존 근권·양액·관수 + 기존 시설 제어 이력 + 기존 시설·설비·작기 맥락)",
-      "feature_count": 24,
+      "feature_count": 23,
       "features": [
         {
           "feature_id": "rcv_lgt_qty",
@@ -20593,15 +20224,6 @@
           "note": "sect_cd=CR"
         },
         {
-          "feature_id": "crop_nm",
-          "feature_name": "crop_nm",
-          "desc": "작물",
-          "type": "VARCHAR",
-          "source_table": "cltv",
-          "role": "후보입력",
-          "note": ""
-        },
-        {
           "feature_id": "cltv_strt_dt",
           "feature_name": "cltv_strt_dt",
           "desc": "정식일",
@@ -20710,7 +20332,7 @@
         "기존 시설·설비·작기 맥락"
       ],
       "display_name": "E4+E5+E6+E7 (기존 외부 기상 + 기존 근권·양액·관수 + 기존 시설 제어 이력 + 기존 시설·설비·작기 맥락)",
-      "feature_count": 23,
+      "feature_count": 22,
       "features": [
         {
           "feature_id": "env_stts.fld_cd",
@@ -20819,15 +20441,6 @@
           "source_table": "ctrl_stts",
           "role": "후보입력",
           "note": "sect_cd=CR"
-        },
-        {
-          "feature_id": "crop_nm",
-          "feature_name": "crop_nm",
-          "desc": "작물",
-          "type": "VARCHAR",
-          "source_table": "cltv",
-          "role": "후보입력",
-          "note": ""
         },
         {
           "feature_id": "cltv_strt_dt",
@@ -21598,7 +21211,7 @@
         "기존 시설·설비·작기 맥락"
       ],
       "display_name": "E1+E2+E3+E4+E7 (기존 목표·생식생육 이력 + 기존 영양생장 + 기존 시설내 환경 + 기존 외부 기상 + 기존 시설·설비·작기 맥락)",
-      "feature_count": 41,
+      "feature_count": 40,
       "features": [
         {
           "feature_id": "flclstr_cnt",
@@ -21869,15 +21482,6 @@
           "source_table": "env_stts",
           "role": "후보입력",
           "note": "sect_cd=EO"
-        },
-        {
-          "feature_id": "crop_nm",
-          "feature_name": "crop_nm",
-          "desc": "작물",
-          "type": "VARCHAR",
-          "source_table": "cltv",
-          "role": "후보입력",
-          "note": ""
         },
         {
           "feature_id": "cltv_strt_dt",
@@ -22319,7 +21923,7 @@
         "기존 시설·설비·작기 맥락"
       ],
       "display_name": "E1+E2+E3+E5+E7 (기존 목표·생식생육 이력 + 기존 영양생장 + 기존 시설내 환경 + 기존 근권·양액·관수 + 기존 시설·설비·작기 맥락)",
-      "feature_count": 41,
+      "feature_count": 40,
       "features": [
         {
           "feature_id": "flclstr_cnt",
@@ -22592,15 +22196,6 @@
           "note": "sect_cd=NT"
         },
         {
-          "feature_id": "crop_nm",
-          "feature_name": "crop_nm",
-          "desc": "작물",
-          "type": "VARCHAR",
-          "source_table": "cltv",
-          "role": "후보입력",
-          "note": ""
-        },
-        {
           "feature_id": "cltv_strt_dt",
           "feature_name": "cltv_strt_dt",
           "desc": "정식일",
@@ -22711,7 +22306,7 @@
         "기존 시설·설비·작기 맥락"
       ],
       "display_name": "E1+E2+E3+E6+E7 (기존 목표·생식생육 이력 + 기존 영양생장 + 기존 시설내 환경 + 기존 시설 제어 이력 + 기존 시설·설비·작기 맥락)",
-      "feature_count": 41,
+      "feature_count": 40,
       "features": [
         {
           "feature_id": "flclstr_cnt",
@@ -22982,15 +22577,6 @@
           "source_table": "ctrl_stts",
           "role": "후보입력",
           "note": "sect_cd=CR"
-        },
-        {
-          "feature_id": "crop_nm",
-          "feature_name": "crop_nm",
-          "desc": "작물",
-          "type": "VARCHAR",
-          "source_table": "cltv",
-          "role": "후보입력",
-          "note": ""
         },
         {
           "feature_id": "cltv_strt_dt",
@@ -23423,7 +23009,7 @@
         "기존 시설·설비·작기 맥락"
       ],
       "display_name": "E1+E2+E4+E5+E7 (기존 목표·생식생육 이력 + 기존 영양생장 + 기존 외부 기상 + 기존 근권·양액·관수 + 기존 시설·설비·작기 맥락)",
-      "feature_count": 40,
+      "feature_count": 39,
       "features": [
         {
           "feature_id": "flclstr_cnt",
@@ -23685,15 +23271,6 @@
           "source_table": "env_stts",
           "role": "후보입력",
           "note": "sect_cd=NT"
-        },
-        {
-          "feature_id": "crop_nm",
-          "feature_name": "crop_nm",
-          "desc": "작물",
-          "type": "VARCHAR",
-          "source_table": "cltv",
-          "role": "후보입력",
-          "note": ""
         },
         {
           "feature_id": "cltv_strt_dt",
@@ -23806,7 +23383,7 @@
         "기존 시설·설비·작기 맥락"
       ],
       "display_name": "E1+E2+E4+E6+E7 (기존 목표·생식생육 이력 + 기존 영양생장 + 기존 외부 기상 + 기존 시설 제어 이력 + 기존 시설·설비·작기 맥락)",
-      "feature_count": 40,
+      "feature_count": 39,
       "features": [
         {
           "feature_id": "flclstr_cnt",
@@ -24068,15 +23645,6 @@
           "source_table": "ctrl_stts",
           "role": "후보입력",
           "note": "sect_cd=CR"
-        },
-        {
-          "feature_id": "crop_nm",
-          "feature_name": "crop_nm",
-          "desc": "작물",
-          "type": "VARCHAR",
-          "source_table": "cltv",
-          "role": "후보입력",
-          "note": ""
         },
         {
           "feature_id": "cltv_strt_dt",
@@ -24189,7 +23757,7 @@
         "기존 시설·설비·작기 맥락"
       ],
       "display_name": "E1+E2+E5+E6+E7 (기존 목표·생식생육 이력 + 기존 영양생장 + 기존 근권·양액·관수 + 기존 시설 제어 이력 + 기존 시설·설비·작기 맥락)",
-      "feature_count": 40,
+      "feature_count": 39,
       "features": [
         {
           "feature_id": "flclstr_cnt",
@@ -24451,15 +24019,6 @@
           "source_table": "ctrl_stts",
           "role": "후보입력",
           "note": "sect_cd=CR"
-        },
-        {
-          "feature_id": "crop_nm",
-          "feature_name": "crop_nm",
-          "desc": "작물",
-          "type": "VARCHAR",
-          "source_table": "cltv",
-          "role": "후보입력",
-          "note": ""
         },
         {
           "feature_id": "cltv_strt_dt",
@@ -24856,7 +24415,7 @@
         "기존 시설·설비·작기 맥락"
       ],
       "display_name": "E1+E3+E4+E5+E7 (기존 목표·생식생육 이력 + 기존 시설내 환경 + 기존 외부 기상 + 기존 근권·양액·관수 + 기존 시설·설비·작기 맥락)",
-      "feature_count": 36,
+      "feature_count": 35,
       "features": [
         {
           "feature_id": "flclstr_cnt",
@@ -25082,15 +24641,6 @@
           "source_table": "env_stts",
           "role": "후보입력",
           "note": "sect_cd=NT"
-        },
-        {
-          "feature_id": "crop_nm",
-          "feature_name": "crop_nm",
-          "desc": "작물",
-          "type": "VARCHAR",
-          "source_table": "cltv",
-          "role": "후보입력",
-          "note": ""
         },
         {
           "feature_id": "cltv_strt_dt",
@@ -25203,7 +24753,7 @@
         "기존 시설·설비·작기 맥락"
       ],
       "display_name": "E1+E3+E4+E6+E7 (기존 목표·생식생육 이력 + 기존 시설내 환경 + 기존 외부 기상 + 기존 시설 제어 이력 + 기존 시설·설비·작기 맥락)",
-      "feature_count": 36,
+      "feature_count": 35,
       "features": [
         {
           "feature_id": "flclstr_cnt",
@@ -25429,15 +24979,6 @@
           "source_table": "ctrl_stts",
           "role": "후보입력",
           "note": "sect_cd=CR"
-        },
-        {
-          "feature_id": "crop_nm",
-          "feature_name": "crop_nm",
-          "desc": "작물",
-          "type": "VARCHAR",
-          "source_table": "cltv",
-          "role": "후보입력",
-          "note": ""
         },
         {
           "feature_id": "cltv_strt_dt",
@@ -25550,7 +25091,7 @@
         "기존 시설·설비·작기 맥락"
       ],
       "display_name": "E1+E3+E5+E6+E7 (기존 목표·생식생육 이력 + 기존 시설내 환경 + 기존 근권·양액·관수 + 기존 시설 제어 이력 + 기존 시설·설비·작기 맥락)",
-      "feature_count": 36,
+      "feature_count": 35,
       "features": [
         {
           "feature_id": "flclstr_cnt",
@@ -25778,15 +25319,6 @@
           "note": "sect_cd=CR"
         },
         {
-          "feature_id": "crop_nm",
-          "feature_name": "crop_nm",
-          "desc": "작물",
-          "type": "VARCHAR",
-          "source_table": "cltv",
-          "role": "후보입력",
-          "note": ""
-        },
-        {
           "feature_id": "cltv_strt_dt",
           "feature_name": "cltv_strt_dt",
           "desc": "정식일",
@@ -25897,7 +25429,7 @@
         "기존 시설·설비·작기 맥락"
       ],
       "display_name": "E1+E4+E5+E6+E7 (기존 목표·생식생육 이력 + 기존 외부 기상 + 기존 근권·양액·관수 + 기존 시설 제어 이력 + 기존 시설·설비·작기 맥락)",
-      "feature_count": 35,
+      "feature_count": 34,
       "features": [
         {
           "feature_id": "flclstr_cnt",
@@ -26114,15 +25646,6 @@
           "source_table": "ctrl_stts",
           "role": "후보입력",
           "note": "sect_cd=CR"
-        },
-        {
-          "feature_id": "crop_nm",
-          "feature_name": "crop_nm",
-          "desc": "작물",
-          "type": "VARCHAR",
-          "source_table": "cltv",
-          "role": "후보입력",
-          "note": ""
         },
         {
           "feature_id": "cltv_strt_dt",
@@ -26492,7 +26015,7 @@
         "기존 시설·설비·작기 맥락"
       ],
       "display_name": "E2+E3+E4+E5+E7 (기존 영양생장 + 기존 시설내 환경 + 기존 외부 기상 + 기존 근권·양액·관수 + 기존 시설·설비·작기 맥락)",
-      "feature_count": 33,
+      "feature_count": 32,
       "features": [
         {
           "feature_id": "crop_stts.leaf_len",
@@ -26691,15 +26214,6 @@
           "source_table": "env_stts",
           "role": "후보입력",
           "note": "sect_cd=NT"
-        },
-        {
-          "feature_id": "crop_nm",
-          "feature_name": "crop_nm",
-          "desc": "작물",
-          "type": "VARCHAR",
-          "source_table": "cltv",
-          "role": "후보입력",
-          "note": ""
         },
         {
           "feature_id": "cltv_strt_dt",
@@ -26812,7 +26326,7 @@
         "기존 시설·설비·작기 맥락"
       ],
       "display_name": "E2+E3+E4+E6+E7 (기존 영양생장 + 기존 시설내 환경 + 기존 외부 기상 + 기존 시설 제어 이력 + 기존 시설·설비·작기 맥락)",
-      "feature_count": 33,
+      "feature_count": 32,
       "features": [
         {
           "feature_id": "crop_stts.leaf_len",
@@ -27011,15 +26525,6 @@
           "source_table": "ctrl_stts",
           "role": "후보입력",
           "note": "sect_cd=CR"
-        },
-        {
-          "feature_id": "crop_nm",
-          "feature_name": "crop_nm",
-          "desc": "작물",
-          "type": "VARCHAR",
-          "source_table": "cltv",
-          "role": "후보입력",
-          "note": ""
         },
         {
           "feature_id": "cltv_strt_dt",
@@ -27132,7 +26637,7 @@
         "기존 시설·설비·작기 맥락"
       ],
       "display_name": "E2+E3+E5+E6+E7 (기존 영양생장 + 기존 시설내 환경 + 기존 근권·양액·관수 + 기존 시설 제어 이력 + 기존 시설·설비·작기 맥락)",
-      "feature_count": 33,
+      "feature_count": 32,
       "features": [
         {
           "feature_id": "crop_stts.leaf_len",
@@ -27331,15 +26836,6 @@
           "source_table": "ctrl_stts",
           "role": "후보입력",
           "note": "sect_cd=CR"
-        },
-        {
-          "feature_id": "crop_nm",
-          "feature_name": "crop_nm",
-          "desc": "작물",
-          "type": "VARCHAR",
-          "source_table": "cltv",
-          "role": "후보입력",
-          "note": ""
         },
         {
           "feature_id": "cltv_strt_dt",
@@ -27452,7 +26948,7 @@
         "기존 시설·설비·작기 맥락"
       ],
       "display_name": "E2+E4+E5+E6+E7 (기존 영양생장 + 기존 외부 기상 + 기존 근권·양액·관수 + 기존 시설 제어 이력 + 기존 시설·설비·작기 맥락)",
-      "feature_count": 32,
+      "feature_count": 31,
       "features": [
         {
           "feature_id": "crop_stts.leaf_len",
@@ -27644,15 +27140,6 @@
           "note": "sect_cd=CR"
         },
         {
-          "feature_id": "crop_nm",
-          "feature_name": "crop_nm",
-          "desc": "작물",
-          "type": "VARCHAR",
-          "source_table": "cltv",
-          "role": "후보입력",
-          "note": ""
-        },
-        {
           "feature_id": "cltv_strt_dt",
           "feature_name": "cltv_strt_dt",
           "desc": "정식일",
@@ -27763,7 +27250,7 @@
         "기존 시설·설비·작기 맥락"
       ],
       "display_name": "E3+E4+E5+E6+E7 (기존 시설내 환경 + 기존 외부 기상 + 기존 근권·양액·관수 + 기존 시설 제어 이력 + 기존 시설·설비·작기 맥락)",
-      "feature_count": 28,
+      "feature_count": 27,
       "features": [
         {
           "feature_id": "rcv_lgt_qty",
@@ -27917,15 +27404,6 @@
           "source_table": "ctrl_stts",
           "role": "후보입력",
           "note": "sect_cd=CR"
-        },
-        {
-          "feature_id": "crop_nm",
-          "feature_name": "crop_nm",
-          "desc": "작물",
-          "type": "VARCHAR",
-          "source_table": "cltv",
-          "role": "후보입력",
-          "note": ""
         },
         {
           "feature_id": "cltv_strt_dt",
@@ -28407,1296 +27885,6 @@
         "기존 시설·설비·작기 맥락"
       ],
       "display_name": "E1+E2+E3+E4+E5+E7 (기존 목표·생식생육 이력 + 기존 영양생장 + 기존 시설내 환경 + 기존 외부 기상 + 기존 근권·양액·관수 + 기존 시설·설비·작기 맥락)",
-      "feature_count": 45,
-      "features": [
-        {
-          "feature_id": "flclstr_cnt",
-          "feature_name": "flclstr_cnt",
-          "desc": "화방 수 (개)",
-          "type": "INT",
-          "source_table": "crop_stts",
-          "role": "타깃/과거입력",
-          "note": ""
-        },
-        {
-          "feature_id": "flclstr1_flwr_cnt",
-          "feature_name": "flclstr1_flwr_cnt",
-          "desc": "1화방 꽃수",
-          "type": "INT",
-          "source_table": "crop_stts",
-          "role": "타깃/과거입력",
-          "note": ""
-        },
-        {
-          "feature_id": "flclstr2_flwr_cnt",
-          "feature_name": "flclstr2_flwr_cnt",
-          "desc": "2화방 꽃수",
-          "type": "INT",
-          "source_table": "crop_stts",
-          "role": "타깃/과거입력",
-          "note": ""
-        },
-        {
-          "feature_id": "flclstr3_flwr_cnt",
-          "feature_name": "flclstr3_flwr_cnt",
-          "desc": "3화방 꽃수",
-          "type": "INT",
-          "source_table": "crop_stts",
-          "role": "타깃/과거입력",
-          "note": ""
-        },
-        {
-          "feature_id": "flclstr1_frst_cnt",
-          "feature_name": "flclstr1_frst_cnt",
-          "desc": "1화방 착과수",
-          "type": "INT",
-          "source_table": "crop_stts",
-          "role": "타깃/과거입력",
-          "note": ""
-        },
-        {
-          "feature_id": "flclstr2_frst_cnt",
-          "feature_name": "flclstr2_frst_cnt",
-          "desc": "2화방 착과수",
-          "type": "INT",
-          "source_table": "crop_stts",
-          "role": "타깃/과거입력",
-          "note": ""
-        },
-        {
-          "feature_id": "flclstr3_frst_cnt",
-          "feature_name": "flclstr3_frst_cnt",
-          "desc": "3화방 착과수",
-          "type": "INT",
-          "source_table": "crop_stts",
-          "role": "타깃/과거입력",
-          "note": ""
-        },
-        {
-          "feature_id": "bloom_grp_cnt",
-          "feature_name": "bloom_grp_cnt",
-          "desc": "개화군",
-          "type": "INT",
-          "source_table": "crop_stts",
-          "role": "타깃/과거입력",
-          "note": ""
-        },
-        {
-          "feature_id": "flst_grp_cnt",
-          "feature_name": "flst_grp_cnt",
-          "desc": "착화군",
-          "type": "INT",
-          "source_table": "crop_stts",
-          "role": "타깃/과거입력",
-          "note": ""
-        },
-        {
-          "feature_id": "fruit_cnt",
-          "feature_name": "fruit_cnt",
-          "desc": "열매수",
-          "type": "INT",
-          "source_table": "crop_stts",
-          "role": "타깃/과거입력",
-          "note": ""
-        },
-        {
-          "feature_id": "hrvst_grp",
-          "feature_name": "hrvst_grp",
-          "desc": "수확군",
-          "type": "INT",
-          "source_table": "crop_stts",
-          "role": "후보입력",
-          "note": ""
-        },
-        {
-          "feature_id": "ped",
-          "feature_name": "ped",
-          "desc": "PED",
-          "type": "FLOAT",
-          "source_table": "crop_stts",
-          "role": "후보입력",
-          "note": ""
-        },
-        {
-          "feature_id": "crop_stts.leaf_len",
-          "feature_name": "leaf_len",
-          "desc": "엽장 (cm)",
-          "type": "FLOAT",
-          "source_table": "crop_stts",
-          "role": "후보입력",
-          "note": ""
-        },
-        {
-          "feature_id": "leaf_cnt",
-          "feature_name": "leaf_cnt",
-          "desc": "엽수 (개)",
-          "type": "INT",
-          "source_table": "crop_stts",
-          "role": "후보입력",
-          "note": ""
-        },
-        {
-          "feature_id": "crop_stts.leaf_wdth",
-          "feature_name": "leaf_wdth",
-          "desc": "엽폭 (cm)",
-          "type": "FLOAT",
-          "source_table": "crop_stts",
-          "role": "후보입력",
-          "note": ""
-        },
-        {
-          "feature_id": "ptl_len",
-          "feature_name": "ptl_len",
-          "desc": "엽병장",
-          "type": "FLOAT",
-          "source_table": "crop_stts",
-          "role": "후보입력",
-          "note": ""
-        },
-        {
-          "feature_id": "stem_dmtr",
-          "feature_name": "stem_dmtr",
-          "desc": "줄기직경 (mm)",
-          "type": "FLOAT",
-          "source_table": "crop_stts",
-          "role": "후보입력",
-          "note": ""
-        },
-        {
-          "feature_id": "crwn_dmtr",
-          "feature_name": "crwn_dmtr",
-          "desc": "관부 직경",
-          "type": "FLOAT",
-          "source_table": "crop_stts",
-          "role": "후보입력",
-          "note": ""
-        },
-        {
-          "feature_id": "plnt_hgt",
-          "feature_name": "plnt_hgt",
-          "desc": "초장 (cm)",
-          "type": "FLOAT",
-          "source_table": "crop_stts",
-          "role": "후보입력",
-          "note": ""
-        },
-        {
-          "feature_id": "grw_len",
-          "feature_name": "grw_len",
-          "desc": "생장길이 (cm)",
-          "type": "FLOAT",
-          "source_table": "crop_stts",
-          "role": "후보입력",
-          "note": ""
-        },
-        {
-          "feature_id": "flclstr_hgt",
-          "feature_name": "flclstr_hgt",
-          "desc": "화방높이 (cm)",
-          "type": "FLOAT",
-          "source_table": "crop_stts",
-          "role": "후보입력",
-          "note": ""
-        },
-        {
-          "feature_id": "rcv_lgt_qty",
-          "feature_name": "rcv_lgt_qty",
-          "desc": "수광량",
-          "type": "FLOAT",
-          "source_table": "crop_stts",
-          "role": "후보입력",
-          "note": ""
-        },
-        {
-          "feature_id": "env_stts.fld_cd",
-          "feature_name": "fld_cd",
-          "desc": "분야코드",
-          "type": "VARCHAR",
-          "source_table": "env_stts",
-          "role": "후보입력",
-          "note": "sect_cd=EI (동일 구조를 E4·E5에도 조건별 재사용)"
-        },
-        {
-          "feature_id": "env_stts.sect_cd",
-          "feature_name": "sect_cd",
-          "desc": "분류코드",
-          "type": "VARCHAR",
-          "source_table": "env_stts",
-          "role": "후보입력",
-          "note": "sect_cd=EI (동일 구조를 E4·E5에도 조건별 재사용)"
-        },
-        {
-          "feature_id": "env_stts.fatr_cd",
-          "feature_name": "fatr_cd",
-          "desc": "항목코드",
-          "type": "VARCHAR",
-          "source_table": "env_stts",
-          "role": "후보입력",
-          "note": "sect_cd=EI (동일 구조를 E4·E5에도 조건별 재사용)"
-        },
-        {
-          "feature_id": "env_stts.sns_vl",
-          "feature_name": "sns_vl",
-          "desc": "측정값",
-          "type": "FLOAT",
-          "source_table": "env_stts",
-          "role": "후보입력",
-          "note": "sect_cd=EI (동일 구조를 E4·E5에도 조건별 재사용)"
-        },
-        {
-          "feature_id": "env_stts.fld_cd",
-          "feature_name": "fld_cd",
-          "desc": "분야코드",
-          "type": "VARCHAR",
-          "source_table": "env_stts",
-          "role": "후보입력",
-          "note": "sect_cd=EO"
-        },
-        {
-          "feature_id": "env_stts.sect_cd",
-          "feature_name": "sect_cd",
-          "desc": "분류코드",
-          "type": "VARCHAR",
-          "source_table": "env_stts",
-          "role": "후보입력",
-          "note": "sect_cd=EO"
-        },
-        {
-          "feature_id": "env_stts.fatr_cd",
-          "feature_name": "fatr_cd",
-          "desc": "항목코드",
-          "type": "VARCHAR",
-          "source_table": "env_stts",
-          "role": "후보입력",
-          "note": "sect_cd=EO"
-        },
-        {
-          "feature_id": "env_stts.sns_vl",
-          "feature_name": "sns_vl",
-          "desc": "측정값",
-          "type": "FLOAT",
-          "source_table": "env_stts",
-          "role": "후보입력",
-          "note": "sect_cd=EO"
-        },
-        {
-          "feature_id": "env_stts.fld_cd",
-          "feature_name": "fld_cd",
-          "desc": "분야코드",
-          "type": "VARCHAR",
-          "source_table": "env_stts",
-          "role": "후보입력",
-          "note": "sect_cd=NT"
-        },
-        {
-          "feature_id": "env_stts.sect_cd",
-          "feature_name": "sect_cd",
-          "desc": "분류코드",
-          "type": "VARCHAR",
-          "source_table": "env_stts",
-          "role": "후보입력",
-          "note": "sect_cd=NT"
-        },
-        {
-          "feature_id": "env_stts.fatr_cd",
-          "feature_name": "fatr_cd",
-          "desc": "항목코드",
-          "type": "VARCHAR",
-          "source_table": "env_stts",
-          "role": "후보입력",
-          "note": "sect_cd=NT"
-        },
-        {
-          "feature_id": "env_stts.sns_vl",
-          "feature_name": "sns_vl",
-          "desc": "측정값",
-          "type": "FLOAT",
-          "source_table": "env_stts",
-          "role": "후보입력",
-          "note": "sect_cd=NT"
-        },
-        {
-          "feature_id": "crop_nm",
-          "feature_name": "crop_nm",
-          "desc": "작물",
-          "type": "VARCHAR",
-          "source_table": "cltv",
-          "role": "후보입력",
-          "note": ""
-        },
-        {
-          "feature_id": "cltv_strt_dt",
-          "feature_name": "cltv_strt_dt",
-          "desc": "정식일",
-          "type": "DATE",
-          "source_table": "cltv",
-          "role": "후보입력",
-          "note": ""
-        },
-        {
-          "feature_id": "cltv_mth_nm",
-          "feature_name": "cltv_mth_nm",
-          "desc": "재배방식",
-          "type": "VARCHAR",
-          "source_table": "cltv",
-          "role": "후보입력",
-          "note": ""
-        },
-        {
-          "feature_id": "indvd_cnt",
-          "feature_name": "indvd_cnt",
-          "desc": "재배 포기수 (주)",
-          "type": "INT",
-          "source_table": "cltv",
-          "role": "후보입력",
-          "note": ""
-        },
-        {
-          "feature_id": "crop_end_dt",
-          "feature_name": "crop_end_dt",
-          "desc": "작기 종료일",
-          "type": "DATE",
-          "source_table": "cltv",
-          "role": "후보입력",
-          "note": ""
-        },
-        {
-          "feature_id": "fcar",
-          "feature_name": "fcar",
-          "desc": "온실 면적 (m²)",
-          "type": "FLOAT",
-          "source_table": "fclt",
-          "role": "후보입력",
-          "note": ""
-        },
-        {
-          "feature_id": "cltv_mthd_nm",
-          "feature_name": "cltv_mthd_nm",
-          "desc": "재배 방식",
-          "type": "VARCHAR",
-          "source_table": "fclt",
-          "role": "후보입력",
-          "note": ""
-        },
-        {
-          "feature_id": "fclt_eqpm.fld_cd",
-          "feature_name": "fld_cd",
-          "desc": "분야코드",
-          "type": "VARCHAR",
-          "source_table": "fclt_eqpm",
-          "role": "후보입력",
-          "note": ""
-        },
-        {
-          "feature_id": "fclt_eqpm.sect_cd",
-          "feature_name": "sect_cd",
-          "desc": "분류코드",
-          "type": "VARCHAR",
-          "source_table": "fclt_eqpm",
-          "role": "후보입력",
-          "note": ""
-        },
-        {
-          "feature_id": "fclt_eqpm.fatr_cd",
-          "feature_name": "fatr_cd",
-          "desc": "항목코드",
-          "type": "VARCHAR",
-          "source_table": "fclt_eqpm",
-          "role": "후보입력",
-          "note": ""
-        },
-        {
-          "feature_id": "fclt_eqpm.sns_no",
-          "feature_name": "sns_no",
-          "desc": "센서 번호",
-          "type": "VARCHAR",
-          "source_table": "fclt_eqpm",
-          "role": "후보입력",
-          "note": ""
-        }
-      ]
-    },
-    {
-      "combination_id": "COMBO_5bae6c3e725e",
-      "groups": [
-        "E1",
-        "E2",
-        "E3",
-        "E4",
-        "E6",
-        "E7"
-      ],
-      "group_count": 6,
-      "label": "E1+E2+E3+E4+E6+E7",
-      "group_names": [
-        "기존 목표·생식생육 이력",
-        "기존 영양생장",
-        "기존 시설내 환경",
-        "기존 외부 기상",
-        "기존 시설 제어 이력",
-        "기존 시설·설비·작기 맥락"
-      ],
-      "display_name": "E1+E2+E3+E4+E6+E7 (기존 목표·생식생육 이력 + 기존 영양생장 + 기존 시설내 환경 + 기존 외부 기상 + 기존 시설 제어 이력 + 기존 시설·설비·작기 맥락)",
-      "feature_count": 45,
-      "features": [
-        {
-          "feature_id": "flclstr_cnt",
-          "feature_name": "flclstr_cnt",
-          "desc": "화방 수 (개)",
-          "type": "INT",
-          "source_table": "crop_stts",
-          "role": "타깃/과거입력",
-          "note": ""
-        },
-        {
-          "feature_id": "flclstr1_flwr_cnt",
-          "feature_name": "flclstr1_flwr_cnt",
-          "desc": "1화방 꽃수",
-          "type": "INT",
-          "source_table": "crop_stts",
-          "role": "타깃/과거입력",
-          "note": ""
-        },
-        {
-          "feature_id": "flclstr2_flwr_cnt",
-          "feature_name": "flclstr2_flwr_cnt",
-          "desc": "2화방 꽃수",
-          "type": "INT",
-          "source_table": "crop_stts",
-          "role": "타깃/과거입력",
-          "note": ""
-        },
-        {
-          "feature_id": "flclstr3_flwr_cnt",
-          "feature_name": "flclstr3_flwr_cnt",
-          "desc": "3화방 꽃수",
-          "type": "INT",
-          "source_table": "crop_stts",
-          "role": "타깃/과거입력",
-          "note": ""
-        },
-        {
-          "feature_id": "flclstr1_frst_cnt",
-          "feature_name": "flclstr1_frst_cnt",
-          "desc": "1화방 착과수",
-          "type": "INT",
-          "source_table": "crop_stts",
-          "role": "타깃/과거입력",
-          "note": ""
-        },
-        {
-          "feature_id": "flclstr2_frst_cnt",
-          "feature_name": "flclstr2_frst_cnt",
-          "desc": "2화방 착과수",
-          "type": "INT",
-          "source_table": "crop_stts",
-          "role": "타깃/과거입력",
-          "note": ""
-        },
-        {
-          "feature_id": "flclstr3_frst_cnt",
-          "feature_name": "flclstr3_frst_cnt",
-          "desc": "3화방 착과수",
-          "type": "INT",
-          "source_table": "crop_stts",
-          "role": "타깃/과거입력",
-          "note": ""
-        },
-        {
-          "feature_id": "bloom_grp_cnt",
-          "feature_name": "bloom_grp_cnt",
-          "desc": "개화군",
-          "type": "INT",
-          "source_table": "crop_stts",
-          "role": "타깃/과거입력",
-          "note": ""
-        },
-        {
-          "feature_id": "flst_grp_cnt",
-          "feature_name": "flst_grp_cnt",
-          "desc": "착화군",
-          "type": "INT",
-          "source_table": "crop_stts",
-          "role": "타깃/과거입력",
-          "note": ""
-        },
-        {
-          "feature_id": "fruit_cnt",
-          "feature_name": "fruit_cnt",
-          "desc": "열매수",
-          "type": "INT",
-          "source_table": "crop_stts",
-          "role": "타깃/과거입력",
-          "note": ""
-        },
-        {
-          "feature_id": "hrvst_grp",
-          "feature_name": "hrvst_grp",
-          "desc": "수확군",
-          "type": "INT",
-          "source_table": "crop_stts",
-          "role": "후보입력",
-          "note": ""
-        },
-        {
-          "feature_id": "ped",
-          "feature_name": "ped",
-          "desc": "PED",
-          "type": "FLOAT",
-          "source_table": "crop_stts",
-          "role": "후보입력",
-          "note": ""
-        },
-        {
-          "feature_id": "crop_stts.leaf_len",
-          "feature_name": "leaf_len",
-          "desc": "엽장 (cm)",
-          "type": "FLOAT",
-          "source_table": "crop_stts",
-          "role": "후보입력",
-          "note": ""
-        },
-        {
-          "feature_id": "leaf_cnt",
-          "feature_name": "leaf_cnt",
-          "desc": "엽수 (개)",
-          "type": "INT",
-          "source_table": "crop_stts",
-          "role": "후보입력",
-          "note": ""
-        },
-        {
-          "feature_id": "crop_stts.leaf_wdth",
-          "feature_name": "leaf_wdth",
-          "desc": "엽폭 (cm)",
-          "type": "FLOAT",
-          "source_table": "crop_stts",
-          "role": "후보입력",
-          "note": ""
-        },
-        {
-          "feature_id": "ptl_len",
-          "feature_name": "ptl_len",
-          "desc": "엽병장",
-          "type": "FLOAT",
-          "source_table": "crop_stts",
-          "role": "후보입력",
-          "note": ""
-        },
-        {
-          "feature_id": "stem_dmtr",
-          "feature_name": "stem_dmtr",
-          "desc": "줄기직경 (mm)",
-          "type": "FLOAT",
-          "source_table": "crop_stts",
-          "role": "후보입력",
-          "note": ""
-        },
-        {
-          "feature_id": "crwn_dmtr",
-          "feature_name": "crwn_dmtr",
-          "desc": "관부 직경",
-          "type": "FLOAT",
-          "source_table": "crop_stts",
-          "role": "후보입력",
-          "note": ""
-        },
-        {
-          "feature_id": "plnt_hgt",
-          "feature_name": "plnt_hgt",
-          "desc": "초장 (cm)",
-          "type": "FLOAT",
-          "source_table": "crop_stts",
-          "role": "후보입력",
-          "note": ""
-        },
-        {
-          "feature_id": "grw_len",
-          "feature_name": "grw_len",
-          "desc": "생장길이 (cm)",
-          "type": "FLOAT",
-          "source_table": "crop_stts",
-          "role": "후보입력",
-          "note": ""
-        },
-        {
-          "feature_id": "flclstr_hgt",
-          "feature_name": "flclstr_hgt",
-          "desc": "화방높이 (cm)",
-          "type": "FLOAT",
-          "source_table": "crop_stts",
-          "role": "후보입력",
-          "note": ""
-        },
-        {
-          "feature_id": "rcv_lgt_qty",
-          "feature_name": "rcv_lgt_qty",
-          "desc": "수광량",
-          "type": "FLOAT",
-          "source_table": "crop_stts",
-          "role": "후보입력",
-          "note": ""
-        },
-        {
-          "feature_id": "env_stts.fld_cd",
-          "feature_name": "fld_cd",
-          "desc": "분야코드",
-          "type": "VARCHAR",
-          "source_table": "env_stts",
-          "role": "후보입력",
-          "note": "sect_cd=EI (동일 구조를 E4·E5에도 조건별 재사용)"
-        },
-        {
-          "feature_id": "env_stts.sect_cd",
-          "feature_name": "sect_cd",
-          "desc": "분류코드",
-          "type": "VARCHAR",
-          "source_table": "env_stts",
-          "role": "후보입력",
-          "note": "sect_cd=EI (동일 구조를 E4·E5에도 조건별 재사용)"
-        },
-        {
-          "feature_id": "env_stts.fatr_cd",
-          "feature_name": "fatr_cd",
-          "desc": "항목코드",
-          "type": "VARCHAR",
-          "source_table": "env_stts",
-          "role": "후보입력",
-          "note": "sect_cd=EI (동일 구조를 E4·E5에도 조건별 재사용)"
-        },
-        {
-          "feature_id": "env_stts.sns_vl",
-          "feature_name": "sns_vl",
-          "desc": "측정값",
-          "type": "FLOAT",
-          "source_table": "env_stts",
-          "role": "후보입력",
-          "note": "sect_cd=EI (동일 구조를 E4·E5에도 조건별 재사용)"
-        },
-        {
-          "feature_id": "env_stts.fld_cd",
-          "feature_name": "fld_cd",
-          "desc": "분야코드",
-          "type": "VARCHAR",
-          "source_table": "env_stts",
-          "role": "후보입력",
-          "note": "sect_cd=EO"
-        },
-        {
-          "feature_id": "env_stts.sect_cd",
-          "feature_name": "sect_cd",
-          "desc": "분류코드",
-          "type": "VARCHAR",
-          "source_table": "env_stts",
-          "role": "후보입력",
-          "note": "sect_cd=EO"
-        },
-        {
-          "feature_id": "env_stts.fatr_cd",
-          "feature_name": "fatr_cd",
-          "desc": "항목코드",
-          "type": "VARCHAR",
-          "source_table": "env_stts",
-          "role": "후보입력",
-          "note": "sect_cd=EO"
-        },
-        {
-          "feature_id": "env_stts.sns_vl",
-          "feature_name": "sns_vl",
-          "desc": "측정값",
-          "type": "FLOAT",
-          "source_table": "env_stts",
-          "role": "후보입력",
-          "note": "sect_cd=EO"
-        },
-        {
-          "feature_id": "ctrl_stts.fld_cd",
-          "feature_name": "fld_cd",
-          "desc": "분야코드",
-          "type": "VARCHAR",
-          "source_table": "ctrl_stts",
-          "role": "후보입력",
-          "note": "sect_cd=CR"
-        },
-        {
-          "feature_id": "ctrl_stts.sect_cd",
-          "feature_name": "sect_cd",
-          "desc": "분류코드",
-          "type": "VARCHAR",
-          "source_table": "ctrl_stts",
-          "role": "후보입력",
-          "note": "sect_cd=CR"
-        },
-        {
-          "feature_id": "ctrl_stts.fatr_cd",
-          "feature_name": "fatr_cd",
-          "desc": "항목코드",
-          "type": "VARCHAR",
-          "source_table": "ctrl_stts",
-          "role": "후보입력",
-          "note": "sect_cd=CR"
-        },
-        {
-          "feature_id": "ctrl_stts.sns_vl",
-          "feature_name": "sns_vl",
-          "desc": "측정값",
-          "type": "FLOAT",
-          "source_table": "ctrl_stts",
-          "role": "후보입력",
-          "note": "sect_cd=CR"
-        },
-        {
-          "feature_id": "crop_nm",
-          "feature_name": "crop_nm",
-          "desc": "작물",
-          "type": "VARCHAR",
-          "source_table": "cltv",
-          "role": "후보입력",
-          "note": ""
-        },
-        {
-          "feature_id": "cltv_strt_dt",
-          "feature_name": "cltv_strt_dt",
-          "desc": "정식일",
-          "type": "DATE",
-          "source_table": "cltv",
-          "role": "후보입력",
-          "note": ""
-        },
-        {
-          "feature_id": "cltv_mth_nm",
-          "feature_name": "cltv_mth_nm",
-          "desc": "재배방식",
-          "type": "VARCHAR",
-          "source_table": "cltv",
-          "role": "후보입력",
-          "note": ""
-        },
-        {
-          "feature_id": "indvd_cnt",
-          "feature_name": "indvd_cnt",
-          "desc": "재배 포기수 (주)",
-          "type": "INT",
-          "source_table": "cltv",
-          "role": "후보입력",
-          "note": ""
-        },
-        {
-          "feature_id": "crop_end_dt",
-          "feature_name": "crop_end_dt",
-          "desc": "작기 종료일",
-          "type": "DATE",
-          "source_table": "cltv",
-          "role": "후보입력",
-          "note": ""
-        },
-        {
-          "feature_id": "fcar",
-          "feature_name": "fcar",
-          "desc": "온실 면적 (m²)",
-          "type": "FLOAT",
-          "source_table": "fclt",
-          "role": "후보입력",
-          "note": ""
-        },
-        {
-          "feature_id": "cltv_mthd_nm",
-          "feature_name": "cltv_mthd_nm",
-          "desc": "재배 방식",
-          "type": "VARCHAR",
-          "source_table": "fclt",
-          "role": "후보입력",
-          "note": ""
-        },
-        {
-          "feature_id": "fclt_eqpm.fld_cd",
-          "feature_name": "fld_cd",
-          "desc": "분야코드",
-          "type": "VARCHAR",
-          "source_table": "fclt_eqpm",
-          "role": "후보입력",
-          "note": ""
-        },
-        {
-          "feature_id": "fclt_eqpm.sect_cd",
-          "feature_name": "sect_cd",
-          "desc": "분류코드",
-          "type": "VARCHAR",
-          "source_table": "fclt_eqpm",
-          "role": "후보입력",
-          "note": ""
-        },
-        {
-          "feature_id": "fclt_eqpm.fatr_cd",
-          "feature_name": "fatr_cd",
-          "desc": "항목코드",
-          "type": "VARCHAR",
-          "source_table": "fclt_eqpm",
-          "role": "후보입력",
-          "note": ""
-        },
-        {
-          "feature_id": "fclt_eqpm.sns_no",
-          "feature_name": "sns_no",
-          "desc": "센서 번호",
-          "type": "VARCHAR",
-          "source_table": "fclt_eqpm",
-          "role": "후보입력",
-          "note": ""
-        }
-      ]
-    },
-    {
-      "combination_id": "COMBO_a05167c66bed",
-      "groups": [
-        "E1",
-        "E2",
-        "E3",
-        "E5",
-        "E6",
-        "E7"
-      ],
-      "group_count": 6,
-      "label": "E1+E2+E3+E5+E6+E7",
-      "group_names": [
-        "기존 목표·생식생육 이력",
-        "기존 영양생장",
-        "기존 시설내 환경",
-        "기존 근권·양액·관수",
-        "기존 시설 제어 이력",
-        "기존 시설·설비·작기 맥락"
-      ],
-      "display_name": "E1+E2+E3+E5+E6+E7 (기존 목표·생식생육 이력 + 기존 영양생장 + 기존 시설내 환경 + 기존 근권·양액·관수 + 기존 시설 제어 이력 + 기존 시설·설비·작기 맥락)",
-      "feature_count": 45,
-      "features": [
-        {
-          "feature_id": "flclstr_cnt",
-          "feature_name": "flclstr_cnt",
-          "desc": "화방 수 (개)",
-          "type": "INT",
-          "source_table": "crop_stts",
-          "role": "타깃/과거입력",
-          "note": ""
-        },
-        {
-          "feature_id": "flclstr1_flwr_cnt",
-          "feature_name": "flclstr1_flwr_cnt",
-          "desc": "1화방 꽃수",
-          "type": "INT",
-          "source_table": "crop_stts",
-          "role": "타깃/과거입력",
-          "note": ""
-        },
-        {
-          "feature_id": "flclstr2_flwr_cnt",
-          "feature_name": "flclstr2_flwr_cnt",
-          "desc": "2화방 꽃수",
-          "type": "INT",
-          "source_table": "crop_stts",
-          "role": "타깃/과거입력",
-          "note": ""
-        },
-        {
-          "feature_id": "flclstr3_flwr_cnt",
-          "feature_name": "flclstr3_flwr_cnt",
-          "desc": "3화방 꽃수",
-          "type": "INT",
-          "source_table": "crop_stts",
-          "role": "타깃/과거입력",
-          "note": ""
-        },
-        {
-          "feature_id": "flclstr1_frst_cnt",
-          "feature_name": "flclstr1_frst_cnt",
-          "desc": "1화방 착과수",
-          "type": "INT",
-          "source_table": "crop_stts",
-          "role": "타깃/과거입력",
-          "note": ""
-        },
-        {
-          "feature_id": "flclstr2_frst_cnt",
-          "feature_name": "flclstr2_frst_cnt",
-          "desc": "2화방 착과수",
-          "type": "INT",
-          "source_table": "crop_stts",
-          "role": "타깃/과거입력",
-          "note": ""
-        },
-        {
-          "feature_id": "flclstr3_frst_cnt",
-          "feature_name": "flclstr3_frst_cnt",
-          "desc": "3화방 착과수",
-          "type": "INT",
-          "source_table": "crop_stts",
-          "role": "타깃/과거입력",
-          "note": ""
-        },
-        {
-          "feature_id": "bloom_grp_cnt",
-          "feature_name": "bloom_grp_cnt",
-          "desc": "개화군",
-          "type": "INT",
-          "source_table": "crop_stts",
-          "role": "타깃/과거입력",
-          "note": ""
-        },
-        {
-          "feature_id": "flst_grp_cnt",
-          "feature_name": "flst_grp_cnt",
-          "desc": "착화군",
-          "type": "INT",
-          "source_table": "crop_stts",
-          "role": "타깃/과거입력",
-          "note": ""
-        },
-        {
-          "feature_id": "fruit_cnt",
-          "feature_name": "fruit_cnt",
-          "desc": "열매수",
-          "type": "INT",
-          "source_table": "crop_stts",
-          "role": "타깃/과거입력",
-          "note": ""
-        },
-        {
-          "feature_id": "hrvst_grp",
-          "feature_name": "hrvst_grp",
-          "desc": "수확군",
-          "type": "INT",
-          "source_table": "crop_stts",
-          "role": "후보입력",
-          "note": ""
-        },
-        {
-          "feature_id": "ped",
-          "feature_name": "ped",
-          "desc": "PED",
-          "type": "FLOAT",
-          "source_table": "crop_stts",
-          "role": "후보입력",
-          "note": ""
-        },
-        {
-          "feature_id": "crop_stts.leaf_len",
-          "feature_name": "leaf_len",
-          "desc": "엽장 (cm)",
-          "type": "FLOAT",
-          "source_table": "crop_stts",
-          "role": "후보입력",
-          "note": ""
-        },
-        {
-          "feature_id": "leaf_cnt",
-          "feature_name": "leaf_cnt",
-          "desc": "엽수 (개)",
-          "type": "INT",
-          "source_table": "crop_stts",
-          "role": "후보입력",
-          "note": ""
-        },
-        {
-          "feature_id": "crop_stts.leaf_wdth",
-          "feature_name": "leaf_wdth",
-          "desc": "엽폭 (cm)",
-          "type": "FLOAT",
-          "source_table": "crop_stts",
-          "role": "후보입력",
-          "note": ""
-        },
-        {
-          "feature_id": "ptl_len",
-          "feature_name": "ptl_len",
-          "desc": "엽병장",
-          "type": "FLOAT",
-          "source_table": "crop_stts",
-          "role": "후보입력",
-          "note": ""
-        },
-        {
-          "feature_id": "stem_dmtr",
-          "feature_name": "stem_dmtr",
-          "desc": "줄기직경 (mm)",
-          "type": "FLOAT",
-          "source_table": "crop_stts",
-          "role": "후보입력",
-          "note": ""
-        },
-        {
-          "feature_id": "crwn_dmtr",
-          "feature_name": "crwn_dmtr",
-          "desc": "관부 직경",
-          "type": "FLOAT",
-          "source_table": "crop_stts",
-          "role": "후보입력",
-          "note": ""
-        },
-        {
-          "feature_id": "plnt_hgt",
-          "feature_name": "plnt_hgt",
-          "desc": "초장 (cm)",
-          "type": "FLOAT",
-          "source_table": "crop_stts",
-          "role": "후보입력",
-          "note": ""
-        },
-        {
-          "feature_id": "grw_len",
-          "feature_name": "grw_len",
-          "desc": "생장길이 (cm)",
-          "type": "FLOAT",
-          "source_table": "crop_stts",
-          "role": "후보입력",
-          "note": ""
-        },
-        {
-          "feature_id": "flclstr_hgt",
-          "feature_name": "flclstr_hgt",
-          "desc": "화방높이 (cm)",
-          "type": "FLOAT",
-          "source_table": "crop_stts",
-          "role": "후보입력",
-          "note": ""
-        },
-        {
-          "feature_id": "rcv_lgt_qty",
-          "feature_name": "rcv_lgt_qty",
-          "desc": "수광량",
-          "type": "FLOAT",
-          "source_table": "crop_stts",
-          "role": "후보입력",
-          "note": ""
-        },
-        {
-          "feature_id": "env_stts.fld_cd",
-          "feature_name": "fld_cd",
-          "desc": "분야코드",
-          "type": "VARCHAR",
-          "source_table": "env_stts",
-          "role": "후보입력",
-          "note": "sect_cd=EI (동일 구조를 E4·E5에도 조건별 재사용)"
-        },
-        {
-          "feature_id": "env_stts.sect_cd",
-          "feature_name": "sect_cd",
-          "desc": "분류코드",
-          "type": "VARCHAR",
-          "source_table": "env_stts",
-          "role": "후보입력",
-          "note": "sect_cd=EI (동일 구조를 E4·E5에도 조건별 재사용)"
-        },
-        {
-          "feature_id": "env_stts.fatr_cd",
-          "feature_name": "fatr_cd",
-          "desc": "항목코드",
-          "type": "VARCHAR",
-          "source_table": "env_stts",
-          "role": "후보입력",
-          "note": "sect_cd=EI (동일 구조를 E4·E5에도 조건별 재사용)"
-        },
-        {
-          "feature_id": "env_stts.sns_vl",
-          "feature_name": "sns_vl",
-          "desc": "측정값",
-          "type": "FLOAT",
-          "source_table": "env_stts",
-          "role": "후보입력",
-          "note": "sect_cd=EI (동일 구조를 E4·E5에도 조건별 재사용)"
-        },
-        {
-          "feature_id": "env_stts.fld_cd",
-          "feature_name": "fld_cd",
-          "desc": "분야코드",
-          "type": "VARCHAR",
-          "source_table": "env_stts",
-          "role": "후보입력",
-          "note": "sect_cd=NT"
-        },
-        {
-          "feature_id": "env_stts.sect_cd",
-          "feature_name": "sect_cd",
-          "desc": "분류코드",
-          "type": "VARCHAR",
-          "source_table": "env_stts",
-          "role": "후보입력",
-          "note": "sect_cd=NT"
-        },
-        {
-          "feature_id": "env_stts.fatr_cd",
-          "feature_name": "fatr_cd",
-          "desc": "항목코드",
-          "type": "VARCHAR",
-          "source_table": "env_stts",
-          "role": "후보입력",
-          "note": "sect_cd=NT"
-        },
-        {
-          "feature_id": "env_stts.sns_vl",
-          "feature_name": "sns_vl",
-          "desc": "측정값",
-          "type": "FLOAT",
-          "source_table": "env_stts",
-          "role": "후보입력",
-          "note": "sect_cd=NT"
-        },
-        {
-          "feature_id": "ctrl_stts.fld_cd",
-          "feature_name": "fld_cd",
-          "desc": "분야코드",
-          "type": "VARCHAR",
-          "source_table": "ctrl_stts",
-          "role": "후보입력",
-          "note": "sect_cd=CR"
-        },
-        {
-          "feature_id": "ctrl_stts.sect_cd",
-          "feature_name": "sect_cd",
-          "desc": "분류코드",
-          "type": "VARCHAR",
-          "source_table": "ctrl_stts",
-          "role": "후보입력",
-          "note": "sect_cd=CR"
-        },
-        {
-          "feature_id": "ctrl_stts.fatr_cd",
-          "feature_name": "fatr_cd",
-          "desc": "항목코드",
-          "type": "VARCHAR",
-          "source_table": "ctrl_stts",
-          "role": "후보입력",
-          "note": "sect_cd=CR"
-        },
-        {
-          "feature_id": "ctrl_stts.sns_vl",
-          "feature_name": "sns_vl",
-          "desc": "측정값",
-          "type": "FLOAT",
-          "source_table": "ctrl_stts",
-          "role": "후보입력",
-          "note": "sect_cd=CR"
-        },
-        {
-          "feature_id": "crop_nm",
-          "feature_name": "crop_nm",
-          "desc": "작물",
-          "type": "VARCHAR",
-          "source_table": "cltv",
-          "role": "후보입력",
-          "note": ""
-        },
-        {
-          "feature_id": "cltv_strt_dt",
-          "feature_name": "cltv_strt_dt",
-          "desc": "정식일",
-          "type": "DATE",
-          "source_table": "cltv",
-          "role": "후보입력",
-          "note": ""
-        },
-        {
-          "feature_id": "cltv_mth_nm",
-          "feature_name": "cltv_mth_nm",
-          "desc": "재배방식",
-          "type": "VARCHAR",
-          "source_table": "cltv",
-          "role": "후보입력",
-          "note": ""
-        },
-        {
-          "feature_id": "indvd_cnt",
-          "feature_name": "indvd_cnt",
-          "desc": "재배 포기수 (주)",
-          "type": "INT",
-          "source_table": "cltv",
-          "role": "후보입력",
-          "note": ""
-        },
-        {
-          "feature_id": "crop_end_dt",
-          "feature_name": "crop_end_dt",
-          "desc": "작기 종료일",
-          "type": "DATE",
-          "source_table": "cltv",
-          "role": "후보입력",
-          "note": ""
-        },
-        {
-          "feature_id": "fcar",
-          "feature_name": "fcar",
-          "desc": "온실 면적 (m²)",
-          "type": "FLOAT",
-          "source_table": "fclt",
-          "role": "후보입력",
-          "note": ""
-        },
-        {
-          "feature_id": "cltv_mthd_nm",
-          "feature_name": "cltv_mthd_nm",
-          "desc": "재배 방식",
-          "type": "VARCHAR",
-          "source_table": "fclt",
-          "role": "후보입력",
-          "note": ""
-        },
-        {
-          "feature_id": "fclt_eqpm.fld_cd",
-          "feature_name": "fld_cd",
-          "desc": "분야코드",
-          "type": "VARCHAR",
-          "source_table": "fclt_eqpm",
-          "role": "후보입력",
-          "note": ""
-        },
-        {
-          "feature_id": "fclt_eqpm.sect_cd",
-          "feature_name": "sect_cd",
-          "desc": "분류코드",
-          "type": "VARCHAR",
-          "source_table": "fclt_eqpm",
-          "role": "후보입력",
-          "note": ""
-        },
-        {
-          "feature_id": "fclt_eqpm.fatr_cd",
-          "feature_name": "fatr_cd",
-          "desc": "항목코드",
-          "type": "VARCHAR",
-          "source_table": "fclt_eqpm",
-          "role": "후보입력",
-          "note": ""
-        },
-        {
-          "feature_id": "fclt_eqpm.sns_no",
-          "feature_name": "sns_no",
-          "desc": "센서 번호",
-          "type": "VARCHAR",
-          "source_table": "fclt_eqpm",
-          "role": "후보입력",
-          "note": ""
-        }
-      ]
-    },
-    {
-      "combination_id": "COMBO_03fdc448c51b",
-      "groups": [
-        "E1",
-        "E2",
-        "E4",
-        "E5",
-        "E6",
-        "E7"
-      ],
-      "group_count": 6,
-      "label": "E1+E2+E4+E5+E6+E7",
-      "group_names": [
-        "기존 목표·생식생육 이력",
-        "기존 영양생장",
-        "기존 외부 기상",
-        "기존 근권·양액·관수",
-        "기존 시설 제어 이력",
-        "기존 시설·설비·작기 맥락"
-      ],
-      "display_name": "E1+E2+E4+E5+E6+E7 (기존 목표·생식생육 이력 + 기존 영양생장 + 기존 외부 기상 + 기존 근권·양액·관수 + 기존 시설 제어 이력 + 기존 시설·설비·작기 맥락)",
       "feature_count": 44,
       "features": [
         {
@@ -29889,6 +28077,1269 @@
           "note": ""
         },
         {
+          "feature_id": "rcv_lgt_qty",
+          "feature_name": "rcv_lgt_qty",
+          "desc": "수광량",
+          "type": "FLOAT",
+          "source_table": "crop_stts",
+          "role": "후보입력",
+          "note": ""
+        },
+        {
+          "feature_id": "env_stts.fld_cd",
+          "feature_name": "fld_cd",
+          "desc": "분야코드",
+          "type": "VARCHAR",
+          "source_table": "env_stts",
+          "role": "후보입력",
+          "note": "sect_cd=EI (동일 구조를 E4·E5에도 조건별 재사용)"
+        },
+        {
+          "feature_id": "env_stts.sect_cd",
+          "feature_name": "sect_cd",
+          "desc": "분류코드",
+          "type": "VARCHAR",
+          "source_table": "env_stts",
+          "role": "후보입력",
+          "note": "sect_cd=EI (동일 구조를 E4·E5에도 조건별 재사용)"
+        },
+        {
+          "feature_id": "env_stts.fatr_cd",
+          "feature_name": "fatr_cd",
+          "desc": "항목코드",
+          "type": "VARCHAR",
+          "source_table": "env_stts",
+          "role": "후보입력",
+          "note": "sect_cd=EI (동일 구조를 E4·E5에도 조건별 재사용)"
+        },
+        {
+          "feature_id": "env_stts.sns_vl",
+          "feature_name": "sns_vl",
+          "desc": "측정값",
+          "type": "FLOAT",
+          "source_table": "env_stts",
+          "role": "후보입력",
+          "note": "sect_cd=EI (동일 구조를 E4·E5에도 조건별 재사용)"
+        },
+        {
+          "feature_id": "env_stts.fld_cd",
+          "feature_name": "fld_cd",
+          "desc": "분야코드",
+          "type": "VARCHAR",
+          "source_table": "env_stts",
+          "role": "후보입력",
+          "note": "sect_cd=EO"
+        },
+        {
+          "feature_id": "env_stts.sect_cd",
+          "feature_name": "sect_cd",
+          "desc": "분류코드",
+          "type": "VARCHAR",
+          "source_table": "env_stts",
+          "role": "후보입력",
+          "note": "sect_cd=EO"
+        },
+        {
+          "feature_id": "env_stts.fatr_cd",
+          "feature_name": "fatr_cd",
+          "desc": "항목코드",
+          "type": "VARCHAR",
+          "source_table": "env_stts",
+          "role": "후보입력",
+          "note": "sect_cd=EO"
+        },
+        {
+          "feature_id": "env_stts.sns_vl",
+          "feature_name": "sns_vl",
+          "desc": "측정값",
+          "type": "FLOAT",
+          "source_table": "env_stts",
+          "role": "후보입력",
+          "note": "sect_cd=EO"
+        },
+        {
+          "feature_id": "env_stts.fld_cd",
+          "feature_name": "fld_cd",
+          "desc": "분야코드",
+          "type": "VARCHAR",
+          "source_table": "env_stts",
+          "role": "후보입력",
+          "note": "sect_cd=NT"
+        },
+        {
+          "feature_id": "env_stts.sect_cd",
+          "feature_name": "sect_cd",
+          "desc": "분류코드",
+          "type": "VARCHAR",
+          "source_table": "env_stts",
+          "role": "후보입력",
+          "note": "sect_cd=NT"
+        },
+        {
+          "feature_id": "env_stts.fatr_cd",
+          "feature_name": "fatr_cd",
+          "desc": "항목코드",
+          "type": "VARCHAR",
+          "source_table": "env_stts",
+          "role": "후보입력",
+          "note": "sect_cd=NT"
+        },
+        {
+          "feature_id": "env_stts.sns_vl",
+          "feature_name": "sns_vl",
+          "desc": "측정값",
+          "type": "FLOAT",
+          "source_table": "env_stts",
+          "role": "후보입력",
+          "note": "sect_cd=NT"
+        },
+        {
+          "feature_id": "cltv_strt_dt",
+          "feature_name": "cltv_strt_dt",
+          "desc": "정식일",
+          "type": "DATE",
+          "source_table": "cltv",
+          "role": "후보입력",
+          "note": ""
+        },
+        {
+          "feature_id": "cltv_mth_nm",
+          "feature_name": "cltv_mth_nm",
+          "desc": "재배방식",
+          "type": "VARCHAR",
+          "source_table": "cltv",
+          "role": "후보입력",
+          "note": ""
+        },
+        {
+          "feature_id": "indvd_cnt",
+          "feature_name": "indvd_cnt",
+          "desc": "재배 포기수 (주)",
+          "type": "INT",
+          "source_table": "cltv",
+          "role": "후보입력",
+          "note": ""
+        },
+        {
+          "feature_id": "crop_end_dt",
+          "feature_name": "crop_end_dt",
+          "desc": "작기 종료일",
+          "type": "DATE",
+          "source_table": "cltv",
+          "role": "후보입력",
+          "note": ""
+        },
+        {
+          "feature_id": "fcar",
+          "feature_name": "fcar",
+          "desc": "온실 면적 (m²)",
+          "type": "FLOAT",
+          "source_table": "fclt",
+          "role": "후보입력",
+          "note": ""
+        },
+        {
+          "feature_id": "cltv_mthd_nm",
+          "feature_name": "cltv_mthd_nm",
+          "desc": "재배 방식",
+          "type": "VARCHAR",
+          "source_table": "fclt",
+          "role": "후보입력",
+          "note": ""
+        },
+        {
+          "feature_id": "fclt_eqpm.fld_cd",
+          "feature_name": "fld_cd",
+          "desc": "분야코드",
+          "type": "VARCHAR",
+          "source_table": "fclt_eqpm",
+          "role": "후보입력",
+          "note": ""
+        },
+        {
+          "feature_id": "fclt_eqpm.sect_cd",
+          "feature_name": "sect_cd",
+          "desc": "분류코드",
+          "type": "VARCHAR",
+          "source_table": "fclt_eqpm",
+          "role": "후보입력",
+          "note": ""
+        },
+        {
+          "feature_id": "fclt_eqpm.fatr_cd",
+          "feature_name": "fatr_cd",
+          "desc": "항목코드",
+          "type": "VARCHAR",
+          "source_table": "fclt_eqpm",
+          "role": "후보입력",
+          "note": ""
+        },
+        {
+          "feature_id": "fclt_eqpm.sns_no",
+          "feature_name": "sns_no",
+          "desc": "센서 번호",
+          "type": "VARCHAR",
+          "source_table": "fclt_eqpm",
+          "role": "후보입력",
+          "note": ""
+        }
+      ]
+    },
+    {
+      "combination_id": "COMBO_5bae6c3e725e",
+      "groups": [
+        "E1",
+        "E2",
+        "E3",
+        "E4",
+        "E6",
+        "E7"
+      ],
+      "group_count": 6,
+      "label": "E1+E2+E3+E4+E6+E7",
+      "group_names": [
+        "기존 목표·생식생육 이력",
+        "기존 영양생장",
+        "기존 시설내 환경",
+        "기존 외부 기상",
+        "기존 시설 제어 이력",
+        "기존 시설·설비·작기 맥락"
+      ],
+      "display_name": "E1+E2+E3+E4+E6+E7 (기존 목표·생식생육 이력 + 기존 영양생장 + 기존 시설내 환경 + 기존 외부 기상 + 기존 시설 제어 이력 + 기존 시설·설비·작기 맥락)",
+      "feature_count": 44,
+      "features": [
+        {
+          "feature_id": "flclstr_cnt",
+          "feature_name": "flclstr_cnt",
+          "desc": "화방 수 (개)",
+          "type": "INT",
+          "source_table": "crop_stts",
+          "role": "타깃/과거입력",
+          "note": ""
+        },
+        {
+          "feature_id": "flclstr1_flwr_cnt",
+          "feature_name": "flclstr1_flwr_cnt",
+          "desc": "1화방 꽃수",
+          "type": "INT",
+          "source_table": "crop_stts",
+          "role": "타깃/과거입력",
+          "note": ""
+        },
+        {
+          "feature_id": "flclstr2_flwr_cnt",
+          "feature_name": "flclstr2_flwr_cnt",
+          "desc": "2화방 꽃수",
+          "type": "INT",
+          "source_table": "crop_stts",
+          "role": "타깃/과거입력",
+          "note": ""
+        },
+        {
+          "feature_id": "flclstr3_flwr_cnt",
+          "feature_name": "flclstr3_flwr_cnt",
+          "desc": "3화방 꽃수",
+          "type": "INT",
+          "source_table": "crop_stts",
+          "role": "타깃/과거입력",
+          "note": ""
+        },
+        {
+          "feature_id": "flclstr1_frst_cnt",
+          "feature_name": "flclstr1_frst_cnt",
+          "desc": "1화방 착과수",
+          "type": "INT",
+          "source_table": "crop_stts",
+          "role": "타깃/과거입력",
+          "note": ""
+        },
+        {
+          "feature_id": "flclstr2_frst_cnt",
+          "feature_name": "flclstr2_frst_cnt",
+          "desc": "2화방 착과수",
+          "type": "INT",
+          "source_table": "crop_stts",
+          "role": "타깃/과거입력",
+          "note": ""
+        },
+        {
+          "feature_id": "flclstr3_frst_cnt",
+          "feature_name": "flclstr3_frst_cnt",
+          "desc": "3화방 착과수",
+          "type": "INT",
+          "source_table": "crop_stts",
+          "role": "타깃/과거입력",
+          "note": ""
+        },
+        {
+          "feature_id": "bloom_grp_cnt",
+          "feature_name": "bloom_grp_cnt",
+          "desc": "개화군",
+          "type": "INT",
+          "source_table": "crop_stts",
+          "role": "타깃/과거입력",
+          "note": ""
+        },
+        {
+          "feature_id": "flst_grp_cnt",
+          "feature_name": "flst_grp_cnt",
+          "desc": "착화군",
+          "type": "INT",
+          "source_table": "crop_stts",
+          "role": "타깃/과거입력",
+          "note": ""
+        },
+        {
+          "feature_id": "fruit_cnt",
+          "feature_name": "fruit_cnt",
+          "desc": "열매수",
+          "type": "INT",
+          "source_table": "crop_stts",
+          "role": "타깃/과거입력",
+          "note": ""
+        },
+        {
+          "feature_id": "hrvst_grp",
+          "feature_name": "hrvst_grp",
+          "desc": "수확군",
+          "type": "INT",
+          "source_table": "crop_stts",
+          "role": "후보입력",
+          "note": ""
+        },
+        {
+          "feature_id": "ped",
+          "feature_name": "ped",
+          "desc": "PED",
+          "type": "FLOAT",
+          "source_table": "crop_stts",
+          "role": "후보입력",
+          "note": ""
+        },
+        {
+          "feature_id": "crop_stts.leaf_len",
+          "feature_name": "leaf_len",
+          "desc": "엽장 (cm)",
+          "type": "FLOAT",
+          "source_table": "crop_stts",
+          "role": "후보입력",
+          "note": ""
+        },
+        {
+          "feature_id": "leaf_cnt",
+          "feature_name": "leaf_cnt",
+          "desc": "엽수 (개)",
+          "type": "INT",
+          "source_table": "crop_stts",
+          "role": "후보입력",
+          "note": ""
+        },
+        {
+          "feature_id": "crop_stts.leaf_wdth",
+          "feature_name": "leaf_wdth",
+          "desc": "엽폭 (cm)",
+          "type": "FLOAT",
+          "source_table": "crop_stts",
+          "role": "후보입력",
+          "note": ""
+        },
+        {
+          "feature_id": "ptl_len",
+          "feature_name": "ptl_len",
+          "desc": "엽병장",
+          "type": "FLOAT",
+          "source_table": "crop_stts",
+          "role": "후보입력",
+          "note": ""
+        },
+        {
+          "feature_id": "stem_dmtr",
+          "feature_name": "stem_dmtr",
+          "desc": "줄기직경 (mm)",
+          "type": "FLOAT",
+          "source_table": "crop_stts",
+          "role": "후보입력",
+          "note": ""
+        },
+        {
+          "feature_id": "crwn_dmtr",
+          "feature_name": "crwn_dmtr",
+          "desc": "관부 직경",
+          "type": "FLOAT",
+          "source_table": "crop_stts",
+          "role": "후보입력",
+          "note": ""
+        },
+        {
+          "feature_id": "plnt_hgt",
+          "feature_name": "plnt_hgt",
+          "desc": "초장 (cm)",
+          "type": "FLOAT",
+          "source_table": "crop_stts",
+          "role": "후보입력",
+          "note": ""
+        },
+        {
+          "feature_id": "grw_len",
+          "feature_name": "grw_len",
+          "desc": "생장길이 (cm)",
+          "type": "FLOAT",
+          "source_table": "crop_stts",
+          "role": "후보입력",
+          "note": ""
+        },
+        {
+          "feature_id": "flclstr_hgt",
+          "feature_name": "flclstr_hgt",
+          "desc": "화방높이 (cm)",
+          "type": "FLOAT",
+          "source_table": "crop_stts",
+          "role": "후보입력",
+          "note": ""
+        },
+        {
+          "feature_id": "rcv_lgt_qty",
+          "feature_name": "rcv_lgt_qty",
+          "desc": "수광량",
+          "type": "FLOAT",
+          "source_table": "crop_stts",
+          "role": "후보입력",
+          "note": ""
+        },
+        {
+          "feature_id": "env_stts.fld_cd",
+          "feature_name": "fld_cd",
+          "desc": "분야코드",
+          "type": "VARCHAR",
+          "source_table": "env_stts",
+          "role": "후보입력",
+          "note": "sect_cd=EI (동일 구조를 E4·E5에도 조건별 재사용)"
+        },
+        {
+          "feature_id": "env_stts.sect_cd",
+          "feature_name": "sect_cd",
+          "desc": "분류코드",
+          "type": "VARCHAR",
+          "source_table": "env_stts",
+          "role": "후보입력",
+          "note": "sect_cd=EI (동일 구조를 E4·E5에도 조건별 재사용)"
+        },
+        {
+          "feature_id": "env_stts.fatr_cd",
+          "feature_name": "fatr_cd",
+          "desc": "항목코드",
+          "type": "VARCHAR",
+          "source_table": "env_stts",
+          "role": "후보입력",
+          "note": "sect_cd=EI (동일 구조를 E4·E5에도 조건별 재사용)"
+        },
+        {
+          "feature_id": "env_stts.sns_vl",
+          "feature_name": "sns_vl",
+          "desc": "측정값",
+          "type": "FLOAT",
+          "source_table": "env_stts",
+          "role": "후보입력",
+          "note": "sect_cd=EI (동일 구조를 E4·E5에도 조건별 재사용)"
+        },
+        {
+          "feature_id": "env_stts.fld_cd",
+          "feature_name": "fld_cd",
+          "desc": "분야코드",
+          "type": "VARCHAR",
+          "source_table": "env_stts",
+          "role": "후보입력",
+          "note": "sect_cd=EO"
+        },
+        {
+          "feature_id": "env_stts.sect_cd",
+          "feature_name": "sect_cd",
+          "desc": "분류코드",
+          "type": "VARCHAR",
+          "source_table": "env_stts",
+          "role": "후보입력",
+          "note": "sect_cd=EO"
+        },
+        {
+          "feature_id": "env_stts.fatr_cd",
+          "feature_name": "fatr_cd",
+          "desc": "항목코드",
+          "type": "VARCHAR",
+          "source_table": "env_stts",
+          "role": "후보입력",
+          "note": "sect_cd=EO"
+        },
+        {
+          "feature_id": "env_stts.sns_vl",
+          "feature_name": "sns_vl",
+          "desc": "측정값",
+          "type": "FLOAT",
+          "source_table": "env_stts",
+          "role": "후보입력",
+          "note": "sect_cd=EO"
+        },
+        {
+          "feature_id": "ctrl_stts.fld_cd",
+          "feature_name": "fld_cd",
+          "desc": "분야코드",
+          "type": "VARCHAR",
+          "source_table": "ctrl_stts",
+          "role": "후보입력",
+          "note": "sect_cd=CR"
+        },
+        {
+          "feature_id": "ctrl_stts.sect_cd",
+          "feature_name": "sect_cd",
+          "desc": "분류코드",
+          "type": "VARCHAR",
+          "source_table": "ctrl_stts",
+          "role": "후보입력",
+          "note": "sect_cd=CR"
+        },
+        {
+          "feature_id": "ctrl_stts.fatr_cd",
+          "feature_name": "fatr_cd",
+          "desc": "항목코드",
+          "type": "VARCHAR",
+          "source_table": "ctrl_stts",
+          "role": "후보입력",
+          "note": "sect_cd=CR"
+        },
+        {
+          "feature_id": "ctrl_stts.sns_vl",
+          "feature_name": "sns_vl",
+          "desc": "측정값",
+          "type": "FLOAT",
+          "source_table": "ctrl_stts",
+          "role": "후보입력",
+          "note": "sect_cd=CR"
+        },
+        {
+          "feature_id": "cltv_strt_dt",
+          "feature_name": "cltv_strt_dt",
+          "desc": "정식일",
+          "type": "DATE",
+          "source_table": "cltv",
+          "role": "후보입력",
+          "note": ""
+        },
+        {
+          "feature_id": "cltv_mth_nm",
+          "feature_name": "cltv_mth_nm",
+          "desc": "재배방식",
+          "type": "VARCHAR",
+          "source_table": "cltv",
+          "role": "후보입력",
+          "note": ""
+        },
+        {
+          "feature_id": "indvd_cnt",
+          "feature_name": "indvd_cnt",
+          "desc": "재배 포기수 (주)",
+          "type": "INT",
+          "source_table": "cltv",
+          "role": "후보입력",
+          "note": ""
+        },
+        {
+          "feature_id": "crop_end_dt",
+          "feature_name": "crop_end_dt",
+          "desc": "작기 종료일",
+          "type": "DATE",
+          "source_table": "cltv",
+          "role": "후보입력",
+          "note": ""
+        },
+        {
+          "feature_id": "fcar",
+          "feature_name": "fcar",
+          "desc": "온실 면적 (m²)",
+          "type": "FLOAT",
+          "source_table": "fclt",
+          "role": "후보입력",
+          "note": ""
+        },
+        {
+          "feature_id": "cltv_mthd_nm",
+          "feature_name": "cltv_mthd_nm",
+          "desc": "재배 방식",
+          "type": "VARCHAR",
+          "source_table": "fclt",
+          "role": "후보입력",
+          "note": ""
+        },
+        {
+          "feature_id": "fclt_eqpm.fld_cd",
+          "feature_name": "fld_cd",
+          "desc": "분야코드",
+          "type": "VARCHAR",
+          "source_table": "fclt_eqpm",
+          "role": "후보입력",
+          "note": ""
+        },
+        {
+          "feature_id": "fclt_eqpm.sect_cd",
+          "feature_name": "sect_cd",
+          "desc": "분류코드",
+          "type": "VARCHAR",
+          "source_table": "fclt_eqpm",
+          "role": "후보입력",
+          "note": ""
+        },
+        {
+          "feature_id": "fclt_eqpm.fatr_cd",
+          "feature_name": "fatr_cd",
+          "desc": "항목코드",
+          "type": "VARCHAR",
+          "source_table": "fclt_eqpm",
+          "role": "후보입력",
+          "note": ""
+        },
+        {
+          "feature_id": "fclt_eqpm.sns_no",
+          "feature_name": "sns_no",
+          "desc": "센서 번호",
+          "type": "VARCHAR",
+          "source_table": "fclt_eqpm",
+          "role": "후보입력",
+          "note": ""
+        }
+      ]
+    },
+    {
+      "combination_id": "COMBO_a05167c66bed",
+      "groups": [
+        "E1",
+        "E2",
+        "E3",
+        "E5",
+        "E6",
+        "E7"
+      ],
+      "group_count": 6,
+      "label": "E1+E2+E3+E5+E6+E7",
+      "group_names": [
+        "기존 목표·생식생육 이력",
+        "기존 영양생장",
+        "기존 시설내 환경",
+        "기존 근권·양액·관수",
+        "기존 시설 제어 이력",
+        "기존 시설·설비·작기 맥락"
+      ],
+      "display_name": "E1+E2+E3+E5+E6+E7 (기존 목표·생식생육 이력 + 기존 영양생장 + 기존 시설내 환경 + 기존 근권·양액·관수 + 기존 시설 제어 이력 + 기존 시설·설비·작기 맥락)",
+      "feature_count": 44,
+      "features": [
+        {
+          "feature_id": "flclstr_cnt",
+          "feature_name": "flclstr_cnt",
+          "desc": "화방 수 (개)",
+          "type": "INT",
+          "source_table": "crop_stts",
+          "role": "타깃/과거입력",
+          "note": ""
+        },
+        {
+          "feature_id": "flclstr1_flwr_cnt",
+          "feature_name": "flclstr1_flwr_cnt",
+          "desc": "1화방 꽃수",
+          "type": "INT",
+          "source_table": "crop_stts",
+          "role": "타깃/과거입력",
+          "note": ""
+        },
+        {
+          "feature_id": "flclstr2_flwr_cnt",
+          "feature_name": "flclstr2_flwr_cnt",
+          "desc": "2화방 꽃수",
+          "type": "INT",
+          "source_table": "crop_stts",
+          "role": "타깃/과거입력",
+          "note": ""
+        },
+        {
+          "feature_id": "flclstr3_flwr_cnt",
+          "feature_name": "flclstr3_flwr_cnt",
+          "desc": "3화방 꽃수",
+          "type": "INT",
+          "source_table": "crop_stts",
+          "role": "타깃/과거입력",
+          "note": ""
+        },
+        {
+          "feature_id": "flclstr1_frst_cnt",
+          "feature_name": "flclstr1_frst_cnt",
+          "desc": "1화방 착과수",
+          "type": "INT",
+          "source_table": "crop_stts",
+          "role": "타깃/과거입력",
+          "note": ""
+        },
+        {
+          "feature_id": "flclstr2_frst_cnt",
+          "feature_name": "flclstr2_frst_cnt",
+          "desc": "2화방 착과수",
+          "type": "INT",
+          "source_table": "crop_stts",
+          "role": "타깃/과거입력",
+          "note": ""
+        },
+        {
+          "feature_id": "flclstr3_frst_cnt",
+          "feature_name": "flclstr3_frst_cnt",
+          "desc": "3화방 착과수",
+          "type": "INT",
+          "source_table": "crop_stts",
+          "role": "타깃/과거입력",
+          "note": ""
+        },
+        {
+          "feature_id": "bloom_grp_cnt",
+          "feature_name": "bloom_grp_cnt",
+          "desc": "개화군",
+          "type": "INT",
+          "source_table": "crop_stts",
+          "role": "타깃/과거입력",
+          "note": ""
+        },
+        {
+          "feature_id": "flst_grp_cnt",
+          "feature_name": "flst_grp_cnt",
+          "desc": "착화군",
+          "type": "INT",
+          "source_table": "crop_stts",
+          "role": "타깃/과거입력",
+          "note": ""
+        },
+        {
+          "feature_id": "fruit_cnt",
+          "feature_name": "fruit_cnt",
+          "desc": "열매수",
+          "type": "INT",
+          "source_table": "crop_stts",
+          "role": "타깃/과거입력",
+          "note": ""
+        },
+        {
+          "feature_id": "hrvst_grp",
+          "feature_name": "hrvst_grp",
+          "desc": "수확군",
+          "type": "INT",
+          "source_table": "crop_stts",
+          "role": "후보입력",
+          "note": ""
+        },
+        {
+          "feature_id": "ped",
+          "feature_name": "ped",
+          "desc": "PED",
+          "type": "FLOAT",
+          "source_table": "crop_stts",
+          "role": "후보입력",
+          "note": ""
+        },
+        {
+          "feature_id": "crop_stts.leaf_len",
+          "feature_name": "leaf_len",
+          "desc": "엽장 (cm)",
+          "type": "FLOAT",
+          "source_table": "crop_stts",
+          "role": "후보입력",
+          "note": ""
+        },
+        {
+          "feature_id": "leaf_cnt",
+          "feature_name": "leaf_cnt",
+          "desc": "엽수 (개)",
+          "type": "INT",
+          "source_table": "crop_stts",
+          "role": "후보입력",
+          "note": ""
+        },
+        {
+          "feature_id": "crop_stts.leaf_wdth",
+          "feature_name": "leaf_wdth",
+          "desc": "엽폭 (cm)",
+          "type": "FLOAT",
+          "source_table": "crop_stts",
+          "role": "후보입력",
+          "note": ""
+        },
+        {
+          "feature_id": "ptl_len",
+          "feature_name": "ptl_len",
+          "desc": "엽병장",
+          "type": "FLOAT",
+          "source_table": "crop_stts",
+          "role": "후보입력",
+          "note": ""
+        },
+        {
+          "feature_id": "stem_dmtr",
+          "feature_name": "stem_dmtr",
+          "desc": "줄기직경 (mm)",
+          "type": "FLOAT",
+          "source_table": "crop_stts",
+          "role": "후보입력",
+          "note": ""
+        },
+        {
+          "feature_id": "crwn_dmtr",
+          "feature_name": "crwn_dmtr",
+          "desc": "관부 직경",
+          "type": "FLOAT",
+          "source_table": "crop_stts",
+          "role": "후보입력",
+          "note": ""
+        },
+        {
+          "feature_id": "plnt_hgt",
+          "feature_name": "plnt_hgt",
+          "desc": "초장 (cm)",
+          "type": "FLOAT",
+          "source_table": "crop_stts",
+          "role": "후보입력",
+          "note": ""
+        },
+        {
+          "feature_id": "grw_len",
+          "feature_name": "grw_len",
+          "desc": "생장길이 (cm)",
+          "type": "FLOAT",
+          "source_table": "crop_stts",
+          "role": "후보입력",
+          "note": ""
+        },
+        {
+          "feature_id": "flclstr_hgt",
+          "feature_name": "flclstr_hgt",
+          "desc": "화방높이 (cm)",
+          "type": "FLOAT",
+          "source_table": "crop_stts",
+          "role": "후보입력",
+          "note": ""
+        },
+        {
+          "feature_id": "rcv_lgt_qty",
+          "feature_name": "rcv_lgt_qty",
+          "desc": "수광량",
+          "type": "FLOAT",
+          "source_table": "crop_stts",
+          "role": "후보입력",
+          "note": ""
+        },
+        {
+          "feature_id": "env_stts.fld_cd",
+          "feature_name": "fld_cd",
+          "desc": "분야코드",
+          "type": "VARCHAR",
+          "source_table": "env_stts",
+          "role": "후보입력",
+          "note": "sect_cd=EI (동일 구조를 E4·E5에도 조건별 재사용)"
+        },
+        {
+          "feature_id": "env_stts.sect_cd",
+          "feature_name": "sect_cd",
+          "desc": "분류코드",
+          "type": "VARCHAR",
+          "source_table": "env_stts",
+          "role": "후보입력",
+          "note": "sect_cd=EI (동일 구조를 E4·E5에도 조건별 재사용)"
+        },
+        {
+          "feature_id": "env_stts.fatr_cd",
+          "feature_name": "fatr_cd",
+          "desc": "항목코드",
+          "type": "VARCHAR",
+          "source_table": "env_stts",
+          "role": "후보입력",
+          "note": "sect_cd=EI (동일 구조를 E4·E5에도 조건별 재사용)"
+        },
+        {
+          "feature_id": "env_stts.sns_vl",
+          "feature_name": "sns_vl",
+          "desc": "측정값",
+          "type": "FLOAT",
+          "source_table": "env_stts",
+          "role": "후보입력",
+          "note": "sect_cd=EI (동일 구조를 E4·E5에도 조건별 재사용)"
+        },
+        {
+          "feature_id": "env_stts.fld_cd",
+          "feature_name": "fld_cd",
+          "desc": "분야코드",
+          "type": "VARCHAR",
+          "source_table": "env_stts",
+          "role": "후보입력",
+          "note": "sect_cd=NT"
+        },
+        {
+          "feature_id": "env_stts.sect_cd",
+          "feature_name": "sect_cd",
+          "desc": "분류코드",
+          "type": "VARCHAR",
+          "source_table": "env_stts",
+          "role": "후보입력",
+          "note": "sect_cd=NT"
+        },
+        {
+          "feature_id": "env_stts.fatr_cd",
+          "feature_name": "fatr_cd",
+          "desc": "항목코드",
+          "type": "VARCHAR",
+          "source_table": "env_stts",
+          "role": "후보입력",
+          "note": "sect_cd=NT"
+        },
+        {
+          "feature_id": "env_stts.sns_vl",
+          "feature_name": "sns_vl",
+          "desc": "측정값",
+          "type": "FLOAT",
+          "source_table": "env_stts",
+          "role": "후보입력",
+          "note": "sect_cd=NT"
+        },
+        {
+          "feature_id": "ctrl_stts.fld_cd",
+          "feature_name": "fld_cd",
+          "desc": "분야코드",
+          "type": "VARCHAR",
+          "source_table": "ctrl_stts",
+          "role": "후보입력",
+          "note": "sect_cd=CR"
+        },
+        {
+          "feature_id": "ctrl_stts.sect_cd",
+          "feature_name": "sect_cd",
+          "desc": "분류코드",
+          "type": "VARCHAR",
+          "source_table": "ctrl_stts",
+          "role": "후보입력",
+          "note": "sect_cd=CR"
+        },
+        {
+          "feature_id": "ctrl_stts.fatr_cd",
+          "feature_name": "fatr_cd",
+          "desc": "항목코드",
+          "type": "VARCHAR",
+          "source_table": "ctrl_stts",
+          "role": "후보입력",
+          "note": "sect_cd=CR"
+        },
+        {
+          "feature_id": "ctrl_stts.sns_vl",
+          "feature_name": "sns_vl",
+          "desc": "측정값",
+          "type": "FLOAT",
+          "source_table": "ctrl_stts",
+          "role": "후보입력",
+          "note": "sect_cd=CR"
+        },
+        {
+          "feature_id": "cltv_strt_dt",
+          "feature_name": "cltv_strt_dt",
+          "desc": "정식일",
+          "type": "DATE",
+          "source_table": "cltv",
+          "role": "후보입력",
+          "note": ""
+        },
+        {
+          "feature_id": "cltv_mth_nm",
+          "feature_name": "cltv_mth_nm",
+          "desc": "재배방식",
+          "type": "VARCHAR",
+          "source_table": "cltv",
+          "role": "후보입력",
+          "note": ""
+        },
+        {
+          "feature_id": "indvd_cnt",
+          "feature_name": "indvd_cnt",
+          "desc": "재배 포기수 (주)",
+          "type": "INT",
+          "source_table": "cltv",
+          "role": "후보입력",
+          "note": ""
+        },
+        {
+          "feature_id": "crop_end_dt",
+          "feature_name": "crop_end_dt",
+          "desc": "작기 종료일",
+          "type": "DATE",
+          "source_table": "cltv",
+          "role": "후보입력",
+          "note": ""
+        },
+        {
+          "feature_id": "fcar",
+          "feature_name": "fcar",
+          "desc": "온실 면적 (m²)",
+          "type": "FLOAT",
+          "source_table": "fclt",
+          "role": "후보입력",
+          "note": ""
+        },
+        {
+          "feature_id": "cltv_mthd_nm",
+          "feature_name": "cltv_mthd_nm",
+          "desc": "재배 방식",
+          "type": "VARCHAR",
+          "source_table": "fclt",
+          "role": "후보입력",
+          "note": ""
+        },
+        {
+          "feature_id": "fclt_eqpm.fld_cd",
+          "feature_name": "fld_cd",
+          "desc": "분야코드",
+          "type": "VARCHAR",
+          "source_table": "fclt_eqpm",
+          "role": "후보입력",
+          "note": ""
+        },
+        {
+          "feature_id": "fclt_eqpm.sect_cd",
+          "feature_name": "sect_cd",
+          "desc": "분류코드",
+          "type": "VARCHAR",
+          "source_table": "fclt_eqpm",
+          "role": "후보입력",
+          "note": ""
+        },
+        {
+          "feature_id": "fclt_eqpm.fatr_cd",
+          "feature_name": "fatr_cd",
+          "desc": "항목코드",
+          "type": "VARCHAR",
+          "source_table": "fclt_eqpm",
+          "role": "후보입력",
+          "note": ""
+        },
+        {
+          "feature_id": "fclt_eqpm.sns_no",
+          "feature_name": "sns_no",
+          "desc": "센서 번호",
+          "type": "VARCHAR",
+          "source_table": "fclt_eqpm",
+          "role": "후보입력",
+          "note": ""
+        }
+      ]
+    },
+    {
+      "combination_id": "COMBO_03fdc448c51b",
+      "groups": [
+        "E1",
+        "E2",
+        "E4",
+        "E5",
+        "E6",
+        "E7"
+      ],
+      "group_count": 6,
+      "label": "E1+E2+E4+E5+E6+E7",
+      "group_names": [
+        "기존 목표·생식생육 이력",
+        "기존 영양생장",
+        "기존 외부 기상",
+        "기존 근권·양액·관수",
+        "기존 시설 제어 이력",
+        "기존 시설·설비·작기 맥락"
+      ],
+      "display_name": "E1+E2+E4+E5+E6+E7 (기존 목표·생식생육 이력 + 기존 영양생장 + 기존 외부 기상 + 기존 근권·양액·관수 + 기존 시설 제어 이력 + 기존 시설·설비·작기 맥락)",
+      "feature_count": 43,
+      "features": [
+        {
+          "feature_id": "flclstr_cnt",
+          "feature_name": "flclstr_cnt",
+          "desc": "화방 수 (개)",
+          "type": "INT",
+          "source_table": "crop_stts",
+          "role": "타깃/과거입력",
+          "note": ""
+        },
+        {
+          "feature_id": "flclstr1_flwr_cnt",
+          "feature_name": "flclstr1_flwr_cnt",
+          "desc": "1화방 꽃수",
+          "type": "INT",
+          "source_table": "crop_stts",
+          "role": "타깃/과거입력",
+          "note": ""
+        },
+        {
+          "feature_id": "flclstr2_flwr_cnt",
+          "feature_name": "flclstr2_flwr_cnt",
+          "desc": "2화방 꽃수",
+          "type": "INT",
+          "source_table": "crop_stts",
+          "role": "타깃/과거입력",
+          "note": ""
+        },
+        {
+          "feature_id": "flclstr3_flwr_cnt",
+          "feature_name": "flclstr3_flwr_cnt",
+          "desc": "3화방 꽃수",
+          "type": "INT",
+          "source_table": "crop_stts",
+          "role": "타깃/과거입력",
+          "note": ""
+        },
+        {
+          "feature_id": "flclstr1_frst_cnt",
+          "feature_name": "flclstr1_frst_cnt",
+          "desc": "1화방 착과수",
+          "type": "INT",
+          "source_table": "crop_stts",
+          "role": "타깃/과거입력",
+          "note": ""
+        },
+        {
+          "feature_id": "flclstr2_frst_cnt",
+          "feature_name": "flclstr2_frst_cnt",
+          "desc": "2화방 착과수",
+          "type": "INT",
+          "source_table": "crop_stts",
+          "role": "타깃/과거입력",
+          "note": ""
+        },
+        {
+          "feature_id": "flclstr3_frst_cnt",
+          "feature_name": "flclstr3_frst_cnt",
+          "desc": "3화방 착과수",
+          "type": "INT",
+          "source_table": "crop_stts",
+          "role": "타깃/과거입력",
+          "note": ""
+        },
+        {
+          "feature_id": "bloom_grp_cnt",
+          "feature_name": "bloom_grp_cnt",
+          "desc": "개화군",
+          "type": "INT",
+          "source_table": "crop_stts",
+          "role": "타깃/과거입력",
+          "note": ""
+        },
+        {
+          "feature_id": "flst_grp_cnt",
+          "feature_name": "flst_grp_cnt",
+          "desc": "착화군",
+          "type": "INT",
+          "source_table": "crop_stts",
+          "role": "타깃/과거입력",
+          "note": ""
+        },
+        {
+          "feature_id": "fruit_cnt",
+          "feature_name": "fruit_cnt",
+          "desc": "열매수",
+          "type": "INT",
+          "source_table": "crop_stts",
+          "role": "타깃/과거입력",
+          "note": ""
+        },
+        {
+          "feature_id": "hrvst_grp",
+          "feature_name": "hrvst_grp",
+          "desc": "수확군",
+          "type": "INT",
+          "source_table": "crop_stts",
+          "role": "후보입력",
+          "note": ""
+        },
+        {
+          "feature_id": "ped",
+          "feature_name": "ped",
+          "desc": "PED",
+          "type": "FLOAT",
+          "source_table": "crop_stts",
+          "role": "후보입력",
+          "note": ""
+        },
+        {
+          "feature_id": "crop_stts.leaf_len",
+          "feature_name": "leaf_len",
+          "desc": "엽장 (cm)",
+          "type": "FLOAT",
+          "source_table": "crop_stts",
+          "role": "후보입력",
+          "note": ""
+        },
+        {
+          "feature_id": "leaf_cnt",
+          "feature_name": "leaf_cnt",
+          "desc": "엽수 (개)",
+          "type": "INT",
+          "source_table": "crop_stts",
+          "role": "후보입력",
+          "note": ""
+        },
+        {
+          "feature_id": "crop_stts.leaf_wdth",
+          "feature_name": "leaf_wdth",
+          "desc": "엽폭 (cm)",
+          "type": "FLOAT",
+          "source_table": "crop_stts",
+          "role": "후보입력",
+          "note": ""
+        },
+        {
+          "feature_id": "ptl_len",
+          "feature_name": "ptl_len",
+          "desc": "엽병장",
+          "type": "FLOAT",
+          "source_table": "crop_stts",
+          "role": "후보입력",
+          "note": ""
+        },
+        {
+          "feature_id": "stem_dmtr",
+          "feature_name": "stem_dmtr",
+          "desc": "줄기직경 (mm)",
+          "type": "FLOAT",
+          "source_table": "crop_stts",
+          "role": "후보입력",
+          "note": ""
+        },
+        {
+          "feature_id": "crwn_dmtr",
+          "feature_name": "crwn_dmtr",
+          "desc": "관부 직경",
+          "type": "FLOAT",
+          "source_table": "crop_stts",
+          "role": "후보입력",
+          "note": ""
+        },
+        {
+          "feature_id": "plnt_hgt",
+          "feature_name": "plnt_hgt",
+          "desc": "초장 (cm)",
+          "type": "FLOAT",
+          "source_table": "crop_stts",
+          "role": "후보입력",
+          "note": ""
+        },
+        {
+          "feature_id": "grw_len",
+          "feature_name": "grw_len",
+          "desc": "생장길이 (cm)",
+          "type": "FLOAT",
+          "source_table": "crop_stts",
+          "role": "후보입력",
+          "note": ""
+        },
+        {
+          "feature_id": "flclstr_hgt",
+          "feature_name": "flclstr_hgt",
+          "desc": "화방높이 (cm)",
+          "type": "FLOAT",
+          "source_table": "crop_stts",
+          "role": "후보입력",
+          "note": ""
+        },
+        {
           "feature_id": "env_stts.fld_cd",
           "feature_name": "fld_cd",
           "desc": "분야코드",
@@ -29995,15 +29446,6 @@
           "source_table": "ctrl_stts",
           "role": "후보입력",
           "note": "sect_cd=CR"
-        },
-        {
-          "feature_id": "crop_nm",
-          "feature_name": "crop_nm",
-          "desc": "작물",
-          "type": "VARCHAR",
-          "source_table": "cltv",
-          "role": "후보입력",
-          "note": ""
         },
         {
           "feature_id": "cltv_strt_dt",
@@ -30118,7 +29560,7 @@
         "기존 시설·설비·작기 맥락"
       ],
       "display_name": "E1+E3+E4+E5+E6+E7 (기존 목표·생식생육 이력 + 기존 시설내 환경 + 기존 외부 기상 + 기존 근권·양액·관수 + 기존 시설 제어 이력 + 기존 시설·설비·작기 맥락)",
-      "feature_count": 40,
+      "feature_count": 39,
       "features": [
         {
           "feature_id": "flclstr_cnt",
@@ -30382,15 +29824,6 @@
           "note": "sect_cd=CR"
         },
         {
-          "feature_id": "crop_nm",
-          "feature_name": "crop_nm",
-          "desc": "작물",
-          "type": "VARCHAR",
-          "source_table": "cltv",
-          "role": "후보입력",
-          "note": ""
-        },
-        {
           "feature_id": "cltv_strt_dt",
           "feature_name": "cltv_strt_dt",
           "desc": "정식일",
@@ -30503,7 +29936,7 @@
         "기존 시설·설비·작기 맥락"
       ],
       "display_name": "E2+E3+E4+E5+E6+E7 (기존 영양생장 + 기존 시설내 환경 + 기존 외부 기상 + 기존 근권·양액·관수 + 기존 시설 제어 이력 + 기존 시설·설비·작기 맥락)",
-      "feature_count": 37,
+      "feature_count": 36,
       "features": [
         {
           "feature_id": "crop_stts.leaf_len",
@@ -30738,15 +30171,6 @@
           "source_table": "ctrl_stts",
           "role": "후보입력",
           "note": "sect_cd=CR"
-        },
-        {
-          "feature_id": "crop_nm",
-          "feature_name": "crop_nm",
-          "desc": "작물",
-          "type": "VARCHAR",
-          "source_table": "cltv",
-          "role": "후보입력",
-          "note": ""
         },
         {
           "feature_id": "cltv_strt_dt",
@@ -30863,7 +30287,7 @@
         "기존 시설·설비·작기 맥락"
       ],
       "display_name": "E1+E2+E3+E4+E5+E6+E7 (기존 목표·생식생육 이력 + 기존 영양생장 + 기존 시설내 환경 + 기존 외부 기상 + 기존 근권·양액·관수 + 기존 시설 제어 이력 + 기존 시설·설비·작기 맥락)",
-      "feature_count": 49,
+      "feature_count": 48,
       "features": [
         {
           "feature_id": "flclstr_cnt",
@@ -31206,15 +30630,6 @@
           "source_table": "ctrl_stts",
           "role": "후보입력",
           "note": "sect_cd=CR"
-        },
-        {
-          "feature_id": "crop_nm",
-          "feature_name": "crop_nm",
-          "desc": "작물",
-          "type": "VARCHAR",
-          "source_table": "cltv",
-          "role": "후보입력",
-          "note": ""
         },
         {
           "feature_id": "cltv_strt_dt",

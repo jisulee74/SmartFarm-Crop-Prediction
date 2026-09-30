@@ -8,6 +8,7 @@ const CACHE = {
   metadata: null,
   comparison: new Map(),
   predictions: new Map(),
+  featureSelections: new Map(),
 };
 
 let staticCatalog = null;
@@ -29,7 +30,7 @@ export async function fetchCatalog(force = false) {
   // Fallback to static cache/combination_catalog.json
   try {
     if (!staticCatalog) {
-      const res = await fetch('./cache/combination_catalog.json');
+      const res = await fetch('./cache/combination_catalog.json', { cache: 'no-store' });
       if (!res.ok) throw new Error(`Static catalog HTTP error ${res.status}`);
       staticCatalog = await res.json();
     }
@@ -43,7 +44,7 @@ export async function fetchCatalog(force = false) {
 
 async function getStaticIndex() {
   if (staticIndex) return staticIndex;
-  const res = await fetch('./cache/experiment_index.json');
+  const res = await fetch('./cache/experiment_index.json', { cache: 'no-store' });
   if (!res.ok) throw new Error(`Static index HTTP error ${res.status}`);
   staticIndex = await res.json();
   return staticIndex;
@@ -99,6 +100,17 @@ export async function fetchMetadata(force = false) {
     console.error('[ExperimentAPI] Static metadata fallback failed:', err);
     throw err;
   }
+}
+
+export async function fetchFeatureSelection(target, group, force = false) {
+  if (!force && CACHE.featureSelections.has(target)) {
+    return CACHE.featureSelections.get(target)?.combinations?.[group] || null;
+  }
+  const res = await fetch(`./cache/feature_selections/${encodeURIComponent(target)}.json`, { cache: 'no-store' });
+  if (!res.ok) throw new Error(`Feature selection detail HTTP error ${res.status}`);
+  const data = await res.json();
+  CACHE.featureSelections.set(target, data);
+  return data?.combinations?.[group] || null;
 }
 
 export async function fetchComparison(target, model, split, force = false) {
@@ -351,6 +363,7 @@ export async function refreshExperiments() {
     CACHE.metadata = null;
     CACHE.comparison.clear();
     CACHE.predictions.clear();
+    CACHE.featureSelections.clear();
     staticCatalog = null;
     staticIndex = null;
     return await fetchMetadata(true);
