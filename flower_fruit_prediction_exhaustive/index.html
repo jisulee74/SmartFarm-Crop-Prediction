@@ -1283,96 +1283,144 @@
            서브탭 2: AX 데이터 구축 방향 (anl-subtab-ax)
            ==================================================================== -->
       <div id="anl-subtab-ax" class="anl-subtab-pane">
-        <!-- 2-1. H01~H07 가설 마스터-디테일 레이아웃 -->
-        <section class="anl-master-detail-layout" aria-label="개선 가설 목록 및 세부 정보">
-          <!-- 좌측: 가설 목록 카드 (간결한 선택기) -->
-          <div class="anl-card anl-hyp-master-card">
-            <div class="anl-card-header-simple">
-              <h3 class="anl-card-title">💡 AX 추가 데이터 개선 가설 (H01 ~ H07)</h3>
-              <span class="summary-card-badge">P0/P1/P2 체계</span>
+        <!-- 2-1. 공식 과업 기준 AX 구축 목표 -->
+        <section class="anl-card" aria-label="AX 데이터 구축 목표">
+          <div class="anl-card-header-between">
+            <div>
+              <h3 class="anl-card-title">🌱 2026 AX 데이터 구축 목표</h3>
+              <p class="anl-card-subtitle">기존의 상태 중심 데이터를 의사결정 과정과 결과까지 연결하여 AI가 즉시 학습·활용할 수 있는 데이터로 전환</p>
             </div>
-            <div class="anl-hyp-list" id="anl_hyp_list"></div>
+            <span class="summary-card-badge">AI-Ready Data</span>
           </div>
-
-          <!-- 우측: 선택된 가설 세부 정보 패널 -->
-          <div class="anl-card anl-hyp-detail-card" id="anl_hyp_detail_panel">
-            <div class="empty-state">가설을 선택하면 상세 분석 및 검증 계획이 표시됩니다.</div>
+          <div class="guide-banner" style="margin: 16px 0 0;">
+            <div class="guide-icon">🎯</div>
+            <div class="guide-text">
+              <h4>사업의 1순위 입증 과제</h4>
+              <p>암묵지에서 재배자의 <strong>관찰 → 판단 → 행동 → 결과</strong>를 구조화하고 환경·생육·제어·경영 데이터와 연결합니다. 예측 모델은 새 데이터가 실제 학습에 사용 가능한지 평가하는 검증 수단이며, 단기 성능 향상만으로 AX DB의 완성도를 판단하지 않습니다.</p>
+            </div>
           </div>
         </section>
 
-        <!-- 2-2. AX 제안 필드 스키마 (88개 필드 동적 탐색기) -->
-        <section class="anl-card anl-schema-card" style="margin-top: 24px;" aria-label="AX 필드 스키마 탐색기">
+        <!-- 2-2. State · Action · Outcome · Context · Constraints -->
+        <section class="anl-rules-section" style="margin-top: 24px;" aria-label="AX 데이터 5대 구조">
+          <h4 class="anl-rules-header">🧭 AX 데이터 5대 구조와 실제 정의 테이블</h4>
+          <div class="anl-rules-grid">
+            <div class="anl-rule-card">
+              <span class="rule-num">S</span>
+              <strong>상태 State</strong>
+              <p>환경·생육·관찰 당시 상태<br><code>env_stts</code>, <code>crop_stts</code>, <code>crop_stts_rbt</code>, <code>obsv_log</code>, <code>sys_stts</code></p>
+            </div>
+            <div class="anl-rule-card">
+              <span class="rule-num">A</span>
+              <strong>행동 Action</strong>
+              <p>제어·농작업·방제와 재배자의 실제 조치<br><code>ctrl_stts</code>, <code>act_log</code>, <code>act_pest_dtl</code>, <code>job_img</code></p>
+            </div>
+            <div class="anl-rule-card">
+              <span class="rule-num">O</span>
+              <strong>결과 Outcome</strong>
+              <p>행동 뒤 변화와 수확·출하·경영 결과<br><code>act_rslt</code>, <code>otcm_shpm</code></p>
+            </div>
+            <div class="anl-rule-card">
+              <span class="rule-num">C</span>
+              <strong>맥락 Context</strong>
+              <p>시설·설비·작기·생육단계·인터뷰 회차<br><code>fclt</code>, <code>fclt_eqpm</code>, <code>cltv</code>, <code>ctxt_info</code>, <code>itvw_mst</code></p>
+            </div>
+            <div class="anl-rule-card">
+              <span class="rule-num">C</span>
+              <strong>제약 Constraints</strong>
+              <p>인력·에너지·관수·CO₂·장비 한계<br><code>rstrct_cnd</code></p>
+            </div>
+          </div>
+        </section>
+
+        <!-- 2-3. 대표농가 수집 범위 -->
+        <section class="anl-card" style="margin-top: 24px;" aria-label="AX 대표농가 수집 범위">
           <div class="anl-card-header-between">
             <div>
-              <h3 class="anl-card-title">📐 AX 추가 데이터 제안 필드 스키마 (88개 필드)</h3>
-              <p class="anl-card-subtitle">현장 수집을 위한 표준 테이블별 필드 규격, 단위, 출처, 수집 주기 및 가용 시각 규칙</p>
+              <h3 class="anl-card-title">👨‍🌾 5개 작물 대표농가 AX 데이터 수집</h3>
+              <p class="anl-card-subtitle">품목별 대표농가 1호에서 센서·생육·제어 자료와 전문재배사의 판단·행동 이력을 연결</p>
             </div>
-            <span class="crop-badge-count" id="anl_schema_count_badge">88개 필드</span>
+            <span class="summary-card-badge">5작물 × 1농가</span>
           </div>
-
-          <!-- 동적 테이블 탭 바 -->
-          <div class="anl-schema-tabs" id="anl_schema_tabs"></div>
-
-          <!-- 실시간 검색창 -->
-          <div class="anl-search-row">
-            <div class="anl-search-input-wrap">
-              <span class="search-icon">🔍</span>
-              <input type="text" id="anl_schema_search" class="control-input anl-search-input" placeholder="필드명, 한글설명, 출처, 연계가설 검색...">
-            </div>
-            <div class="anl-search-count-info" id="anl_schema_search_info">총 88개 표시 중</div>
-          </div>
-
-          <!-- 스키마 테이블 -->
-          <div class="table-responsive anl-schema-table-wrap">
+          <div class="table-responsive" style="margin-top: 16px;">
             <table class="styled-comparison-table anl-table">
-              <thead>
-                <tr>
-                  <th>테이블</th>
-                  <th>필드명</th>
-                  <th>타입 (단위)</th>
-                  <th>출처</th>
-                  <th>수집 주기</th>
-                  <th>조인 키</th>
-                  <th>가용 시각 규칙</th>
-                  <th>연계 가설</th>
-                </tr>
-              </thead>
-              <tbody id="anl_schema_tbody"></tbody>
+              <thead><tr><th>작물</th><th>대표농가</th><th>핵심 수집 범위</th><th>현재 구분</th></tr></thead>
+              <tbody>
+                <tr><td>방울토마토</td><td><strong>정석산</strong></td><td rowspan="5">환경·제어·수작업 생육조사 + 관찰·판단·행동·행동 결과·출하/경영·제약</td><td rowspan="5"><span class="anl-badge-tag warning">수집·적재 진행 중</span><br><span class="text-muted">암묵지 데이터는 적재 준비 단계</span></td></tr>
+                <tr><td>토마토</td><td><strong>문영일</strong></td></tr>
+                <tr><td>오이</td><td><strong>김필동</strong></td></tr>
+                <tr><td>딸기</td><td><strong>시재영</strong></td></tr>
+                <tr><td>파프리카</td><td><strong>박봉성</strong></td></tr>
+              </tbody>
             </table>
           </div>
         </section>
 
-        <!-- 2-3. 데이터 연결 및 누수 방지 5대 원칙 배너 -->
-        <section class="anl-rules-section" style="margin-top: 24px;" aria-label="누수 방지 5대 원칙">
-          <h4 class="anl-rules-header">🛡️ 데이터 연결 및 시간 누수 방지 5대 원칙</h4>
-          <div class="anl-rules-grid">
-            <div class="anl-rule-card">
-              <span class="rule-num">01</span>
-              <strong>복합 기본 키 보장</strong>
-              <p><code>facility_id + crop_sn + sample_num + truss_id + observed_at</code>로 개체 교체 시 이력 오염 차단</p>
+        <!-- 2-4. 공식 데이터 정의서 구조 -->
+        <section class="anl-card" style="margin-top: 24px;" aria-label="AX 데이터 정의서 구조">
+          <div class="anl-card-header-between">
+            <div>
+              <h3 class="anl-card-title">🗂️ AX 데이터 정의서 기준 데이터 계층</h3>
+              <p class="anl-card-subtitle">정의서의 26개 상세 테이블을 수집·학습·검증 역할에 따라 정리</p>
             </div>
-            <div class="anl-rule-card">
-              <span class="rule-num">02</span>
-              <strong>가용 시각 규칙 (누수 방지)</strong>
-              <p>사건 발생 시각(<code>occurred_at</code>)과 시스템 등록 시각(<code>available_at</code>) 모두 예측 시점 <code>t</code> 이하만 투입</p>
-            </div>
-            <div class="anl-rule-card">
-              <span class="rule-num">03</span>
-              <strong>작업 범위(scope_type) 보존</strong>
-              <p>온실/구역 단위 작업을 개별 개체 작업으로 임의 복제하거나 시설 수량을 개체마다 전량 중복 배분하지 않음</p>
-            </div>
-            <div class="anl-rule-card">
-              <span class="rule-num">04</span>
-              <strong>정답(Ground Truth) 연결</strong>
-              <p>동일 개체·화방의 다음 실제 조사값과 1:1 연결하며, 미관측 상태를 임의 0으로 치환하지 않음</p>
-            </div>
-            <div class="anl-rule-card">
-              <span class="rule-num">05</span>
-              <strong>1~2주 현장 PoC 분리</strong>
-              <p>초기 PoC는 수집 프로세스 및 일치율 검증용이며, 성능 개선 입증은 새로운 미래 작기 코호트에서 검증</p>
+            <span class="summary-card-badge">상세 테이블 26개</span>
+          </div>
+          <div class="table-responsive" style="margin-top: 16px;">
+            <table class="styled-comparison-table anl-table">
+              <thead><tr><th>계층</th><th>테이블</th><th>데이터 역할</th><th>대표 수집 주기</th></tr></thead>
+              <tbody>
+                <tr><td><strong>기준·맥락</strong></td><td><code>fclt</code>, <code>fclt_eqpm</code>, <code>cltv</code>, <code>ctxt_info</code>, <code>itvw_mst</code></td><td>시설·설비·작기·생육단계·인터뷰 연결</td><td>최초 등록 / 주간·회차</td></tr>
+                <tr><td><strong>상태</strong></td><td><code>env_stts</code>, <code>sys_stts</code>, <code>crop_stts</code>, <code>crop_stts_rbt</code>, <code>obsv_log</code></td><td>환경·생육·관찰 상태</td><td>10분 / 1시간 / 1주 / 사건별</td></tr>
+                <tr><td><strong>행동</strong></td><td><code>ctrl_stts</code>, <code>act_log</code>, <code>act_pest_dtl</code>, <code>job_img</code></td><td>시설 제어·농작업·방제·작업 근거</td><td>10분 / 사건별 / 인물 탐지 시</td></tr>
+                <tr><td><strong>결과·제약</strong></td><td><code>act_rslt</code>, <code>otcm_shpm</code>, <code>rstrct_cnd</code></td><td>행동 후 변화·출하/경영·운영 한계</td><td>사건별 / 주 1회 / 변경 시</td></tr>
+                <tr><td><strong>이미지·AI 산출</strong></td><td><code>crop_img_bndl</code>, <code>crop_img</code>, <code>crop_img_lbl_rslt</code>, <code>mtur_dgns_rslt</code>, <code>dip_dgns_rslt</code>, <code>crop_cnt_predc_rslt</code>, <code>abnrml_dtct_rslt</code></td><td>이미지 원천·라벨링·진단·예측·품질 결과</td><td>촬영·라벨링·모델 실행 시</td></tr>
+                <tr><td><strong>외부 검증</strong></td><td><code>pbdt_mrkt_sl</code>, <code>pbdt_elpwr_usqty</code></td><td>경락가격·에너지 비용 비교</td><td>1일 / 1개월</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="guide-banner anl-kpi-notice" style="margin-top: 16px; margin-bottom: 0;">
+            <div class="guide-icon">⚠️</div>
+            <div class="guide-text">
+              <h4>정의서 정합성 점검 필요</h4>
+              <p><code>전체변수목록</code> 시트는 10개 테이블·96개 필드를 담고 있지만, 개별 상세 시트는 26개 테이블·307개 필드를 정의하고 일부 명칭도 <code>ctxt</code>/<code>ctxt_info</code>처럼 다릅니다. 본 화면은 상세 시트와 TABLE INFO를 기준으로 작성했으며, 실제 적재 전 최종 스키마 동결과 목록 동기화가 필요합니다.</p>
             </div>
           </div>
         </section>
+
+        <!-- 2-5. 검증 로드맵 -->
+        <section class="anl-card" style="margin-top: 24px;" aria-label="AX 데이터 검증 로드맵">
+          <div class="anl-card-header-between">
+            <div>
+              <h3 class="anl-card-title">🧪 AX DB 완성도 검증 순서</h3>
+              <p class="anl-card-subtitle">데이터가 연결되고 학습 가능한지를 먼저 확인한 뒤, 동일 평가 조건에서 예측 성능 개선을 비교</p>
+            </div>
+            <span class="summary-card-badge">As-Is → To-Be</span>
+          </div>
+          <div class="anl-rules-grid" style="margin-top: 16px;">
+            <div class="anl-rule-card"><span class="rule-num">01</span><strong>기준 성능 고정</strong><p>2024년 이후 기존 DB만 사용한 8개 타깃·6개 모델·변수군 조합 결과를 As-Is 기준으로 보존</p></div>
+            <div class="anl-rule-card"><span class="rule-num">02</span><strong>수집 품질 확인</strong><p>필수값 완전성, 수집 주기 준수율, 시설·작기 연결률, 미기록/미발생 구분, 사건 시각 정합성 검증</p></div>
+            <div class="anl-rule-card"><span class="rule-num">03</span><strong>암묵지 연결 검증</strong><p>관찰(<code>obsv_log</code>)에서 행동(<code>act_log</code>), 결과(<code>act_rslt</code>)로 이어지는 참조키와 근거 자료 점검</p></div>
+            <div class="anl-rule-card"><span class="rule-num">04</span><strong>동일 조건 재학습</strong><p>같은 평가 행·시설 분할·모델·시드에 AX 입력만 추가해 RMSE·MAE·R²·CCC 변화 비교</p></div>
+            <div class="anl-rule-card"><span class="rule-num">05</span><strong>미래 작기 확인</strong><p>검증셋 개선 여부로 후보를 선정하고, 새 시설·작기 데이터에서 일반화 성능과 비열화 여부 확인</p></div>
+          </div>
+          <div class="guide-banner" style="margin-top: 16px; margin-bottom: 0; border-left-color: #f59e0b;">
+            <div class="guide-icon">📌</div>
+            <div class="guide-text">
+              <h4>현재 해석 가능한 범위</h4>
+              <p>5농가가 서로 다른 작물이고 신규 수집 기간이 약 3개월이므로, 초기 단계에서 통계적으로 강한 범용 모델 성능 향상을 확정하기는 어렵습니다. 우선 <strong>완전성·연결성·추적성·학습 가능성</strong>을 입증하고, 예측 성능은 작물별 표본이 누적된 뒤 보조 근거로 평가합니다.</p>
+            </div>
+          </div>
+        </section>
+
+        <div class="anl-doc-links-bar" style="margin-top: 24px;">
+          <div class="doc-links-title">📚 작성 근거:</div>
+          <div class="doc-links-list">
+            <span class="doc-link">제안요청서 · AX 전환 데이터 구축</span>
+            <span class="doc-link">기술협상서 · 다양한 모델을 활용한 데이터 품질 평가</span>
+            <span class="doc-link">최종 발표자료 · State/Action/Outcome 파이프라인</span>
+            <span class="doc-link">AX 데이터 정의서 · 2026-09-08 수정본</span>
+          </div>
+        </div>
       </div>
 
       <!-- ====================================================================
@@ -1603,4 +1651,3 @@
   <script type="module" src="./src/app.js?v=23"></script>
 </body>
 </html>
-

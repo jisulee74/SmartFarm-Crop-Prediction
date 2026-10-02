@@ -156,8 +156,6 @@ def main() -> None:
     # omit this retired E7 candidate only from the dashboard projection.
     selected = selected[selected["Variable_ID"].ne("item_code")].copy()
     excluded = excluded[excluded["Variable_ID"].ne("item_code")].copy()
-    selected = selected[selected["stage"].eq("validation")].copy()
-    excluded = excluded[excluded["stage"].eq("validation")].copy()
     CACHE.mkdir(parents=True, exist_ok=True)
     source_labels = load_source_labels()
 
@@ -173,9 +171,48 @@ def main() -> None:
 
         for combo in catalog["combinations"]:
             combo_id = combo["combination_id"]
-            sel = target_selected[target_selected["combination"].eq(combo_id)]
-            exc = target_excluded[target_excluded["combination"].eq(combo_id)]
             status, reason = status_for(target, combo_id)
+            combo_selected = target_selected[target_selected["combination"].eq(combo_id)]
+            combo_excluded = target_excluded[target_excluded["combination"].eq(combo_id)]
+            sel = combo_selected[combo_selected["stage"].eq("validation")]
+            exc = combo_excluded[combo_excluded["stage"].eq("validation")]
+            stage = "validation"
+            fold = None
+            source_label = None
+            exclusion_note = None
+
+            # Failed combinations do not have a frozen validation selection,
+            # but their fold-level audit is still available.  Show the first
+            # internal-CV fold where every candidate was excluded because that
+            # is the fold that made a complete 3-fold configuration impossible.
+            if sel.empty and exc.empty and status == "failed":
+                cv_selected = combo_selected[combo_selected["stage"].eq("internal_cv")]
+                cv_excluded = combo_excluded[combo_excluded["stage"].eq("internal_cv")]
+                fold_values = sorted(
+                    {
+                        int(value)
+                        for value in pd.concat([cv_selected["fold"], cv_excluded["fold"]]).dropna().unique()
+                    }
+                )
+                if fold_values:
+                    selected_counts = {
+                        value: len(cv_selected[cv_selected["fold"].eq(float(value))])
+                        for value in fold_values
+                    }
+                    empty_folds = [value for value in fold_values if selected_counts[value] == 0]
+                    fold = empty_folds[0] if empty_folds else min(
+                        fold_values, key=lambda value: (selected_counts[value], value)
+                    )
+                    sel = cv_selected[cv_selected["fold"].eq(float(fold))]
+                    exc = cv_excluded[cv_excluded["fold"].eq(float(fold))]
+                    stage = "internal_cv"
+                    source_label = f"시간순 교차검증 {fold}번 구간의 변수 선별 기록"
+                    if selected_counts[fold] == 0 and not exc.empty:
+                        exclusion_note = (
+                            f"3개 시간순 교차검증 구간 중 {fold}번 구간에서 "
+                            f"후보 {len(exc)}개가 모두 제외되어 전체 교차검증을 완료하지 못했습니다. "
+                            "아래 표는 해당 구간에서 실제로 제외된 변수와 판단 근거입니다."
+                        )
 
             selected_rows = []
             for row in sel.itertuples(index=False):
@@ -209,8 +246,15 @@ def main() -> None:
                 "groups": combo["groups"],
                 "status": status,
                 "reason": reason,
-                "stage": "validation",
-                "fit_hash": str(sel.iloc[0]["fit_hash"]) if not sel.empty else None,
+                "stage": stage,
+                "fold": fold,
+                "fit_hash": (
+                    str(sel.iloc[0]["fit_hash"])
+                    if not sel.empty
+                    else str(exc.iloc[0]["fit_hash"])
+                    if not exc.empty
+                    else None
+                ),
                 "candidate_count": len(selected_rows) + len(excluded_rows),
                 "selected_count": len(selected_rows),
                 "excluded_count": len(excluded_rows),
@@ -224,6 +268,8 @@ def main() -> None:
                     }
                     for key, count in reason_counts.most_common()
                 ],
+                "source_label": source_label,
+                "exclusion_note": exclusion_note,
             }
 
         payload = {

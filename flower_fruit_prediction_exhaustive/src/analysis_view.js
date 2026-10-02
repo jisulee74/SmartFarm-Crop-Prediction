@@ -5,7 +5,7 @@
  * Implements:
  * 1. Three internal sub-tabs:
  *    - anl-subtab-perf: 성능·오차 분석 (Observation-style Toolbar, 4 KPI cards, ECharts visual models, Evidence accordion)
- *    - anl-subtab-ax: AX 데이터 구축 방향 (H01~H07 Master-Detail, 88 fields Dynamic Schema explorer, 5 Principles)
+ *    - anl-subtab-ax: AX 데이터 구축 방향 (official project scope, five AX roles, farms, schema layers, validation roadmap)
  *    - anl-subtab-kpi: 검증 계획·KPI (B0~ABL Step Pipeline, Target KPI planning card, Full 8-target reference table)
  * 2. ECharts chart instances with clean lifecycle & resize handlers
  * 3. Dynamic schema table counting and Korean display names (preserving true DB keys)

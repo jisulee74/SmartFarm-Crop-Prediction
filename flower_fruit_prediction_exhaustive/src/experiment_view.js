@@ -1291,6 +1291,7 @@ export class ExperimentViewController {
     const labels = {
       all_variables_excluded: '선별 기준 적용 후 사용할 수 있는 변수가 남지 않았습니다.',
       missing_over_50_percent: '후보 변수의 결측률이 50%를 초과했습니다.',
+      no_successful_complete_cv_configuration: '3개 시간순 교차검증 구간을 모두 완료한 학습 설정이 없습니다.',
     };
     return labels[reason] || reason;
   }
@@ -1381,6 +1382,17 @@ export class ExperimentViewController {
     const exclusionNote = detail.exclusion_note ? `
       <div class="selection-scope-note"><strong>제외 기록:</strong> ${this.escapeHtml(detail.exclusion_note)}</div>
     ` : '';
+    const scopeNote = detail.stage === 'internal_cv' ? `
+      <div class="selection-scope-note">
+        <strong>표시 기준:</strong> 시간순 교차검증 ${this.escapeHtml(detail.fold)}번 구간의 학습 데이터로 선별한 결과입니다.
+        이 구간에서 사용할 변수가 남지 않아 최종 검증용 변수 목록이 생성되지 않았습니다.
+      </div>
+    ` : `
+      <div class="selection-scope-note">
+        <strong>표시 기준:</strong> 검증(Validation) 평가 직전, 학습 데이터만으로 확정한 변수 목록입니다.
+        같은 타깃·조합의 6개 모델이 이 목록을 공통으로 사용하며, 테스트 우승 조합도 이 목록을 동결해 사용합니다.
+      </div>
+    `;
 
     const unavailable = selected.length === 0 ? `
       <div class="selection-empty">
@@ -1391,10 +1403,7 @@ export class ExperimentViewController {
 
     content.innerHTML = `
       ${sourceNote}
-      <div class="selection-scope-note">
-        <strong>표시 기준:</strong> 검증(Validation) 평가 직전, 학습 데이터만으로 확정한 변수 목록입니다.
-        같은 타깃·조합의 6개 모델이 이 목록을 공통으로 사용하며, 테스트 우승 조합도 이 목록을 동결해 사용합니다.
-      </div>
+      ${scopeNote}
       <div class="selection-context-row">
         <div><span>조합</span><strong>${groups || this.escapeHtml(detail.label)}</strong></div>
         <div><span>파생 후보</span><strong>${detail.candidate_count}개</strong></div>
