@@ -1,0 +1,168 @@
+﻿target,dimensions,level,n,rmse_mean,small_n
+tomato_first,facility+age,PF_0024697_01 / 61+,225,0.014925369983011399,False
+tomato_first,facility+age,PF_0024697_01 / <=60,45,0.6841810303167352,False
+tomato_first,facility+age,PF_0026456_01 / <=60,53,1.0038110056519165,False
+tomato_first,facility+horizon,PF_0024697_01 / 1-7,198,0.27481971856101567,False
+tomato_first,facility+horizon,PF_0024697_01 / 8+,72,0.2914282773896627,False
+tomato_first,facility+horizon,PF_0026456_01 / 1-7,35,0.7162484545097287,False
+tomato_first,facility+horizon,PF_0026456_01 / 8+,18,1.3938008418203462,True
+tomato_first,facility+age+horizon,PF_0024697_01 / 61+ / 1-7,171,0.016719091778946694,False
+tomato_first,facility+age+horizon,PF_0024697_01 / 61+ / 8+,54,0.005920663668560372,False
+tomato_first,facility+age+horizon,PF_0024697_01 / <=60 / 1-7,27,0.742597318616552,True
+tomato_first,facility+age+horizon,PF_0024697_01 / <=60 / 8+,18,0.58270478649082,True
+tomato_first,facility+age+horizon,PF_0026456_01 / <=60 / 1-7,35,0.7162484545097287,False
+tomato_first,facility+age+horizon,PF_0026456_01 / <=60 / 8+,18,1.3938008418203462,True
+tomato_first,age+change,61+ / unchanged,225,0.014925369983011399,False
+tomato_first,age+change,<=60 / changed,29,1.1214011348121251,True
+tomato_first,age+change,<=60 / unchanged,69,0.7376062485776399,False
+tomato_second,facility+age,PF_0024697_01 / 61+,225,0.009574840174621542,False
+tomato_second,facility+age,PF_0024697_01 / <=60,31,0.5614546507294295,False
+tomato_second,facility+age,PF_0026456_01 / <=60,44,0.8645981214922394,False
+tomato_second,facility+horizon,PF_0024697_01 / 1-7,184,0.22385613551346842,False
+tomato_second,facility+horizon,PF_0024697_01 / 8+,72,0.08838204350596852,False
+tomato_second,facility+horizon,PF_0026456_01 / 1-7,27,0.33521627460927894,True
+tomato_second,facility+horizon,PF_0026456_01 / 8+,17,1.3129440335117468,True
+tomato_second,facility+age+horizon,PF_0024697_01 / 61+ / 1-7,171,0.00781868817986623,False
+tomato_second,facility+age+horizon,PF_0024697_01 / 61+ / 8+,54,0.013038371945910949,False
+tomato_second,facility+age+horizon,PF_0024697_01 / <=60 / 1-7,13,0.8416639291537479,True
+tomato_second,facility+age+horizon,PF_0024697_01 / <=60 / 8+,18,0.17518067404990267,True
+tomato_second,facility+age+horizon,PF_0026456_01 / <=60 / 1-7,27,0.33521627460927894,True
+tomato_second,facility+age+horizon,PF_0026456_01 / <=60 / 8+,17,1.3129440335117468,True
+tomato_second,age+change,61+ / unchanged,225,0.009574840174621542,False
+tomato_second,age+change,<=60 / changed,25,1.219683013610037,True
+tomato_second,age+change,<=60 / unchanged,50,0.3261156061203351,False
+tomato_third,facility+age,PF_0024697_01 / 61+,225,0.0039304042767146965,False
+tomato_third,facility+age,PF_0024697_01 / <=60,27,0.4781178192045782,True
+tomato_third,facility+age,PF_0026456_01 / <=60,34,1.1958954704437743,False
+tomato_third,facility+horizon,PF_0024697_01 / 1-7,180,0.012727252586002125,False
+tomato_third,facility+horizon,PF_0024697_01 / 8+,72,0.2921541700300878,False
+tomato_third,facility+horizon,PF_0026456_01 / 1-7,27,0.2680369707908804,True
+tomato_third,facility+horizon,PF_0026456_01 / 8+,7,2.5822265711556573,True
+tomato_third,facility+age+horizon,PF_0024697_01 / 61+ / 1-7,171,0.00397317738038759,False
+tomato_third,facility+age+horizon,PF_0024697_01 / 61+ / 8+,54,0.00379120108952317,False
+tomato_third,facility+age+horizon,PF_0024697_01 / <=60 / 1-7,9,0.05412615234281722,True
+tomato_third,facility+age+horizon,PF_0024697_01 / <=60 / 8+,18,0.5842713733854605,True
+tomato_third,facility+age+horizon,PF_0026456_01 / <=60 / 1-7,27,0.2680369707908804,True
+tomato_third,facility+age+horizon,PF_0026456_01 / <=60 / 8+,7,2.5822265711556573,True
+tomato_third,age+change,61+ / unchanged,225,0.0039304042767146965,False
+tomato_third,age+change,<=60 / changed,24,1.4577213624749221,True
+tomato_third,age+change,<=60 / unchanged,37,0.3202152118187868,False
+tomato_sum123,facility+age,PF_0024697_01 / 61+,225,0.05610755609367255,False
+tomato_sum123,facility+age,PF_0024697_01 / <=60,27,0.8662578084103488,True
+tomato_sum123,facility+age,PF_0026456_01 / <=60,34,2.4742094856135313,False
+tomato_sum123,facility+horizon,PF_0024697_01 / 1-7,180,0.11549278274958585,False
+tomato_sum123,facility+horizon,PF_0024697_01 / 8+,72,0.508620025988544,False
+tomato_sum123,facility+horizon,PF_0026456_01 / 1-7,27,0.9077299936363652,True
+tomato_sum123,facility+horizon,PF_0026456_01 / 8+,7,5.152970731468126,True
+tomato_sum123,facility+age+horizon,PF_0024697_01 / 61+ / 1-7,171,0.05607984272471165,False
+tomato_sum123,facility+age+horizon,PF_0024697_01 / 61+ / 8+,54,0.05592478701884229,False
+tomato_sum123,facility+age+horizon,PF_0024697_01 / <=60 / 1-7,9,0.41404869651543647,True
+tomato_sum123,facility+age+horizon,PF_0024697_01 / <=60 / 8+,18,1.0111619063532409,True
+tomato_sum123,facility+age+horizon,PF_0026456_01 / <=60 / 1-7,27,0.9077299936363652,True
+tomato_sum123,facility+age+horizon,PF_0026456_01 / <=60 / 8+,7,5.152970731468126,True
+tomato_sum123,age+change,61+ / unchanged,225,0.05610755609367255,False
+tomato_sum123,age+change,<=60 / changed,26,2.8684524852445854,True
+tomato_sum123,age+change,<=60 / unchanged,35,0.6546675208877796,False
+strawberry_first,facility+age,PF_0023621_01 / 61+,124,2.2853725104440885,False
+strawberry_first,facility+age,PF_0023621_01 / <=60,72,0.1501107721692986,False
+strawberry_first,facility+age,PF_0023732_01 / 61+,310,1.460479137678963,False
+strawberry_first,facility+age,PF_0023732_01 / <=60,45,0.5768611005376778,False
+strawberry_first,facility+age,PF_0024700_01 / 61+,189,2.0831510879381456,False
+strawberry_first,facility+age,PF_0024700_01 / <=60,45,0.15011077225208283,False
+strawberry_first,facility+horizon,PF_0023621_01 / 1-7,173,1.840539029829019,False
+strawberry_first,facility+horizon,PF_0023621_01 / 8+,23,1.6588466704724432,True
+strawberry_first,facility+horizon,PF_0023732_01 / 1-7,213,1.0202185085103266,False
+strawberry_first,facility+horizon,PF_0023732_01 / 8+,142,1.7888613865648793,False
+strawberry_first,facility+horizon,PF_0024700_01 / 1-7,207,1.8395039879515547,False
+strawberry_first,facility+horizon,PF_0024700_01 / 8+,27,2.115012125085796,True
+strawberry_first,facility+age+horizon,PF_0023621_01 / 61+ / 1-7,101,2.4053068189395432,False
+strawberry_first,facility+age+horizon,PF_0023621_01 / 61+ / 8+,23,1.6588466704724432,True
+strawberry_first,facility+age+horizon,PF_0023621_01 / <=60 / 1-7,72,0.1501107721692986,False
+strawberry_first,facility+age+horizon,PF_0023732_01 / 61+ / 1-7,186,1.0845645820844259,False
+strawberry_first,facility+age+horizon,PF_0023732_01 / 61+ / 8+,124,1.8887314504392125,False
+strawberry_first,facility+age+horizon,PF_0023732_01 / <=60 / 1-7,27,0.32813432259180286,True
+strawberry_first,facility+age+horizon,PF_0023732_01 / <=60 / 8+,18,0.8183703110045322,True
+strawberry_first,facility+age+horizon,PF_0024700_01 / 61+ / 1-7,162,2.077761576280241,False
+strawberry_first,facility+age+horizon,PF_0024700_01 / 61+ / 8+,27,2.115012125085796,True
+strawberry_first,facility+age+horizon,PF_0024700_01 / <=60 / 1-7,45,0.15011077225208283,False
+strawberry_first,age+change,61+ / changed,128,3.9993779550443107,False
+strawberry_first,age+change,61+ / unchanged,495,0.4061996754067179,False
+strawberry_first,age+change,<=60 / changed,7,1.4176244939010298,True
+strawberry_first,age+change,<=60 / unchanged,155,0.1501107722136282,False
+strawberry_second,facility+age,PF_0023621_01 / 61+,124,1.1841821135381931,False
+strawberry_second,facility+age,PF_0023621_01 / <=60,72,0.02055376646938628,False
+strawberry_second,facility+age,PF_0023732_01 / 61+,310,1.165327117737458,False
+strawberry_second,facility+age,PF_0023732_01 / <=60,45,0.14770707088957943,False
+strawberry_second,facility+age,PF_0024700_01 / 61+,189,2.4742476754129137,False
+strawberry_second,facility+age,PF_0024700_01 / <=60,45,0.017644857978258783,False
+strawberry_second,facility+horizon,PF_0023621_01 / 1-7,173,0.8378792332043945,False
+strawberry_second,facility+horizon,PF_0023621_01 / 8+,23,1.5089884045514501,True
+strawberry_second,facility+horizon,PF_0023732_01 / 1-7,213,0.6599241794564976,False
+strawberry_second,facility+horizon,PF_0023732_01 / 8+,142,1.5224780855722915,False
+strawberry_second,facility+horizon,PF_0024700_01 / 1-7,207,2.152486106849403,False
+strawberry_second,facility+horizon,PF_0024700_01 / 8+,27,2.705177311252796,True
+strawberry_second,facility+age+horizon,PF_0023621_01 / 61+ / 1-7,101,1.09634315797291,False
+strawberry_second,facility+age+horizon,PF_0023621_01 / 61+ / 8+,23,1.5089884045514501,True
+strawberry_second,facility+age+horizon,PF_0023621_01 / <=60 / 1-7,72,0.02055376646938628,False
+strawberry_second,facility+age+horizon,PF_0023732_01 / 61+ / 1-7,186,0.7061566143971447,False
+strawberry_second,facility+age+horizon,PF_0023732_01 / 61+ / 8+,124,1.6268333608280023,False
+strawberry_second,facility+age+horizon,PF_0023732_01 / <=60 / 1-7,27,0.015960836439816672,True
+strawberry_second,facility+age+horizon,PF_0023732_01 / <=60 / 8+,18,0.23219795070182592,True
+strawberry_second,facility+age+horizon,PF_0024700_01 / 61+ / 1-7,162,2.433114071114242,False
+strawberry_second,facility+age+horizon,PF_0024700_01 / 61+ / 8+,27,2.705177311252796,True
+strawberry_second,facility+age+horizon,PF_0024700_01 / <=60 / 1-7,45,0.017644857978258783,False
+strawberry_second,age+change,61+ / changed,135,3.5198526448222474,False
+strawberry_second,age+change,61+ / unchanged,488,0.40020577381407996,False
+strawberry_second,age+change,<=60 / changed,1,0.9805671706795692,True
+strawberry_second,age+change,<=60 / unchanged,161,0.0188646893584855,False
+strawberry_third,facility+age,PF_0023621_01 / 61+,124,0.9954540117877093,False
+strawberry_third,facility+age,PF_0023621_01 / <=60,72,0.03391997886023955,False
+strawberry_third,facility+age,PF_0023732_01 / 61+,310,1.150211717034541,False
+strawberry_third,facility+age,PF_0023732_01 / <=60,45,0.034291293731758904,False
+strawberry_third,facility+age,PF_0024700_01 / 61+,189,2.464578462863893,False
+strawberry_third,facility+age,PF_0024700_01 / <=60,45,0.036021705658637326,False
+strawberry_third,facility+horizon,PF_0023621_01 / 1-7,173,0.610109516203071,False
+strawberry_third,facility+horizon,PF_0023621_01 / 8+,23,1.5956204490021464,True
+strawberry_third,facility+horizon,PF_0023732_01 / 1-7,213,0.9008489011590142,False
+strawberry_third,facility+horizon,PF_0023732_01 / 8+,142,1.292751004875187,False
+strawberry_third,facility+horizon,PF_0024700_01 / 1-7,207,2.116082965813617,False
+strawberry_third,facility+horizon,PF_0024700_01 / 8+,27,2.8619406014693114,True
+strawberry_third,facility+age+horizon,PF_0023621_01 / 61+ / 1-7,101,0.7979749632173606,False
+strawberry_third,facility+age+horizon,PF_0023621_01 / 61+ / 8+,23,1.5956204490021464,True
+strawberry_third,facility+age+horizon,PF_0023621_01 / <=60 / 1-7,72,0.03391997886023955,False
+strawberry_third,facility+age+horizon,PF_0023732_01 / 61+ / 1-7,186,0.9639380312450319,False
+strawberry_third,facility+age+horizon,PF_0023732_01 / 61+ / 8+,124,1.383329918576664,False
+strawberry_third,facility+age+horizon,PF_0023732_01 / <=60 / 1-7,27,0.03257548527529887,True
+strawberry_third,facility+age+horizon,PF_0023732_01 / <=60 / 8+,18,0.03668913545276606,True
+strawberry_third,facility+age+horizon,PF_0024700_01 / 61+ / 1-7,162,2.3919197311340947,False
+strawberry_third,facility+age+horizon,PF_0024700_01 / 61+ / 8+,27,2.8619406014693114,True
+strawberry_third,facility+age+horizon,PF_0024700_01 / <=60 / 1-7,45,0.036021705658637326,False
+strawberry_third,age+change,61+ / changed,143,3.2821423630209865,False
+strawberry_third,age+change,61+ / unchanged,480,0.5411585628878077,False
+strawberry_third,age+change,<=60 / unchanged,162,0.03462680166159303,False
+strawberry_sum123,facility+age,PF_0023621_01 / 61+,124,2.7413003042354633,False
+strawberry_sum123,facility+age,PF_0023621_01 / <=60,72,0.18337049982609321,False
+strawberry_sum123,facility+age,PF_0023732_01 / 61+,310,2.1362977626367288,False
+strawberry_sum123,facility+age,PF_0023732_01 / <=60,45,0.7266298367888497,False
+strawberry_sum123,facility+age,PF_0024700_01 / 61+,189,4.793848357008594,False
+strawberry_sum123,facility+age,PF_0024700_01 / <=60,45,0.18354727668560664,False
+strawberry_sum123,facility+horizon,PF_0023621_01 / 1-7,173,2.165451606273291,False
+strawberry_sum123,facility+horizon,PF_0023621_01 / 8+,23,2.3126632519791377,True
+strawberry_sum123,facility+horizon,PF_0023732_01 / 1-7,213,1.371257471506389,False
+strawberry_sum123,facility+horizon,PF_0023732_01 / 8+,142,2.703691670918378,False
+strawberry_sum123,facility+horizon,PF_0024700_01 / 1-7,207,4.376916905230253,False
+strawberry_sum123,facility+horizon,PF_0024700_01 / 8+,27,3.7482607472652725,True
+strawberry_sum123,facility+age+horizon,PF_0023621_01 / 61+ / 1-7,101,2.8298396257181255,False
+strawberry_sum123,facility+age+horizon,PF_0023621_01 / 61+ / 8+,23,2.3126632519791377,True
+strawberry_sum123,facility+age+horizon,PF_0023621_01 / <=60 / 1-7,72,0.18337049982609321,False
+strawberry_sum123,facility+age+horizon,PF_0023732_01 / 61+ / 1-7,186,1.458512668480669,False
+strawberry_sum123,facility+age+horizon,PF_0023732_01 / 61+ / 8+,124,2.866794612075656,False
+strawberry_sum123,facility+age+horizon,PF_0023732_01 / <=60 / 1-7,27,0.4234957587252624,True
+strawberry_sum123,facility+age+horizon,PF_0023732_01 / <=60 / 8+,18,1.02513047453787,True
+strawberry_sum123,facility+age+horizon,PF_0024700_01 / 61+ / 1-7,162,4.946669960688043,False
+strawberry_sum123,facility+age+horizon,PF_0024700_01 / 61+ / 8+,27,3.7482607472652725,True
+strawberry_sum123,facility+age+horizon,PF_0024700_01 / <=60 / 1-7,45,0.18354727668560664,False
+strawberry_sum123,age+change,61+ / changed,264,4.923565839291274,False
+strawberry_sum123,age+change,61+ / unchanged,359,0.8991142684838538,False
+strawberry_sum123,age+change,<=60 / changed,7,1.792434174812835,True
+strawberry_sum123,age+change,<=60 / unchanged,155,0.18328080016212153,False

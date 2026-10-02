@@ -1,0 +1,14 @@
+{
+  "created_at": "2026-09-14T08:17:59.028648+09:00",
+  "source_root": "/NHNHOME/WORKSPACE/26mafra001_A/BASE/theimc/jslee/AXData/ax_catalog_experiments/outputs/stability_v2",
+  "scheduler_status": "finished",
+  "campaign_finished_at": "2026-09-12T23:46:03.701380+09:00",
+  "completed_runs": 39856,
+  "verified_prediction_files": 496,
+  "metric_recomputations": 3968,
+  "checks": 4932,
+  "passed": true,
+  "scope": "All run file IDs/status index, dataset hashes, frozen selection and 496 selected/baseline prediction files. Other candidate metrics use hashed saved summary; no refitting.",
+  "confidence": "seed SD is optimization variability, not population uncertainty; test has 2 tomato / 3 strawberry facilities",
+  "holdout_notice": "Previously inspected holdout; diagnostic reuse only, not a new independent confirmation"
+}

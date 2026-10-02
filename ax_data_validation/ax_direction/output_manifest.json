@@ -1,0 +1,202 @@
+{
+  "01_성능_오차_원인분석.md": {
+    "bytes": 22034,
+    "sha256": "aac2f65f9dd8c178600c67616593c6d4dac2bb248dbe518ff456608b37a28a5d"
+  },
+  "02_AX_추가데이터_구축방향.md": {
+    "bytes": 11600,
+    "sha256": "8fd61bbcc57c3af545862cc21de78d3fc9cd7173bc26b6ace35de8cbe64aff85"
+  },
+  "03_AsIs_ToBe_검증체계_KPI.md": {
+    "bytes": 11183,
+    "sha256": "7e72f48372530faaddcbc8d58bc62a44d34116f7bcea69da7b11630205c2ef6b"
+  },
+  "analyze.py": {
+    "bytes": 20266,
+    "sha256": "6808be05bdaf2b0c638dab849929bb222523c6c3f87ab05c3d0949ce74caef17"
+  },
+  "ANTIGRAVITY_PROMPT.md": {
+    "bytes": 6316,
+    "sha256": "94b7ac5577abdc35d82ef4d7386539ec7609710bf0338567c04d4fb389ecb0c9"
+  },
+  "audit.json": {
+    "bytes": 828,
+    "sha256": "253b7e9d6bf90cc3a2f9c684fcc03c05d77fe660d14459cd463aca476b8b47f5"
+  },
+  "build_report.py": {
+    "bytes": 58600,
+    "sha256": "09bfb2b65d040adad00fa562e3615b570902b92cc03e16cc610dcbf264ba6ef6"
+  },
+  "dashboard_bundle.json": {
+    "bytes": 954542,
+    "sha256": "0cef4a3a3010fd46e74a06008ba3fde78f0c2fca164b49b4abf01345827713a1"
+  },
+  "data_dictionary.json": {
+    "bytes": 49184,
+    "sha256": "007708f84401194f1d57b0043819f87944e2c9439d4f0cc58d75ae4975cfe108"
+  },
+  "deliverable_checks.json": {
+    "bytes": 4124,
+    "sha256": "54eca76d3979a38b626f5a2f21db69779fa1d16561830907b7e27bc5dc5fc0f9"
+  },
+  "figures\\baseline_comparison.pdf": {
+    "bytes": 72676,
+    "sha256": "266f30d9a89f7e5739ed60cdd734b9af6ab635302bdba4a031d5d4095b6d1a15"
+  },
+  "figures\\baseline_comparison.png": {
+    "bytes": 85747,
+    "sha256": "039d4964710c4fa99c7b5e18f52aa8ba7784efcd65ae4d37702be465f908b18c"
+  },
+  "figures\\change_error_concentration.pdf": {
+    "bytes": 36560,
+    "sha256": "3324fae907065d5b418b2a97537944ae7830aa2baa5d136340afe1e8ca08a323"
+  },
+  "figures\\change_error_concentration.png": {
+    "bytes": 60521,
+    "sha256": "c1d31cfcc8ea110ea7435eca18128856aedaa5c97226a4424d4657f84e3f92fb"
+  },
+  "figures\\crop_age_error.pdf": {
+    "bytes": 43972,
+    "sha256": "8809f3312c713ae614abb4122d34289021df271aaa198a03a5c9c3983089dbb0"
+  },
+  "figures\\crop_age_error.png": {
+    "bytes": 208739,
+    "sha256": "2313d8eee07ad076d1fb6d23c850c379f71c25af9d001c9a97f59c583ae29906"
+  },
+  "package_outputs.py": {
+    "bytes": 11777,
+    "sha256": "fcf23d17cd5aab71a8ec26f2a794a445ec0bfa6e00783b48ece24b1d4ba7d016"
+  },
+  "README.md": {
+    "bytes": 4145,
+    "sha256": "f3844692a21b155b402af9321dc6edb73c4281a36c0f9d7124aa177f1b85d779"
+  },
+  "source_hashes.json": {
+    "bytes": 273777,
+    "sha256": "8104f945bc100d7b3c67fb36be2448b67fde64b12c396e723103c76f9553bbef"
+  },
+  "sources\\회의록_AX데이터구축_0826.txt": {
+    "bytes": 17010,
+    "sha256": "7a0e25083989e3a1de3e9631beafa00e7f54a6c198bda5c25c266db511d09d8a"
+  },
+  "sources\\회의록_AX데이터구축_0909.txt": {
+    "bytes": 7728,
+    "sha256": "88cdd9840b49e5faf81fecf24541f313cf81193a799ce483bb2a3f58175c53e2"
+  },
+  "tables\\all_group_validation_metrics.csv": {
+    "bytes": 846507,
+    "sha256": "7681514ce18ce6817906c6931a873a7de1ae1ee678101a7bcc3117d942efbd5a"
+  },
+  "tables\\ax_field_schema.csv": {
+    "bytes": 20734,
+    "sha256": "a21f5bb19a079c40829b300c2e20d9c4ae072ca9ada687ac83a0d7ef5531fb5d"
+  },
+  "tables\\baseline_performance.csv": {
+    "bytes": 10464,
+    "sha256": "08601a49639dd77addd41c197eddaaee7458254338359d9e1964451e785a72e1"
+  },
+  "tables\\category_effect_summary.csv": {
+    "bytes": 3952,
+    "sha256": "93a0d8630bd00b6fc1b32309f755c9567ddd5be7d576e089a2fbc7f3f26fb108"
+  },
+  "tables\\cohort_profile.csv": {
+    "bytes": 4358,
+    "sha256": "e38f5afda499cc9edb1fe26d710733fcf45a67e5431c4509743590d24aa92d22"
+  },
+  "tables\\comparison_arms.csv": {
+    "bytes": 763,
+    "sha256": "9a218ab9ff246878e4cee8eba5ab6e54bf6274cffce04a7887be586828c9182c"
+  },
+  "tables\\crop_cycle_quality.csv": {
+    "bytes": 7886,
+    "sha256": "97c423c308032b367acace3bc17c96afb94c7cfc1d0fa5b3a8ca42f2f8e922ea"
+  },
+  "tables\\crossed_error_strata.csv": {
+    "bytes": 13831,
+    "sha256": "48354bc649ba8b515334bbc5fabb8f2477d16a9ebde1ccf5d28fddfe75cbbdd2"
+  },
+  "tables\\error_strata.csv": {
+    "bytes": 281844,
+    "sha256": "8e0ac7b5f78e4842da72bc5fab922d9d136e946d6797c9205de6f137e1b53ec9"
+  },
+  "tables\\excluded_observations.csv": {
+    "bytes": 117610,
+    "sha256": "725fd80c57121419d9095046fa44ac882b3f4b9fb96f4b41ab93773537e7e85f"
+  },
+  "tables\\feature_coverage.csv": {
+    "bytes": 40904,
+    "sha256": "f4b73fdd1bc36961c1b25ea2181c8997b56c005c3760fa4359c85d395be5045c"
+  },
+  "tables\\hypotheses.csv": {
+    "bytes": 3425,
+    "sha256": "ce1e3193748869533fcbc2365d4d8f01fca9e2d7d31db2dbbbdb12d4368a5fea"
+  },
+  "tables\\integrity_checks.csv": {
+    "bytes": 238380,
+    "sha256": "7e2de9037bebde01b2cba6cd2c1a5fc684fbb54199c3760ae45611e76a26afa6"
+  },
+  "tables\\kpi_planning_reference.csv": {
+    "bytes": 1911,
+    "sha256": "943ae349565f694a6addaaf77d06d2295df7c393cc155df117bf246ebe4fbac8"
+  },
+  "tables\\largest_error_cases.csv": {
+    "bytes": 45340,
+    "sha256": "10b8e10f2ab8e2a756f1f9f93babe7a4f7c3b8621de4f0bd67285832187a66f6"
+  },
+  "tables\\leave_one_facility_sensitivity.csv": {
+    "bytes": 3243,
+    "sha256": "a6d95072093c631243794a3013d1044b94612e3b1760f4b94abf30acac654887"
+  },
+  "tables\\model_comparison.csv": {
+    "bytes": 36155,
+    "sha256": "bcc5870ad12995f39ef1f7286cfbbfd0a1d4552869301f2152a418bf13cece83"
+  },
+  "tables\\model_seed_metrics.csv": {
+    "bytes": 235729,
+    "sha256": "2b952851f3affc7a575099c5e73413b8219ebce0162e877f7ca2a37e5e695738"
+  },
+  "tables\\paired_category_comparisons.csv": {
+    "bytes": 483475,
+    "sha256": "ebabf37e628fc4ce7adceec3165c324ceaa4507ddd88e6a0905bc5f3297b397c"
+  },
+  "tables\\registered_categories.csv": {
+    "bytes": 290288,
+    "sha256": "f2a93b2196cc30074be8fb9e6003bd3aa04f7eb23bfa0cc3b55af824bd0fb31b"
+  },
+  "tables\\selected_input_diagnostics.csv": {
+    "bytes": 59272,
+    "sha256": "7a8ef1bde37483da7db3572dcbc7af7cb8c1c73e572c653ff094091c55e08c61"
+  },
+  "tables\\selected_models.csv": {
+    "bytes": 2013,
+    "sha256": "1467e8625263ed58cd0ced4506de49520c0410ee01b5629f66383ecc3c76a8ae"
+  },
+  "tables\\selected_predictions.parquet": {
+    "bytes": 684601,
+    "sha256": "61637bdf6eb7eb9739d0157ff7cac07411e4aed7814ddc576779dd62bd6890f3"
+  },
+  "tables\\source_data_quality.csv": {
+    "bytes": 3083,
+    "sha256": "8914865d850d978f8aff35f912d29c54e1f45587417f466eafbfb354af0d3196"
+  },
+  "tables\\source_sum_comparisons.csv": {
+    "bytes": 155891,
+    "sha256": "7d32eb453350a0254c45265459c64c389be0f85ebccfbd73573c6acc7ee2399b"
+  },
+  "tables\\target_diagnosis.csv": {
+    "bytes": 2207,
+    "sha256": "c6b82a119e6a3e1793fb111ec253a52332173f71461211d393ec326b7c1812b4"
+  },
+  "tables\\target_distribution.csv": {
+    "bytes": 13455,
+    "sha256": "4789e836e8dad1a7da5b2240e22d95896735c97e7244577e591c4660a8e0ce48"
+  },
+  "분석표_및_AX설계.xlsx": {
+    "bytes": 970104,
+    "sha256": "ed0763e031246b9a132aaefc72f404f01ce2a5de46182cf5ce5a255e757bb8ae"
+  },
+  "종합분석보고서.html": {
+    "bytes": 976020,
+    "sha256": "375ec976b17f1ea15863d0511b87d02af0066a27a0869b4d0b1203fd386df14b"
+  }
+}

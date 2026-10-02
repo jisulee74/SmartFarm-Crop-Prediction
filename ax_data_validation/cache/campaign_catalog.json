@@ -1,0 +1,36 @@
+{
+  "default_campaign": "stored_control_codes",
+  "generated_at": "2026-10-02T00:31:37.323498+00:00",
+  "campaigns": [
+    {
+      "id": "stored_control_codes",
+      "internal_campaign_id": "exhaustive_e1_e7_v1",
+      "name": "시설별 제어코드 기준",
+      "short_name": "시설별 코드 기준",
+      "description": "DB에 저장된 시설 제어 코드를 구분한 최초 전수실험",
+      "status": "completed",
+      "progress_percent": 100.0,
+      "data_path": "./cache/experiment_index.json",
+      "predictions_path": "./cache/predictions",
+      "feature_selections_path": "./cache/feature_selections"
+    },
+    {
+      "id": "semantic_control",
+      "internal_campaign_id": "exhaustive_e6_semantic_v2",
+      "name": "장치 의미 통합 기준",
+      "short_name": "장치 의미 통합",
+      "description": "시설마다 다른 제어 장치의 방향·층수 표현을 합치고, 장치 종류와 측정값 의미는 유지한 추가 검증",
+      "why_separate": "완료된 시설별 코드 기준 결과를 보존하면서, 시설 간 코드 표현 차이가 E6 연결률과 예측 성능에 미친 영향을 공정하게 비교하기 위해 별도 실험으로 진행했습니다.",
+      "scope_note": "시설 제어(E6)를 장치 의미로 통합해 다시 학습하는 16개 조합. E6가 없는 15개 조합은 기존 결과를 재사용합니다.",
+      "status": "completed",
+      "progress_percent": 100.0,
+      "completed_lanes": 48,
+      "total_lanes": 48,
+      "remaining_lanes": 0,
+      "data_path": "./cache/campaigns/semantic_control/experiment_index.json",
+      "predictions_path": "./cache/campaigns/semantic_control/predictions",
+      "baseline_predictions_path": "./cache/predictions",
+      "feature_selections_path": "./cache/campaigns/semantic_control/feature_selections"
+    }
+  ]
+}

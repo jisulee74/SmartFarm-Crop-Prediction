@@ -1,0 +1,9 @@
+﻿target,reference_rmse,illustrative_10pct_rmse,reference_change_mae,illustrative_15pct_change_mae,reference_persistence_rmse,reference_zero_rmse,status
+tomato_first,0.4811963819128014,0.4330767437215213,0.9006954792244681,0.7655911573407979,0.6044212747739616,0.2996385851884668,planning illustration only; rebaseline on the same new paired cohort before preregistration
+tomato_second,0.3775302391610939,0.3397772152449845,0.9879683359246932,0.8397730855359893,0.4242640687119285,0.3055050463303893,planning illustration only; rebaseline on the same new paired cohort before preregistration
+tomato_third,0.4377395810670776,0.39396562296036985,0.9787163028342456,0.8319088574091087,0.4503301042537604,0.2773500981126146,planning illustration only; rebaseline on the same new paired cohort before preregistration
+tomato_sum123,0.8968664125924652,0.8071797713332187,1.959308038594631,1.6654118328054364,0.7409123085433585,0.2773500981126146,planning illustration only; rebaseline on the same new paired cohort before preregistration
+strawberry_first,1.6537419989570636,1.4883677990613573,2.9640317132517144,2.519426956263957,1.8879436459256624,3.170324181217552,planning illustration only; rebaseline on the same new paired cohort before preregistration
+strawberry_second,1.49444468099945,1.345000212899505,2.4387399363057582,2.0729289458598945,1.73131517330016,2.656083031470156,planning illustration only; rebaseline on the same new paired cohort before preregistration
+strawberry_third,1.4634565129368664,1.3171108616431797,2.374719007544853,2.018511156413125,1.5716436282654906,2.4296470347307237,planning illustration only; rebaseline on the same new paired cohort before preregistration
+strawberry_sum123,2.925335317198482,2.632801785478634,3.246432258916536,2.759467420079056,2.9096807450674995,5.793253269061387,planning illustration only; rebaseline on the same new paired cohort before preregistration

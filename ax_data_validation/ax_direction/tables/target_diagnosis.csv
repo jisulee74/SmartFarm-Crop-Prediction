@@ -1,0 +1,9 @@
+﻿target,finding,next_validation,evidence
+tomato_first,작기 ≤60일에 SSE 99.9%; PF_0026456_01 시설 53행에서 SSE 72.1%; 0 예측보다 RMSE 큼,화방 생리 상태·0 의미 및 초기 관측 정합성 확인; 초기 이력 확보; 시설별 추가 평가,baseline_performance.csv; error_strata.csv
+tomato_second,작기 ≤60일에 SSE 100.0%; PF_0026456_01 시설 44행에서 SSE 77.2%; 0 예측보다 RMSE 큼,화방 생리 상태·0 의미 및 초기 관측 정합성 확인; 초기 이력 확보; 시설별 추가 평가,baseline_performance.csv; error_strata.csv
+tomato_third,작기 ≤60일에 SSE 100.0%; PF_0026456_01 시설 34행에서 SSE 88.7%; 0 예측보다 RMSE 큼,화방 생리 상태·0 의미 및 초기 관측 정합성 확인; 초기 이력 확보; 시설별 추가 평가,baseline_performance.csv; error_strata.csv
+tomato_sum123,작기 ≤60일에 SSE 99.6%; PF_0026456_01 시설 34행에서 SSE 91.0%; 0 예측보다 RMSE 큼,화방 생리 상태·0 의미 및 초기 관측 정합성 확인; 초기 이력 확보; 시설별 추가 평가; 합계 산출 방식 및 단순 유지 기준 우선 비교,baseline_performance.csv; error_strata.csv
+strawberry_first,"2개 이상 증가 46행의 bias -4.49개, SSE 60.2%; 변화 구간 오차 집중",기존 생육 변수 활용 검증 → 수정·적과·수확 등 작업 및 화방 상태 연계,baseline_performance.csv; error_strata.csv
+strawberry_second,"2개 이상 증가 48행의 bias -4.02개, SSE 72.6%; 변화 구간 오차 집중",기존 생육 변수 활용 검증 → 수정·적과·수확 등 작업 및 화방 상태 연계,baseline_performance.csv; error_strata.csv
+strawberry_third,"2개 이상 증가 45행의 bias -3.56개, SSE 54.9%; 변화 구간 오차 집중",기존 생육 변수 활용 검증 → 수정·적과·수확 등 작업 및 화방 상태 연계,baseline_performance.csv; error_strata.csv
+strawberry_sum123,"2개 이상 증가 91행의 bias -4.77개, SSE 49.5%; 변화 구간 오차 집중",기존 생육 변수 활용 검증 → 수정·적과·수확 등 작업 및 화방 상태 연계; 합계 산출 방식 및 단순 유지 기준 우선 비교,baseline_performance.csv; error_strata.csv

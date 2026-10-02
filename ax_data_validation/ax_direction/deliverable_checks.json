@@ -1,0 +1,157 @@
+{
+  "passed": true,
+  "checks": [
+    {
+      "check": "analysis_passed",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "web_bundle_roundtrip",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "predictions_have_all_targets",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "predictions_unique_seed_rows",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "tomato_first_validation_export_n",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "tomato_first_test_export_n",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "tomato_second_validation_export_n",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "tomato_second_test_export_n",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "tomato_third_validation_export_n",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "tomato_third_test_export_n",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "tomato_sum123_validation_export_n",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "tomato_sum123_test_export_n",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "strawberry_first_validation_export_n",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "strawberry_first_test_export_n",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "strawberry_second_validation_export_n",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "strawberry_second_test_export_n",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "strawberry_third_validation_export_n",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "strawberry_third_test_export_n",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "strawberry_sum123_validation_export_n",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "strawberry_sum123_test_export_n",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "eight_test_baselines",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "expected_tomato_sum",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "expected_strawberry_second",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "xlsx_zip_integrity",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "xlsx_xml_parse",
+      "passed": true,
+      "detail": "28 XML documents"
+    },
+    {
+      "check": "xlsx_sheet_names",
+      "passed": true,
+      "detail": "['README', 'all_group_validation_metrics', 'ax_field_schema', 'baseline_performance', 'category_effect_summary', 'cohort_profile', 'comparison_arms', 'crossed_error_strata', 'error_strata', 'excluded_observations', 'feature_coverage', 'hypotheses', 'kpi_planning_reference', 'largest_error_cases', 'leave_one_facility_sensitivity', 'model_comparison', 'model_seed_metrics', 'paired_category_comparisons', 'registered_categories', 'selected_input_diagnostics', 'selected_models', 'source_data_quality', 'source_sum_comparisons', 'target_diagnosis']"
+    },
+    {
+      "check": "01_성능_오차_원인분석.md_link_figures/baseline_comparison.png",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "01_성능_오차_원인분석.md_link_figures/crop_age_error.png",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "01_성능_오차_원인분석.md_link_figures/change_error_concentration.png",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "node_offline_harness_skipped",
+      "passed": true,
+      "detail": "node not in PATH on local environment"
+    }
+  ],
+  "visual_review": "baseline_comparison.png inspected for labels/legend; no real-browser layout test, HTML filter JS tested with DOM harness",
+  "created_at": "2026-09-14T11:15:18.239799+09:00"
+}

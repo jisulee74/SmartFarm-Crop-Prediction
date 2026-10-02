@@ -1,0 +1,89 @@
+﻿table,field,type,unit,source,cadence,join_key,availability_rule,use_role,required,hypothesis
+ax_event,event_id,string,ID,시설/작기/개체 원장,이벤트마다,scope별 적용 범위 매핑,원장 유효기간 일치,join,Y,H02-H06
+ax_event,facility_id,string,ID,시설/작기/개체 원장,이벤트마다,scope별 적용 범위 매핑,원장 유효기간 일치,join,Y,H02-H06
+ax_event,crop_sn,string,ID,시설/작기/개체 원장,이벤트마다,scope별 적용 범위 매핑,원장 유효기간 일치,join,Y,H02-H06
+ax_event,scope_type,enum: facility/zone/plant/truss,ID,시설/작기/개체 원장,이벤트마다,scope별 적용 범위 매핑,원장 유효기간 일치,join,Y,H02-H06
+ax_event,sample_num,string nullable,ID,시설/작기/개체 원장,이벤트마다,scope별 적용 범위 매핑,원장 유효기간 일치,join,Y,H02-H06
+ax_event,truss_id,integer nullable,ID,시설/작기/개체 원장,이벤트마다,scope별 적용 범위 매핑,원장 유효기간 일치,join,Y,H02-H06
+ax_event,zone_id,string nullable,ID,시설/작기/개체 원장,이벤트마다,scope별 적용 범위 매핑,원장 유효기간 일치,join,Y,H02-H06
+ax_event,occurred_at,timestamp with timezone,Asia/Seoul,작업 로그/서버 접수 기록,이벤트마다,facility_id + crop_sn + sample_num + truss_id,세 시각 분리; occurred_at<=t AND available_at<=t,asof_filter,Y,H03-H06
+ax_event,recorded_at,timestamp with timezone,Asia/Seoul,작업 로그/서버 접수 기록,이벤트마다,facility_id + crop_sn + sample_num + truss_id,세 시각 분리; occurred_at<=t AND available_at<=t,asof_filter,Y,H03-H06
+ax_event,available_at,timestamp with timezone,Asia/Seoul,작업 로그/서버 접수 기록,이벤트마다,facility_id + crop_sn + sample_num + truss_id,세 시각 분리; occurred_at<=t AND available_at<=t,asof_filter,Y,H03-H06
+ax_event,event_type,enum,표준 코드,작업자/조사원,발생시 기록·일일 확인,facility_id + crop_sn + sample_num + truss_id,예측 시점까지 확인·접수된 기록만,historical_feature,Y,H03-H04
+ax_event,quantity,float nullable,quantity_unit 참조,작업자 계수,발생시 기록·일일 확인,facility_id + crop_sn + sample_num + truss_id,예측 시점까지 확인·접수된 기록만,historical_feature,조건부,H03-H04
+ax_event,quantity_unit,enum,개/주/화방/회 등,작업 정의,발생시 기록·일일 확인,facility_id + crop_sn + sample_num + truss_id,예측 시점까지 확인·접수된 기록만,historical_feature,Y,H03-H04
+ax_event,method_code,enum nullable,표준 코드,작업자,발생시 기록·일일 확인,facility_id + crop_sn + sample_num + truss_id,예측 시점까지 확인·접수된 기록만,historical_feature,조건부,H03-H04
+ax_event,reason_code,enum nullable,상태/목표/제약 코드,일지+문답,발생시 기록·일일 확인,facility_id + crop_sn + sample_num + truss_id,예측 시점까지 확인·접수된 기록만,historical_feature,조건부,H03-H04
+ax_event,reason_text,string nullable,자유 서술,현장 문답,발생시 기록·일일 확인,facility_id + crop_sn + sample_num + truss_id,예측 시점까지 확인·접수된 기록만,historical_feature,조건부,H03-H04
+ax_event,evidence_ref,string,이미지/영상/일지 경로,근거 원본,발생시 기록·일일 확인,facility_id + crop_sn + sample_num + truss_id,예측 시점까지 확인·접수된 기록만,historical_feature,Y,H03-H04
+ax_event,record_status,enum,observed_no_event/event_recorded/unknown,일일 확인,발생시 기록·일일 확인,facility_id + crop_sn + sample_num + truss_id,예측 시점까지 확인·접수된 기록만,historical_feature,Y,H03-H04
+ax_event,confidence,enum,verified/unverified/conflict,교차 검증,발생시 기록·일일 확인,facility_id + crop_sn + sample_num + truss_id,예측 시점까지 확인·접수된 기록만,historical_feature,Y,H03-H04
+ax_observation,observed_at,timestamp,Asia/Seoul,조사원+시각 근거,정기 조사 및 초기/전환 구간 추가 조사,facility_id + crop_sn + sample_num + truss_id + observed_at,관측·가용 시각<=t; t 이후 관측은 정답/사후 설명,state_or_label,Y,H02-H05
+ax_observation,available_at,timestamp,Asia/Seoul,조사원+시각 근거,정기 조사 및 초기/전환 구간 추가 조사,facility_id + crop_sn + sample_num + truss_id + observed_at,관측·가용 시각<=t; t 이후 관측은 정답/사후 설명,state_or_label,Y,H02-H05
+ax_observation,truss_stage,enum,not_emerged/bud/flowering/fruiting/finished/unknown,조사원+시각 근거,정기 조사 및 초기/전환 구간 추가 조사,facility_id + crop_sn + sample_num + truss_id + observed_at,관측·가용 시각<=t; t 이후 관측은 정답/사후 설명,state_or_label,Y,H02-H05
+ax_observation,flower_count,integer nullable,개/화방,조사원+시각 근거,정기 조사 및 초기/전환 구간 추가 조사,facility_id + crop_sn + sample_num + truss_id + observed_at,관측·가용 시각<=t; t 이후 관측은 정답/사후 설명,state_or_label,Y,H02-H05
+ax_observation,fruit_count,integer nullable,개/화방,조사원+시각 근거,정기 조사 및 초기/전환 구간 추가 조사,facility_id + crop_sn + sample_num + truss_id + observed_at,관측·가용 시각<=t; t 이후 관측은 정답/사후 설명,state_or_label,Y,H02-H05
+ax_observation,zero_reason,enum nullable,observed_zero/not_emerged/finished/not_observed/unknown,조사원+시각 근거,정기 조사 및 초기/전환 구간 추가 조사,facility_id + crop_sn + sample_num + truss_id + observed_at,관측·가용 시각<=t; t 이후 관측은 정답/사후 설명,state_or_label,Y,H02-H05
+ax_observation,observable,boolean,관측 가능 여부,조사원+시각 근거,정기 조사 및 초기/전환 구간 추가 조사,facility_id + crop_sn + sample_num + truss_id + observed_at,관측·가용 시각<=t; t 이후 관측은 정답/사후 설명,state_or_label,Y,H02-H05
+ax_observation,observer_id,string,조사자 ID,조사원+시각 근거,정기 조사 및 초기/전환 구간 추가 조사,facility_id + crop_sn + sample_num + truss_id + observed_at,관측·가용 시각<=t; t 이후 관측은 정답/사후 설명,state_or_label,Y,H02-H05
+ax_observation,image_ref,string nullable,근거 이미지,조사원+시각 근거,정기 조사 및 초기/전환 구간 추가 조사,facility_id + crop_sn + sample_num + truss_id + observed_at,관측·가용 시각<=t; t 이후 관측은 정답/사후 설명,state_or_label,Y,H02-H05
+ax_observation,protocol_version,string,조사 정의 버전,조사원+시각 근거,정기 조사 및 초기/전환 구간 추가 조사,facility_id + crop_sn + sample_num + truss_id + observed_at,관측·가용 시각<=t; t 이후 관측은 정답/사후 설명,state_or_label,Y,H02-H05
+ax_context,cultivar,string,품종,농가 원장·현장 확인,작기 시작·변경 발생시,facility_id + crop_sn + sample_num + truss_id,valid_from<=t<valid_to AND available_at<=t,context_feature,조건부,H04
+ax_context,transplant_date,date,정식일,농가 원장·현장 확인,작기 시작·변경 발생시,facility_id + crop_sn + sample_num + truss_id,valid_from<=t<valid_to AND available_at<=t,context_feature,조건부,H04
+ax_context,truss_emergence_date,date nullable,화방 출현일,농가 원장·현장 확인,작기 시작·변경 발생시,facility_id + crop_sn + sample_num + truss_id,valid_from<=t<valid_to AND available_at<=t,context_feature,조건부,H04
+ax_context,target_fruit_count,integer nullable,목표 개/화방,농가 원장·현장 확인,작기 시작·변경 발생시,facility_id + crop_sn + sample_num + truss_id,valid_from<=t<valid_to AND available_at<=t,context_feature,조건부,H04
+ax_context,valid_from,timestamp,유효 시작,농가 원장·현장 확인,작기 시작·변경 발생시,facility_id + crop_sn + sample_num + truss_id,valid_from<=t<valid_to AND available_at<=t,context_feature,조건부,H04
+ax_context,valid_to,timestamp nullable,유효 종료,농가 원장·현장 확인,작기 시작·변경 발생시,facility_id + crop_sn + sample_num + truss_id,valid_from<=t<valid_to AND available_at<=t,context_feature,조건부,H04
+ax_context,available_at,timestamp,가용 시각,농가 원장·현장 확인,작기 시작·변경 발생시,facility_id + crop_sn + sample_num + truss_id,valid_from<=t<valid_to AND available_at<=t,context_feature,조건부,H04
+ax_constraint,constraint_type,enum,표준 정의,장치 로그+근거 문답,발생·해제시,facility_id + crop_sn + sample_num + truss_id,t 당시 알려진 제약만; 미래 해제 시각으로 과거 특성 생성 금지,constraint_feature,조건부,H06
+ax_constraint,started_at,timestamp,표준 정의,장치 로그+근거 문답,발생·해제시,facility_id + crop_sn + sample_num + truss_id,t 당시 알려진 제약만; 미래 해제 시각으로 과거 특성 생성 금지,constraint_feature,조건부,H06
+ax_constraint,resolved_at,timestamp nullable,표준 정의,장치 로그+근거 문답,발생·해제시,facility_id + crop_sn + sample_num + truss_id,t 당시 알려진 제약만; 미래 해제 시각으로 과거 특성 생성 금지,constraint_feature,조건부,H06
+ax_constraint,available_at,timestamp,표준 정의,장치 로그+근거 문답,발생·해제시,facility_id + crop_sn + sample_num + truss_id,t 당시 알려진 제약만; 미래 해제 시각으로 과거 특성 생성 금지,constraint_feature,조건부,H06
+ax_constraint,severity,enum,표준 정의,장치 로그+근거 문답,발생·해제시,facility_id + crop_sn + sample_num + truss_id,t 당시 알려진 제약만; 미래 해제 시각으로 과거 특성 생성 금지,constraint_feature,조건부,H06
+ax_constraint,affected_scope,string,표준 정의,장치 로그+근거 문답,발생·해제시,facility_id + crop_sn + sample_num + truss_id,t 당시 알려진 제약만; 미래 해제 시각으로 과거 특성 생성 금지,constraint_feature,조건부,H06
+survey_schedule,planned_survey_at,timestamp,시각/표준 코드,조사 일정·조사원 기록,조사마다,facility_id + crop_sn + sample_num + truss_id,당시 확정된 계획만 입력; actual/delay는 사후 진단,schedule_or_diagnostic,Y,H05
+survey_schedule,actual_survey_at,timestamp,시각/표준 코드,조사 일정·조사원 기록,조사마다,facility_id + crop_sn + sample_num + truss_id,당시 확정된 계획만 입력; actual/delay는 사후 진단,schedule_or_diagnostic,Y,H05
+survey_schedule,schedule_available_at,timestamp,시각/표준 코드,조사 일정·조사원 기록,조사마다,facility_id + crop_sn + sample_num + truss_id,당시 확정된 계획만 입력; actual/delay는 사후 진단,schedule_or_diagnostic,Y,H05
+survey_schedule,delay_reason,enum nullable,시각/표준 코드,조사 일정·조사원 기록,조사마다,facility_id + crop_sn + sample_num + truss_id,당시 확정된 계획만 입력; actual/delay는 사후 진단,schedule_or_diagnostic,Y,H05
+survey_schedule,replacement_flag,boolean,시각/표준 코드,조사 일정·조사원 기록,조사마다,facility_id + crop_sn + sample_num + truss_id,당시 확정된 계획만 입력; actual/delay는 사후 진단,schedule_or_diagnostic,Y,H05
+survey_schedule,observation_scope,string,시각/표준 코드,조사 일정·조사원 기록,조사마다,facility_id + crop_sn + sample_num + truss_id,당시 확정된 계획만 입력; actual/delay는 사후 진단,schedule_or_diagnostic,Y,H05
+existing_growth,leaves_length,float,원천 단위 확인,기존 생육조사 데이터,기존 조사시,facility_id + crop_sn + sample_num + observed_at,available_at<=t; unit/scale 감사 후 사용,existing_feature,Y,H01
+existing_growth,leaves_num,integer,매/주 확인,기존 생육조사 데이터,기존 조사시,facility_id + crop_sn + sample_num + observed_at,available_at<=t; unit/scale 감사 후 사용,existing_feature,Y,H01
+existing_growth,theca_diameter,float,원천 단위 확인,기존 생육조사 데이터,기존 조사시,facility_id + crop_sn + sample_num + observed_at,available_at<=t; unit/scale 감사 후 사용,existing_feature,Y,H01
+ax_observation,record_id,string,ID/버전,유효기간 원장 및 수집 시스템,레코드마다,facility_id + crop_sn + sample_num + truss_id,scope에 맞는 ID 필수; 부모 원장 FK 검증,join,Y/범위별 조건부,H01-H06
+ax_observation,facility_id,string,ID/버전,유효기간 원장 및 수집 시스템,레코드마다,facility_id + crop_sn + sample_num + truss_id,scope에 맞는 ID 필수; 부모 원장 FK 검증,join,Y/범위별 조건부,H01-H06
+ax_observation,crop_sn,string,ID/버전,유효기간 원장 및 수집 시스템,레코드마다,facility_id + crop_sn + sample_num + truss_id,scope에 맞는 ID 필수; 부모 원장 FK 검증,join,Y/범위별 조건부,H01-H06
+ax_observation,sample_num,string nullable,ID/버전,유효기간 원장 및 수집 시스템,레코드마다,facility_id + crop_sn + sample_num + truss_id,scope에 맞는 ID 필수; 부모 원장 FK 검증,join,Y/범위별 조건부,H01-H06
+ax_observation,truss_id,integer nullable,ID/버전,유효기간 원장 및 수집 시스템,레코드마다,facility_id + crop_sn + sample_num + truss_id,scope에 맞는 ID 필수; 부모 원장 FK 검증,join,Y/범위별 조건부,H01-H06
+ax_observation,scope_type,enum,ID/버전,유효기간 원장 및 수집 시스템,레코드마다,facility_id + crop_sn + sample_num + truss_id,scope에 맞는 ID 필수; 부모 원장 FK 검증,join,Y/범위별 조건부,H01-H06
+ax_observation,record_version,string,ID/버전,유효기간 원장 및 수집 시스템,레코드마다,facility_id + crop_sn + sample_num + truss_id,scope에 맞는 ID 필수; 부모 원장 FK 검증,join,Y/범위별 조건부,H01-H06
+ax_context,record_id,string,ID/버전,유효기간 원장 및 수집 시스템,레코드마다,facility_id + crop_sn + sample_num + truss_id,scope에 맞는 ID 필수; 부모 원장 FK 검증,join,Y/범위별 조건부,H01-H06
+ax_context,facility_id,string,ID/버전,유효기간 원장 및 수집 시스템,레코드마다,facility_id + crop_sn + sample_num + truss_id,scope에 맞는 ID 필수; 부모 원장 FK 검증,join,Y/범위별 조건부,H01-H06
+ax_context,crop_sn,string,ID/버전,유효기간 원장 및 수집 시스템,레코드마다,facility_id + crop_sn + sample_num + truss_id,scope에 맞는 ID 필수; 부모 원장 FK 검증,join,Y/범위별 조건부,H01-H06
+ax_context,sample_num,string nullable,ID/버전,유효기간 원장 및 수집 시스템,레코드마다,facility_id + crop_sn + sample_num + truss_id,scope에 맞는 ID 필수; 부모 원장 FK 검증,join,Y/범위별 조건부,H01-H06
+ax_context,truss_id,integer nullable,ID/버전,유효기간 원장 및 수집 시스템,레코드마다,facility_id + crop_sn + sample_num + truss_id,scope에 맞는 ID 필수; 부모 원장 FK 검증,join,Y/범위별 조건부,H01-H06
+ax_context,scope_type,enum,ID/버전,유효기간 원장 및 수집 시스템,레코드마다,facility_id + crop_sn + sample_num + truss_id,scope에 맞는 ID 필수; 부모 원장 FK 검증,join,Y/범위별 조건부,H01-H06
+ax_context,record_version,string,ID/버전,유효기간 원장 및 수집 시스템,레코드마다,facility_id + crop_sn + sample_num + truss_id,scope에 맞는 ID 필수; 부모 원장 FK 검증,join,Y/범위별 조건부,H01-H06
+ax_constraint,record_id,string,ID/버전,유효기간 원장 및 수집 시스템,레코드마다,facility_id + crop_sn + sample_num + truss_id,scope에 맞는 ID 필수; 부모 원장 FK 검증,join,Y/범위별 조건부,H01-H06
+ax_constraint,facility_id,string,ID/버전,유효기간 원장 및 수집 시스템,레코드마다,facility_id + crop_sn + sample_num + truss_id,scope에 맞는 ID 필수; 부모 원장 FK 검증,join,Y/범위별 조건부,H01-H06
+ax_constraint,crop_sn,string,ID/버전,유효기간 원장 및 수집 시스템,레코드마다,facility_id + crop_sn + sample_num + truss_id,scope에 맞는 ID 필수; 부모 원장 FK 검증,join,Y/범위별 조건부,H01-H06
+ax_constraint,sample_num,string nullable,ID/버전,유효기간 원장 및 수집 시스템,레코드마다,facility_id + crop_sn + sample_num + truss_id,scope에 맞는 ID 필수; 부모 원장 FK 검증,join,Y/범위별 조건부,H01-H06
+ax_constraint,truss_id,integer nullable,ID/버전,유효기간 원장 및 수집 시스템,레코드마다,facility_id + crop_sn + sample_num + truss_id,scope에 맞는 ID 필수; 부모 원장 FK 검증,join,Y/범위별 조건부,H01-H06
+ax_constraint,scope_type,enum,ID/버전,유효기간 원장 및 수집 시스템,레코드마다,facility_id + crop_sn + sample_num + truss_id,scope에 맞는 ID 필수; 부모 원장 FK 검증,join,Y/범위별 조건부,H01-H06
+ax_constraint,record_version,string,ID/버전,유효기간 원장 및 수집 시스템,레코드마다,facility_id + crop_sn + sample_num + truss_id,scope에 맞는 ID 필수; 부모 원장 FK 검증,join,Y/범위별 조건부,H01-H06
+survey_schedule,record_id,string,ID/버전,유효기간 원장 및 수집 시스템,레코드마다,facility_id + crop_sn + sample_num + truss_id,scope에 맞는 ID 필수; 부모 원장 FK 검증,join,Y/범위별 조건부,H01-H06
+survey_schedule,facility_id,string,ID/버전,유효기간 원장 및 수집 시스템,레코드마다,facility_id + crop_sn + sample_num + truss_id,scope에 맞는 ID 필수; 부모 원장 FK 검증,join,Y/범위별 조건부,H01-H06
+survey_schedule,crop_sn,string,ID/버전,유효기간 원장 및 수집 시스템,레코드마다,facility_id + crop_sn + sample_num + truss_id,scope에 맞는 ID 필수; 부모 원장 FK 검증,join,Y/범위별 조건부,H01-H06
+survey_schedule,sample_num,string nullable,ID/버전,유효기간 원장 및 수집 시스템,레코드마다,facility_id + crop_sn + sample_num + truss_id,scope에 맞는 ID 필수; 부모 원장 FK 검증,join,Y/범위별 조건부,H01-H06
+survey_schedule,truss_id,integer nullable,ID/버전,유효기간 원장 및 수집 시스템,레코드마다,facility_id + crop_sn + sample_num + truss_id,scope에 맞는 ID 필수; 부모 원장 FK 검증,join,Y/범위별 조건부,H01-H06
+survey_schedule,scope_type,enum,ID/버전,유효기간 원장 및 수집 시스템,레코드마다,facility_id + crop_sn + sample_num + truss_id,scope에 맞는 ID 필수; 부모 원장 FK 검증,join,Y/범위별 조건부,H01-H06
+survey_schedule,record_version,string,ID/버전,유효기간 원장 및 수집 시스템,레코드마다,facility_id + crop_sn + sample_num + truss_id,scope에 맞는 ID 필수; 부모 원장 FK 검증,join,Y/범위별 조건부,H01-H06
+existing_growth,record_id,string,ID/버전,유효기간 원장 및 수집 시스템,레코드마다,facility_id + crop_sn + sample_num + truss_id,scope에 맞는 ID 필수; 부모 원장 FK 검증,join,Y/범위별 조건부,H01-H06
+existing_growth,facility_id,string,ID/버전,유효기간 원장 및 수집 시스템,레코드마다,facility_id + crop_sn + sample_num + truss_id,scope에 맞는 ID 필수; 부모 원장 FK 검증,join,Y/범위별 조건부,H01-H06
+existing_growth,crop_sn,string,ID/버전,유효기간 원장 및 수집 시스템,레코드마다,facility_id + crop_sn + sample_num + truss_id,scope에 맞는 ID 필수; 부모 원장 FK 검증,join,Y/범위별 조건부,H01-H06
+existing_growth,sample_num,string nullable,ID/버전,유효기간 원장 및 수집 시스템,레코드마다,facility_id + crop_sn + sample_num + truss_id,scope에 맞는 ID 필수; 부모 원장 FK 검증,join,Y/범위별 조건부,H01-H06
+existing_growth,truss_id,integer nullable,ID/버전,유효기간 원장 및 수집 시스템,레코드마다,facility_id + crop_sn + sample_num + truss_id,scope에 맞는 ID 필수; 부모 원장 FK 검증,join,Y/범위별 조건부,H01-H06
+existing_growth,scope_type,enum,ID/버전,유효기간 원장 및 수집 시스템,레코드마다,facility_id + crop_sn + sample_num + truss_id,scope에 맞는 ID 필수; 부모 원장 FK 검증,join,Y/범위별 조건부,H01-H06
+existing_growth,record_version,string,ID/버전,유효기간 원장 및 수집 시스템,레코드마다,facility_id + crop_sn + sample_num + truss_id,scope에 맞는 ID 필수; 부모 원장 FK 검증,join,Y/범위별 조건부,H01-H06
+existing_growth,observed_at,timestamp,Asia/Seoul,기존 조사·수집 로그,조사마다,facility_id + crop_sn + sample_num + truss_id,예측 당시의 가용성 확인; 불명확시 보수적 사용,asof_filter,Y,H01
+existing_growth,available_at,timestamp,Asia/Seoul,기존 조사·수집 로그,조사마다,facility_id + crop_sn + sample_num + truss_id,예측 당시의 가용성 확인; 불명확시 보수적 사용,asof_filter,Y,H01
