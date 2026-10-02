@@ -30,6 +30,14 @@ except ImportError:
     except Exception:
         sync_exp = None
 
+try:
+    import sync_e6_semantic_dashboard as sync_semantic
+except ImportError:
+    try:
+        from . import sync_e6_semantic_dashboard as sync_semantic
+    except Exception:
+        sync_semantic = None
+
 
 class DashboardRequestHandler(http.server.SimpleHTTPRequestHandler):
     protocol_version = "HTTP/1.0"
@@ -137,7 +145,11 @@ class DashboardRequestHandler(http.server.SimpleHTTPRequestHandler):
                 if not sync_exp:
                     return self.send_json({"error": "sync_exhaustive_experiments module not available"}, 500)
                 sync_exp.build_index()
-                return self.send_json({"status": "refreshed"})
+                semantic = sync_semantic.build_index() if sync_semantic else None
+                return self.send_json({
+                    "status": "refreshed",
+                    "campaigns": ["stored_control_codes"] + (["semantic_control"] if semantic else [])
+                })
 
             # Endpoint: /api/analysis/bundle
             elif path == "/api/analysis/bundle":

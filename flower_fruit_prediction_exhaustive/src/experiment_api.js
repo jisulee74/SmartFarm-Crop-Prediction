@@ -5,14 +5,17 @@
 
 const CACHE = {
   catalog: null,
-  metadata: null,
+  metadata: new Map(),
+  campaignCatalog: null,
   comparison: new Map(),
   predictions: new Map(),
   featureSelections: new Map(),
 };
 
 let staticCatalog = null;
-let staticIndex = null;
+const staticIndexes = new Map();
+
+const DEFAULT_CAMPAIGN = 'stored_control_codes';
 
 export async function fetchCatalog(force = false) {
   if (!force && CACHE.catalog) return CACHE.catalog;
@@ -42,30 +45,67 @@ export async function fetchCatalog(force = false) {
   }
 }
 
-async function getStaticIndex() {
-  if (staticIndex) return staticIndex;
-  const res = await fetch('./cache/experiment_index.json', { cache: 'no-store' });
-  if (!res.ok) throw new Error(`Static index HTTP error ${res.status}`);
-  staticIndex = await res.json();
-  return staticIndex;
+export async function fetchCampaignCatalog(force = false) {
+  if (!force && CACHE.campaignCatalog) return CACHE.campaignCatalog;
+  try {
+    const res = await fetch('./cache/campaign_catalog.json', { cache: 'no-store' });
+    if (res.ok) {
+      CACHE.campaignCatalog = await res.json();
+      return CACHE.campaignCatalog;
+    }
+  } catch (err) {
+    console.warn('[ExperimentAPI] Campaign catalog unavailable; using baseline only.', err);
+  }
+  CACHE.campaignCatalog = {
+    default_campaign: DEFAULT_CAMPAIGN,
+    campaigns: [{
+      id: DEFAULT_CAMPAIGN,
+      name: '시설별 제어코드 기준',
+      description: 'DB에 저장된 시설 제어 코드를 구분한 최초 전수실험',
+      status: 'completed', progress_percent: 100,
+      data_path: './cache/experiment_index.json',
+      predictions_path: './cache/predictions',
+      feature_selections_path: './cache/feature_selections'
+    }]
+  };
+  return CACHE.campaignCatalog;
 }
 
-export async function fetchMetadata(force = false) {
-  if (!force && CACHE.metadata) return CACHE.metadata;
+async function campaignDefinition(campaign = DEFAULT_CAMPAIGN) {
+  const catalog = await fetchCampaignCatalog();
+  return catalog.campaigns?.find(item => item.id === campaign)
+    || catalog.campaigns?.find(item => item.id === catalog.default_campaign)
+    || catalog.campaigns?.[0];
+}
+
+async function getStaticIndex(campaign = DEFAULT_CAMPAIGN, force = false) {
+  if (!force && staticIndexes.has(campaign)) return staticIndexes.get(campaign);
+  const definition = await campaignDefinition(campaign);
+  const path = definition?.data_path || './cache/experiment_index.json';
+  const res = await fetch(path, { cache: 'no-store' });
+  if (!res.ok) throw new Error(`Static index HTTP error ${res.status}: ${path}`);
+  const index = await res.json();
+  staticIndexes.set(campaign, index);
+  return index;
+}
+
+export async function fetchMetadata(force = false, campaign = DEFAULT_CAMPAIGN) {
+  if (!force && CACHE.metadata.has(campaign)) return CACHE.metadata.get(campaign);
   try {
+    if (campaign !== DEFAULT_CAMPAIGN) throw new Error('campaign-specific static metadata');
     const res = await fetch('./api/experiments/metadata');
     if (res.ok) {
       const data = await res.json();
-      CACHE.metadata = data;
+      CACHE.metadata.set(campaign, data);
       return data;
     }
   } catch (err) {
-    console.warn('[ExperimentAPI] API metadata failed, falling back to static index:', err);
+    if (campaign === DEFAULT_CAMPAIGN) console.warn('[ExperimentAPI] API metadata failed, falling back to static index:', err);
   }
 
   // Fallback to static cache/experiment_index.json
   try {
-    const index = await getStaticIndex();
+    const index = await getStaticIndex(campaign, force);
     const targets_meta = {};
     for (const [t_id, t_data] of Object.entries(index.targets || {})) {
       targets_meta[t_id] = {
@@ -94,7 +134,7 @@ export async function fetchMetadata(force = false) {
       models: ["poisson", "random_forest", "catboost", "mlp", "tabm", "tft"],
       seeds: [42, 52, 62]
     };
-    CACHE.metadata = data;
+    CACHE.metadata.set(campaign, data);
     return data;
   } catch (err) {
     console.error('[ExperimentAPI] Static metadata fallback failed:', err);
@@ -102,23 +142,27 @@ export async function fetchMetadata(force = false) {
   }
 }
 
-export async function fetchFeatureSelection(target, group, force = false) {
-  if (!force && CACHE.featureSelections.has(target)) {
-    return CACHE.featureSelections.get(target)?.combinations?.[group] || null;
+export async function fetchFeatureSelection(target, group, force = false, campaign = DEFAULT_CAMPAIGN) {
+  const cacheKey = `${campaign}::${target}`;
+  if (!force && CACHE.featureSelections.has(cacheKey)) {
+    return CACHE.featureSelections.get(cacheKey)?.combinations?.[group] || null;
   }
-  const res = await fetch(`./cache/feature_selections/${encodeURIComponent(target)}.json`, { cache: 'no-store' });
+  const definition = await campaignDefinition(campaign);
+  const root = definition?.feature_selections_path || './cache/feature_selections';
+  const res = await fetch(`${root}/${encodeURIComponent(target)}.json`, { cache: 'no-store' });
   if (!res.ok) throw new Error(`Feature selection detail HTTP error ${res.status}`);
   const data = await res.json();
-  CACHE.featureSelections.set(target, data);
+  CACHE.featureSelections.set(cacheKey, data);
   return data?.combinations?.[group] || null;
 }
 
-export async function fetchComparison(target, model, split, force = false) {
-  const cacheKey = `${target}::${model}::${split}`;
+export async function fetchComparison(target, model, split, force = false, campaign = DEFAULT_CAMPAIGN) {
+  const cacheKey = `${campaign}::${target}::${model}::${split}`;
   if (!force && CACHE.comparison.has(cacheKey)) {
     return CACHE.comparison.get(cacheKey);
   }
   try {
+    if (campaign !== DEFAULT_CAMPAIGN) throw new Error('campaign-specific static comparison');
     const url = `./api/experiments/comparison?target=${encodeURIComponent(target)}&model=${encodeURIComponent(model)}&split=${encodeURIComponent(split)}`;
     const res = await fetch(url);
     if (res.ok) {
@@ -127,13 +171,13 @@ export async function fetchComparison(target, model, split, force = false) {
       return data;
     }
   } catch (err) {
-    console.warn('[ExperimentAPI] API comparison failed, falling back to static calculation:', err);
+    if (campaign === DEFAULT_CAMPAIGN) console.warn('[ExperimentAPI] API comparison failed, falling back to static calculation:', err);
   }
 
   // Fallback to computing comparison from static catalog & index
   try {
     const catalog = await fetchCatalog();
-    const index = await getStaticIndex();
+    const index = await getStaticIndex(campaign, force);
     const t_data = index.targets?.[target] || {};
     const groups_dict = t_data.groups || {};
     const results_dict = t_data.results || {};
@@ -161,8 +205,10 @@ export async function fetchComparison(target, model, split, force = false) {
           category_ids: combo.groups,
           features: combo.features,
           completed_seeds: 0,
-          status: split === "test" ? "not_evaluated" : "unstarted",
-          reason: null,
+          status: ginfo.campaign_role === "not_in_scope" ? "not_in_scope" : (split === "test" ? "not_evaluated" : "unstarted"),
+          reason: ginfo.campaign_role === "not_in_scope" ? "E6 의미 통합 재실험 범위 외" : null,
+          source: ginfo.campaign_role || null,
+          source_label: null,
           is_winner: (gid === winner_group),
           params: {},
           bounded: {},
@@ -182,6 +228,8 @@ export async function fetchComparison(target, model, split, force = false) {
           completed_seeds: res_item.completed_seeds || 0,
           status: res_item.status || "unstarted",
           reason: res_item.reason || null,
+          source: res_item.source || null,
+          source_label: res_item.source_label || null,
           is_winner: (gid === winner_group),
           params: res_item.params || {},
           best_epoch: res_item.best_epoch,
@@ -223,6 +271,8 @@ export async function fetchComparison(target, model, split, force = false) {
       target,
       model,
       split,
+      campaign,
+      campaign_meta: index.campaign || {},
       target_status: t_data.status || "pending_experiment",
       frozen_winner: winner_group,
       provisional_winner,
@@ -237,12 +287,13 @@ export async function fetchComparison(target, model, split, force = false) {
   }
 }
 
-export async function fetchPredictions(target, group, model, split, seed = 'all', force = false) {
-  const cacheKey = `${target}::${group}::${model}::${split}::${seed}`;
+export async function fetchPredictions(target, group, model, split, seed = 'all', force = false, campaign = DEFAULT_CAMPAIGN) {
+  const cacheKey = `${campaign}::${target}::${group}::${model}::${split}::${seed}`;
   if (!force && CACHE.predictions.has(cacheKey)) {
     return CACHE.predictions.get(cacheKey);
   }
   try {
+    if (campaign !== DEFAULT_CAMPAIGN) throw new Error('campaign-specific static predictions');
     const url = `./api/experiments/predictions?target=${encodeURIComponent(target)}&group=${encodeURIComponent(group)}&model=${encodeURIComponent(model)}&split=${encodeURIComponent(split)}&seed=${encodeURIComponent(seed)}`;
     const res = await fetch(url);
     if (res.ok) {
@@ -251,12 +302,12 @@ export async function fetchPredictions(target, group, model, split, seed = 'all'
       return data;
     }
   } catch (err) {
-    console.warn('[ExperimentAPI] API predictions failed, falling back to static predictions cache:', err);
+    if (campaign === DEFAULT_CAMPAIGN) console.warn('[ExperimentAPI] API predictions failed, falling back to static predictions cache:', err);
   }
 
   // Fallback to static cache files
   try {
-    const index = await getStaticIndex();
+    const index = await getStaticIndex(campaign, force);
     const t_data = index.targets?.[target] || {};
     const key = `${group}::${model}::${split}`;
     const res_entry = t_data.results?.[key];
@@ -265,6 +316,10 @@ export async function fetchPredictions(target, group, model, split, seed = 'all'
     }
     const seeds_dict = res_entry.seeds || {};
     const available_seeds = Object.keys(seeds_dict).map(s => parseInt(s, 10)).sort((a, b) => a - b);
+    const definition = await campaignDefinition(campaign);
+    const predictionRoot = campaign === 'semantic_control' && res_entry.source === 'reused_stored_control_codes'
+      ? (definition?.baseline_predictions_path || './cache/predictions')
+      : (definition?.predictions_path || './cache/predictions');
 
     if (String(seed).toLowerCase() === 'all' || String(seed).toLowerCase() === 'ensemble') {
       const all_pred_runs = [];
@@ -272,7 +327,7 @@ export async function fetchPredictions(target, group, model, split, seed = 'all'
         const run_id = seeds_dict[String(s)]?.run_id;
         if (!run_id) continue;
         try {
-          const pRes = await fetch(`./cache/predictions/${run_id}.json`);
+          const pRes = await fetch(`${predictionRoot}/${run_id}.json`, { cache: 'no-store' });
           if (pRes.ok) {
             const pJson = await pRes.json();
             if (pJson.predictions && pJson.predictions.length > 0) {
@@ -325,7 +380,7 @@ export async function fetchPredictions(target, group, model, split, seed = 'all'
       if (!seed_item || !seed_item.run_id) {
         return { status: "seed_not_found", available_seeds, predictions: [], metadata: res_entry };
       }
-      const pRes = await fetch(`./cache/predictions/${seed_item.run_id}.json`);
+      const pRes = await fetch(`${predictionRoot}/${seed_item.run_id}.json`, { cache: 'no-store' });
       if (!pRes.ok) throw new Error(`Prediction fetch HTTP error ${pRes.status}`);
       const pData = await pRes.json();
       const preds = (pData.predictions || []).map(r => ({
@@ -355,18 +410,19 @@ export async function fetchPredictions(target, group, model, split, seed = 'all'
   }
 }
 
-export async function refreshExperiments() {
+export async function refreshExperiments(campaign = DEFAULT_CAMPAIGN) {
   try {
     const res = await fetch('./api/experiments/refresh');
     if (!res.ok) throw new Error(`HTTP error ${res.status}`);
     CACHE.catalog = null;
-    CACHE.metadata = null;
+    CACHE.campaignCatalog = null;
+    CACHE.metadata.clear();
     CACHE.comparison.clear();
     CACHE.predictions.clear();
     CACHE.featureSelections.clear();
     staticCatalog = null;
-    staticIndex = null;
-    return await fetchMetadata(true);
+    staticIndexes.clear();
+    return await fetchMetadata(true, campaign);
   } catch (err) {
     console.error('[ExperimentAPI] refreshExperiments failed:', err);
     throw err;

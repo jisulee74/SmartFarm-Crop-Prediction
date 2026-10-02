@@ -11,7 +11,7 @@
  * - Hyperparameters card
  */
 
-import { fetchCatalog, fetchMetadata, fetchComparison, fetchPredictions, fetchFeatureSelection, refreshExperiments } from './experiment_api.js?v=4';
+import { fetchCatalog, fetchCampaignCatalog, fetchMetadata, fetchComparison, fetchPredictions, fetchFeatureSelection, refreshExperiments } from './experiment_api.js?v=5';
 
 const CROP_TARGETS = {
   tomato: [
@@ -40,12 +40,14 @@ const MODEL_LABELS = {
 export class ExperimentViewController {
   constructor() {
     this.catalog = null;
+    this.campaignCatalog = null;
     this.metadata = null;
     this.currentComparison = null;
     this.currentPredictions = null;
 
     // View state
     this.state = {
+      campaign: 'stored_control_codes',
       crop: 'tomato',
       target: 'tomato_first',
       model: 'tabm',
@@ -171,7 +173,7 @@ export class ExperimentViewController {
         refreshBtn.disabled = true;
         refreshBtn.innerHTML = '<span>⏳</span> 갱신 중...';
         try {
-          await refreshExperiments();
+          await refreshExperiments(this.state.campaign);
           await this.loadInitialData();
           this.showToast('✅ 실험 결과가 최신 상태로 새로고침되었습니다.');
         } catch (err) {
@@ -358,7 +360,13 @@ export class ExperimentViewController {
   async loadInitialData() {
     try {
       this.catalog = await fetchCatalog();
-      this.metadata = await fetchMetadata();
+      this.campaignCatalog = await fetchCampaignCatalog();
+      const availableCampaigns = this.campaignCatalog?.campaigns || [];
+      if (!availableCampaigns.some(item => item.id === this.state.campaign)) {
+        this.state.campaign = this.campaignCatalog?.default_campaign || availableCampaigns[0]?.id || 'stored_control_codes';
+      }
+      this.metadata = await fetchMetadata(false, this.state.campaign);
+      this.renderCampaignSelector();
 
       this.updateTargetDropdown();
       this.populateCombinations();
@@ -367,6 +375,47 @@ export class ExperimentViewController {
     } catch (err) {
       console.error('[ExperimentView] Failed to load initial data:', err);
       this.showToast('⚠️ 전수실험 카탈로그 또는 메타데이터를 불러오지 못했습니다.');
+    }
+  }
+
+  renderCampaignSelector() {
+    const options = document.getElementById('exp_campaign_options');
+    const explanation = document.getElementById('exp_campaign_explanation');
+    const progress = document.getElementById('exp_campaign_progress');
+    const campaigns = this.campaignCatalog?.campaigns || [];
+    const selected = campaigns.find(item => item.id === this.state.campaign) || campaigns[0];
+    if (options) {
+      options.innerHTML = campaigns.map(item => `
+        <label class="campaign-basis-option ${item.id === this.state.campaign ? 'active' : ''}">
+          <input type="radio" name="exp_campaign_radio" value="${item.id}" ${item.id === this.state.campaign ? 'checked' : ''}>
+          <span class="campaign-option-title">${item.name}</span>
+          <span class="campaign-option-description">${item.description || ''}</span>
+        </label>
+      `).join('');
+      options.querySelectorAll('input[name="exp_campaign_radio"]').forEach(input => {
+        input.addEventListener('change', async event => {
+          if (event.target.value === this.state.campaign) return;
+          this.state.campaign = event.target.value;
+          this.metadata = await fetchMetadata(false, this.state.campaign);
+          this.renderCampaignSelector();
+          await this.loadComparisonData();
+          await this.loadPredictionsAndRender();
+        });
+      });
+    }
+    if (progress && selected) {
+      const percent = Number(selected.progress_percent ?? (selected.status === 'completed' ? 100 : 0));
+      progress.textContent = selected.status === 'completed'
+        ? `완료 · ${percent.toFixed(1)}%`
+        : `진행 중 · ${selected.completed_lanes || 0}/${selected.total_lanes || 0} lane (${percent.toFixed(1)}%)`;
+      progress.classList.toggle('running', selected.status !== 'completed');
+    }
+    if (explanation && selected) {
+      const why = selected.why_separate
+        ? `<strong>별도 실험 이유:</strong> ${selected.why_separate}`
+        : '<strong>기준 설명:</strong> 완료된 최초 전수실험 결과입니다.';
+      const scope = selected.scope_note ? `<br><strong>결과 구성:</strong> ${selected.scope_note}` : '';
+      explanation.innerHTML = `${why}${scope}`;
     }
   }
 
@@ -501,7 +550,7 @@ export class ExperimentViewController {
 
   async loadComparisonData() {
     try {
-      this.currentComparison = await fetchComparison(this.state.target, this.state.model, this.state.split);
+      this.currentComparison = await fetchComparison(this.state.target, this.state.model, this.state.split, false, this.state.campaign);
       this.renderComparisonTable();
       this.updateGroupMetaBar();
     } catch (err) {
@@ -581,8 +630,18 @@ export class ExperimentViewController {
       const winnerBadge = isWinner ? `<span class="badge-winner">🏆 우승</span>` : `-`;
 
       let statusTag;
-      if (hasResult) {
+      if (hasResult && r.source === 'reused_stored_control_codes') {
+        statusTag = `<span class="status-tag reused" title="E6가 없는 조합이므로 완료된 기존 결과를 그대로 사용했습니다.">기존 결과 재사용 (${r.completed_seeds}/3)</span>`;
+      } else if (hasResult && r.source === 'semantic_retrained') {
+        statusTag = `<span class="status-tag complete">의미 통합 완료 (${r.completed_seeds}/3)</span>`;
+      } else if (hasResult) {
         statusTag = `<span class="status-tag complete">완료 (${r.completed_seeds}/3)</span>`;
+      } else if (r.status === 'not_in_scope') {
+        statusTag = `<span class="status-tag out-of-scope" title="${this.escapeHtml(r.reason || '')}">이번 실험 범위 외</span>`;
+      } else if (r.status === 'running') {
+        statusTag = `<span class="status-tag running">학습 진행 중 (${r.completed_seeds || 0}/3)</span>`;
+      } else if (r.status === 'queued') {
+        statusTag = `<span class="badge-status pending">⏳ 실험 예정 (0/3)</span>`;
       } else if (r.status === 'ineligible') {
         statusTag = `<span class="status-tag unstarted">실행 불가</span>`;
       } else if (r.status === 'failed') {
@@ -658,7 +717,9 @@ export class ExperimentViewController {
         this.state.group_id,
         this.state.model,
         this.state.split,
-        this.state.seed
+        this.state.seed,
+        false,
+        this.state.campaign
       );
 
       const hasPreds = this.currentPredictions?.predictions && this.currentPredictions.predictions.length > 0;
@@ -1266,12 +1327,13 @@ export class ExperimentViewController {
     const combo = this.catalog?.combinations?.find(c => c.combination_id === groupId);
     const target = Object.values(CROP_TARGETS).flat().find(t => t.id === this.state.target);
     if (title) title.textContent = `${combo?.label || groupId} · 실제 사용 변수`;
-    if (subtitle) subtitle.textContent = `${target?.label || this.state.target} · ${MODEL_LABELS[this.state.model] || this.state.model}`;
+    const campaign = this.campaignCatalog?.campaigns?.find(item => item.id === this.state.campaign);
+    if (subtitle) subtitle.textContent = `${campaign?.name || ''} · ${target?.label || this.state.target} · ${MODEL_LABELS[this.state.model] || this.state.model}`;
     content.innerHTML = '<div class="selection-loading">선택 변수 기록을 불러오는 중입니다.</div>';
     modal.style.display = 'flex';
 
     try {
-      const detail = await fetchFeatureSelection(this.state.target, groupId);
+      const detail = await fetchFeatureSelection(this.state.target, groupId, false, this.state.campaign);
       if (!detail) throw new Error('해당 조합의 선택 변수 기록이 없습니다.');
       this.renderFeatureSelectionDetail(detail, content);
     } catch (err) {
@@ -1313,6 +1375,13 @@ export class ExperimentViewController {
       </tr>
     `).join('');
 
+    const sourceNote = detail.source_label ? `
+      <div class="selection-scope-note"><strong>결과 출처:</strong> ${this.escapeHtml(detail.source_label)}</div>
+    ` : '';
+    const exclusionNote = detail.exclusion_note ? `
+      <div class="selection-scope-note"><strong>제외 기록:</strong> ${this.escapeHtml(detail.exclusion_note)}</div>
+    ` : '';
+
     const unavailable = selected.length === 0 ? `
       <div class="selection-empty">
         <strong>이 조합은 실제 학습 변수 목록이 생성되지 않았습니다.</strong>
@@ -1321,6 +1390,7 @@ export class ExperimentViewController {
     ` : '';
 
     content.innerHTML = `
+      ${sourceNote}
       <div class="selection-scope-note">
         <strong>표시 기준:</strong> 검증(Validation) 평가 직전, 학습 데이터만으로 확정한 변수 목록입니다.
         같은 타깃·조합의 6개 모델이 이 목록을 공통으로 사용하며, 테스트 우승 조합도 이 목록을 동결해 사용합니다.
@@ -1332,6 +1402,7 @@ export class ExperimentViewController {
         <div><span>제외</span><strong class="selection-count-excluded">${detail.excluded_count}개</strong></div>
       </div>
       ${unavailable}
+      ${exclusionNote}
       ${selected.length ? `
         <section class="selection-section">
           <div class="selection-section-heading">

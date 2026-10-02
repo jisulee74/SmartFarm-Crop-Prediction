@@ -9,6 +9,7 @@ Verifies:
 """
 
 import sys
+import hashlib
 import json
 import urllib.request
 from pathlib import Path
@@ -74,6 +75,8 @@ def test_endpoints():
         f"{BASE_URL}/src/charts.js",
         f"{BASE_URL}/cache/combination_catalog.json",
         f"{BASE_URL}/cache/experiment_index.json",
+        f"{BASE_URL}/cache/campaign_catalog.json",
+        f"{BASE_URL}/cache/campaigns/semantic_control/experiment_index.json",
         f"{BASE_URL}/tomato_observed_counts_by_crop_cycle.csv",
         f"{BASE_URL}/strawberry_observed_counts_by_crop_cycle.csv",
         f"{BASE_URL}/api/experiments/catalog",
@@ -141,8 +144,32 @@ def test_comparison_127_combinations():
     print("[PASS] Comparison table returned exactly 127 combinations.")
 
 
+def test_campaign_comparison_integrity():
+    print("\n=== 5. Control-variable basis campaign integrity ===")
+    cache = LOCAL_DIR / "cache"
+    campaign_catalog = json.loads((cache / "campaign_catalog.json").read_text(encoding="utf-8"))
+    campaigns = campaign_catalog.get("campaigns", [])
+    assert [item["name"] for item in campaigns] == ["시설별 제어코드 기준", "장치 의미 통합 기준"]
+
+    baseline_path = cache / "experiment_index.json"
+    semantic = json.loads((cache / "campaigns" / "semantic_control" / "experiment_index.json").read_text(encoding="utf-8"))
+    baseline_hash = hashlib.sha256(baseline_path.read_bytes()).hexdigest()
+    assert semantic["campaign"]["baseline_index_sha256"] == baseline_hash, "Baseline index changed after semantic publication"
+    assert semantic["campaign"]["semantic_retrained_combinations"] == 16
+    assert semantic["campaign"]["reused_combinations"] == 15
+    assert semantic["campaign"]["out_of_scope_combinations"] == 96
+
+    allowed_statuses = {"success", "failed", "ineligible", "running", "queued", "not_in_scope", "not_evaluated"}
+    for target_id, target in semantic["targets"].items():
+        assert len(target.get("groups", {})) == 127, f"{target_id}: semantic view must keep all future-addressable combinations"
+        assert all(result.get("status") in allowed_statuses for result in target.get("results", {}).values())
+    print(f"Campaigns: {[item['name'] for item in campaigns]}")
+    print(f"Semantic lanes: {semantic['campaign']['completed_lanes']}/{semantic['campaign']['total_lanes']}")
+    print("[PASS] Baseline preservation and semantic campaign scope verified.")
+
+
 def test_observation_datasets():
-    print("\n=== 5. Observation Datasets Integrity ===")
+    print("\n=== 6. Observation Datasets Integrity ===")
     tomato_csv = LOCAL_DIR / "tomato_observed_counts_by_crop_cycle.csv"
     strawberry_csv = LOCAL_DIR / "strawberry_observed_counts_by_crop_cycle.csv"
 
@@ -163,6 +190,7 @@ if __name__ == "__main__":
     test_endpoints()
     test_metadata_and_targets()
     test_comparison_127_combinations()
+    test_campaign_comparison_integrity()
     test_observation_datasets()
     print("\n=======================================================")
     print(" ALL VERIFICATION TESTS PASSED SUCCESSFULLY! ")

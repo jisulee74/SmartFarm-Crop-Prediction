@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>꽃수·착과수 예측 모델 검증</title>
-  <link rel="stylesheet" href="./src/styles.css?v=16">
+  <link rel="stylesheet" href="./src/styles.css?v=17">
   <!-- Apache ECharts CDN (최신 안정 버전) -->
   <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
 </head>
@@ -76,7 +76,9 @@
         <p>
           • <strong>개체당 평균 모드:</strong> 특정 조사일에 조사된 유효 개체들의 평균값입니다. 조사일마다 조사 개체군(N수)이 달라질 수 있으므로 단순 총합이 아닌 평균값을 비교합니다.<br>
           • <strong>결측치 및 0의 구분:</strong> 빈칸(미관측)은 결측값으로 처리되어 표본(N)에서 제외되며, 실제 관측값 0은 정상 포함됩니다.<br>
-          • <strong>토마토 전체 꽃 수:</strong> 1·2·3화방 외 추가 화방을 포함한 원본 CSV 관측값을 유지합니다. (임의 합산 방지)
+          • <strong>토마토 전체 꽃 수:</strong> 1·2·3화방 외 추가 화방을 포함한 원본 CSV 관측값을 유지합니다. (임의 합산 방지)<br>
+          • <strong>토마토 시설 선정:</strong> 원천 11개 시설 중 실험기간에 1·2·3화방 꽃수의 다음 조사값을 만들 수 있는 10개 시설을 사용했습니다.<br>
+          • <strong>딸기 시설 선정:</strong> 최초 데이터 확정 시 연속 착과수 예측쌍이 있던 20개 시설을 고정 사용했으며, 이후 사용 가능해진 2개 시설은 기존 결과와의 동일 조건 비교를 위해 이번 실험에 추가하지 않았습니다.
         </p>
         <div class="guide-badges">
           <span class="badge-info">✔️ train/validation/test 전체 행 포함</span>
@@ -562,6 +564,18 @@
           </div>
         </div>
 
+        <div class="campaign-basis-panel" id="exp_campaign_panel" aria-label="시설 제어 변수 구성 기준 선택">
+          <div class="campaign-basis-heading">
+            <div>
+              <span class="campaign-basis-kicker">시설 제어 변수 구성 기준</span>
+              <h3>어떤 방식으로 시설 제어 기록을 연결했는지 선택하세요</h3>
+            </div>
+            <span class="campaign-progress-badge" id="exp_campaign_progress">불러오는 중</span>
+          </div>
+          <div class="campaign-basis-options" id="exp_campaign_options"></div>
+          <div class="campaign-basis-explanation" id="exp_campaign_explanation"></div>
+        </div>
+
         <div class="exp-selectors-grid">
           <!-- 1. 작물 선택 -->
           <div class="selector-field">
@@ -716,7 +730,7 @@
           <div class="exp-card-title-group">
             <h3 class="exp-card-title">📋 127개 입력변수군 조합별 모델 성능 비교표</h3>
             <p class="exp-card-subtitle">
-              E1~E7 비공집합 127개 전수조합의 성능 지표를 비교합니다. 행을 클릭하면 해당 조합의 상세 예측 결과가 하단에 즉시 표시됩니다. (미실행 조합은 '결과 대기'로 표시)
+              선택한 시설 제어 변수 구성 기준에서 E1~E7 조합의 성능 지표를 비교합니다. 완료 결과와 진행 중·실험 예정·범위 외 조합을 함께 표시하며, 행을 클릭하면 상세 예측 결과가 하단에 표시됩니다.
             </p>
           </div>
           <span class="filter-count-badge" id="exp_candidates_count_badge">후보 조합 127개</span>
@@ -1586,7 +1600,7 @@
 
 
   <!-- 메인 애플리케이션 진입점 -->
-  <script type="module" src="./src/app.js?v=22"></script>
+  <script type="module" src="./src/app.js?v=23"></script>
 </body>
 </html>
 
