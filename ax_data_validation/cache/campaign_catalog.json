@@ -1,7 +1,30 @@
 {
-  "default_campaign": "stored_control_codes",
-  "generated_at": "2026-10-02T00:31:37.323498+00:00",
+  "default_campaign": "growth_history_quick_screening",
+  "generated_at": "2026-10-06T09:03:00.853604+00:00",
   "campaigns": [
+    {
+      "id": "growth_history_quick_screening",
+      "internal_campaign_id": "exhaustive_e1_e2_deadline_quick_v1",
+      "name": "E1·E2 보완 빠른 선별",
+      "short_name": "E1·E2 보완 선별",
+      "description": "과거 꽃수·착과수 이력과 영양생장 변수를 보완한 127개 조합의 1차 선별 결과",
+      "why_separate": "기존 준비 캐시에 반영되지 않았던 E1·E2 파생변수를 정상 생성한 뒤, 모든 조합의 가능성을 먼저 확인하기 위해 별도 실험으로 수행했습니다.",
+      "scope_note": "8개 타깃 × 6개 모델 × 127개 조합을 Seed 42와 제한된 학습 횟수로 평가했습니다. 6,096건 중 6,048건이 성공했고 48건은 모든 후보 변수가 제외되어 실행 불가였습니다. 이 결과는 캠페인 내부의 후보 선별용이며 정식 3시드 검증이 진행 중입니다.",
+      "status": "completed",
+      "progress_percent": 100.0,
+      "completed_results": 6096,
+      "successful_results": 6048,
+      "ineligible_results": 48,
+      "total_results": 6096,
+      "total_seeds": 1,
+      "seeds": [
+        42
+      ],
+      "data_path": "./cache/campaigns/growth_history_quick_screening/experiment_index.json",
+      "predictions_path": "./cache/campaigns/growth_history_quick_screening/predictions",
+      "feature_selections_path": "./cache/campaigns/growth_history_quick_screening/feature_selections",
+      "feature_selection_layout": "by_combination"
+    },
     {
       "id": "stored_control_codes",
       "internal_campaign_id": "exhaustive_e1_e7_v1",

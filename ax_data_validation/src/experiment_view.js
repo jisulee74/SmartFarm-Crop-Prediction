@@ -11,7 +11,7 @@
  * - Hyperparameters card
  */
 
-import { fetchCatalog, fetchCampaignCatalog, fetchMetadata, fetchComparison, fetchPredictions, fetchFeatureSelection, refreshExperiments } from './experiment_api.js?v=5';
+import { fetchCatalog, fetchCampaignCatalog, fetchMetadata, fetchComparison, fetchPredictions, fetchFeatureSelection, refreshExperiments } from './experiment_api.js?v=6';
 
 const CROP_TARGETS = {
   tomato: [
@@ -47,7 +47,7 @@ export class ExperimentViewController {
 
     // View state
     this.state = {
-      campaign: 'stored_control_codes',
+      campaign: 'growth_history_quick_screening',
       crop: 'tomato',
       target: 'tomato_first',
       model: 'tabm',
@@ -367,6 +367,7 @@ export class ExperimentViewController {
       }
       this.metadata = await fetchMetadata(false, this.state.campaign);
       this.renderCampaignSelector();
+      this.updateSeedDropdown(true);
 
       this.updateTargetDropdown();
       this.populateCombinations();
@@ -398,6 +399,7 @@ export class ExperimentViewController {
           this.state.campaign = event.target.value;
           this.metadata = await fetchMetadata(false, this.state.campaign);
           this.renderCampaignSelector();
+          this.updateSeedDropdown(true);
           await this.loadComparisonData();
           await this.loadPredictionsAndRender();
         });
@@ -417,6 +419,24 @@ export class ExperimentViewController {
       const scope = selected.scope_note ? `<br><strong>결과 구성:</strong> ${selected.scope_note}` : '';
       explanation.innerHTML = `${why}${scope}`;
     }
+  }
+
+  updateSeedDropdown(resetSelection = false) {
+    const seedSelect = document.getElementById('exp_seed_select');
+    if (!seedSelect) return;
+    const seeds = Array.isArray(this.metadata?.seeds) && this.metadata.seeds.length
+      ? this.metadata.seeds
+      : [42, 52, 62];
+    const options = [];
+    if (seeds.length > 1) {
+      options.push(`<option value="all">${seeds.length}개 Seed 앙상블 평균 (권장)</option>`);
+    }
+    options.push(...seeds.map(seed => `<option value="${seed}">Seed ${seed}${seeds.length === 1 ? ' (빠른 선별)' : ''}</option>`));
+    seedSelect.innerHTML = options.join('');
+    if (resetSelection || ![...seedSelect.options].some(option => option.value === String(this.state.seed))) {
+      this.state.seed = seeds.length > 1 ? 'all' : String(seeds[0]);
+    }
+    seedSelect.value = String(this.state.seed);
   }
 
   updateTargetDropdown() {
@@ -628,20 +648,21 @@ export class ExperimentViewController {
 
       const rankBadge = r.rank != null ? `<span class="rank-pill font-bold">#${r.rank}</span>` : `<span class="text-muted">-</span>`;
       const winnerBadge = isWinner ? `<span class="badge-winner">🏆 우승</span>` : `-`;
+      const seedTotal = Number(this.metadata?.campaign?.total_seeds || this.metadata?.seeds?.length || 3);
 
       let statusTag;
       if (hasResult && r.source === 'reused_stored_control_codes') {
-        statusTag = `<span class="status-tag reused" title="E6가 없는 조합이므로 완료된 기존 결과를 그대로 사용했습니다.">기존 결과 재사용 (${r.completed_seeds}/3)</span>`;
+        statusTag = `<span class="status-tag reused" title="E6가 없는 조합이므로 완료된 기존 결과를 그대로 사용했습니다.">기존 결과 재사용 (${r.completed_seeds}/${seedTotal})</span>`;
       } else if (hasResult && r.source === 'semantic_retrained') {
-        statusTag = `<span class="status-tag complete">의미 통합 완료 (${r.completed_seeds}/3)</span>`;
+        statusTag = `<span class="status-tag complete">의미 통합 완료 (${r.completed_seeds}/${seedTotal})</span>`;
       } else if (hasResult) {
-        statusTag = `<span class="status-tag complete">완료 (${r.completed_seeds}/3)</span>`;
+        statusTag = `<span class="status-tag complete">완료 (${r.completed_seeds}/${seedTotal})</span>`;
       } else if (r.status === 'not_in_scope') {
         statusTag = `<span class="status-tag out-of-scope" title="${this.escapeHtml(r.reason || '')}">이번 실험 범위 외</span>`;
       } else if (r.status === 'running') {
-        statusTag = `<span class="status-tag running">학습 진행 중 (${r.completed_seeds || 0}/3)</span>`;
+        statusTag = `<span class="status-tag running">학습 진행 중 (${r.completed_seeds || 0}/${seedTotal})</span>`;
       } else if (r.status === 'queued') {
-        statusTag = `<span class="badge-status pending">⏳ 실험 예정 (0/3)</span>`;
+        statusTag = `<span class="badge-status pending">⏳ 실험 예정 (0/${seedTotal})</span>`;
       } else if (r.status === 'ineligible') {
         statusTag = `<span class="status-tag unstarted">실행 불가</span>`;
       } else if (r.status === 'failed') {
@@ -649,7 +670,7 @@ export class ExperimentViewController {
       } else if (r.status === 'not_evaluated') {
         statusTag = `<span class="status-tag unstarted">테스트 미실행</span>`;
       } else {
-        statusTag = `<span class="badge-status pending">⏳ 결과 대기 (0/3)</span>`;
+        statusTag = `<span class="badge-status pending">⏳ 결과 대기 (0/${seedTotal})</span>`;
       }
 
       const catBadges = (r.category_ids || []).map(g => `<span class="combo-grp-tag">${g}</span>`).join(' ');
@@ -667,7 +688,7 @@ export class ExperimentViewController {
           </td>
           <td class="td-center font-bold">${r.feature_count}</td>
           <td class="td-center"><span class="split-pill ${this.state.split}">${this.state.split}</span></td>
-          <td class="td-center">${r.completed_seeds}/3</td>
+          <td class="td-center">${r.completed_seeds}/${seedTotal}</td>
           <td class="td-right font-mono">${rmseText}</td>
           <td class="td-right font-mono">${maeText}</td>
           <td class="td-right font-mono">${r2Text}</td>
@@ -751,12 +772,29 @@ export class ExperimentViewController {
     const r2El = document.getElementById('metric_stored_r2');
     const nEl = document.getElementById('metric_stored_n');
     const paramsEl = document.getElementById('exp_params_json');
+    const emptyTitle = document.getElementById('exp_empty_predictions_title');
+    const emptyMessage = document.getElementById('exp_empty_predictions_msg');
+    const row = this.currentComparison?.rows?.find(item => item.group_id === this.state.group_id);
+    const metrics = row?.[this.state.variant] || {};
+    const hasMetrics = metrics.rmse_mean != null;
 
-    if (rmseEl) rmseEl.textContent = '-';
-    if (maeEl) maeEl.textContent = '-';
-    if (r2El) r2El.textContent = '-';
-    if (nEl) nEl.textContent = '-';
-    if (paramsEl) paramsEl.textContent = '// 전수실험 튜닝 결과 대기 중 (실험 미실행)';
+    if (hasMetrics) {
+      if (rmseEl) rmseEl.textContent = metrics.rmse_mean.toFixed(3);
+      if (maeEl) maeEl.textContent = metrics.mae_mean != null ? metrics.mae_mean.toFixed(3) : '-';
+      if (r2El) r2El.textContent = metrics.r2_mean != null ? metrics.r2_mean.toFixed(3) : '-';
+      if (nEl) nEl.textContent = row.n_eval ? `${row.n_eval}건` : '-';
+      if (paramsEl) paramsEl.textContent = row.params ? JSON.stringify(row.params, null, 2) : '// 하이퍼파라미터 정보 없음';
+      if (emptyTitle) emptyTitle.textContent = '조합별 평가지표 제공 · 개별 예측 시계열 미제공';
+      if (emptyMessage) emptyMessage.innerHTML = '선택한 실험의 평가지표는 위 비교표와 아래 요약 카드에 표시됩니다.<br>이 조합의 행별 예측값은 현재 정적 배포 묶음에 포함되지 않았습니다.';
+    } else {
+      if (rmseEl) rmseEl.textContent = '-';
+      if (maeEl) maeEl.textContent = '-';
+      if (r2El) r2El.textContent = '-';
+      if (nEl) nEl.textContent = '-';
+      if (paramsEl) paramsEl.textContent = '// 선택한 조건의 완료 결과 없음';
+      if (emptyTitle) emptyTitle.textContent = '선택한 조건의 예측 결과 없음';
+      if (emptyMessage) emptyMessage.innerHTML = `선택하신 <strong>[${this.escapeHtml(this.state.group_id)}]</strong> 조건에는 게시할 완료 결과가 없습니다.`;
+    }
   }
 
   renderStoredMetrics() {

@@ -15,6 +15,9 @@ const CACHE = {
 let staticCatalog = null;
 const staticIndexes = new Map();
 
+// The local Python API serves the original stored-code campaign only.
+// Other campaigns, including the dashboard default quick screening, use their
+// own static index declared in campaign_catalog.json.
 const DEFAULT_CAMPAIGN = 'stored_control_codes';
 
 export async function fetchCatalog(force = false) {
@@ -121,18 +124,22 @@ export async function fetchMetadata(force = false, campaign = DEFAULT_CAMPAIGN) 
         groups: t_data.groups || {}
       };
     }
-    const data = {
-      campaign: index.campaign || {
+    const campaignMeta = index.campaign || {
         id: "exhaustive_e1_e7_v1",
         name: "8개 타깃·6개 모델·127개 변수군 조합 전수실험",
         total_combinations: 127,
         total_targets: 8,
         total_models: 6,
         seeds: [42, 52, 62]
-      },
+      };
+    const campaignSeeds = Array.isArray(campaignMeta.seeds) && campaignMeta.seeds.length
+      ? campaignMeta.seeds
+      : [42, 52, 62];
+    const data = {
+      campaign: campaignMeta,
       targets: targets_meta,
       models: ["poisson", "random_forest", "catboost", "mlp", "tabm", "tft"],
-      seeds: [42, 52, 62]
+      seeds: campaignSeeds
     };
     CACHE.metadata.set(campaign, data);
     return data;
@@ -143,12 +150,23 @@ export async function fetchMetadata(force = false, campaign = DEFAULT_CAMPAIGN) 
 }
 
 export async function fetchFeatureSelection(target, group, force = false, campaign = DEFAULT_CAMPAIGN) {
+  const definition = await campaignDefinition(campaign);
+  const root = definition?.feature_selections_path || './cache/feature_selections';
+  if (definition?.feature_selection_layout === 'by_combination') {
+    const cacheKey = `${campaign}::${target}::${group}`;
+    if (!force && CACHE.featureSelections.has(cacheKey)) {
+      return CACHE.featureSelections.get(cacheKey);
+    }
+    const res = await fetch(`${root}/${encodeURIComponent(target)}/${encodeURIComponent(group)}.json`, { cache: 'no-store' });
+    if (!res.ok) throw new Error(`Feature selection detail HTTP error ${res.status}`);
+    const data = await res.json();
+    CACHE.featureSelections.set(cacheKey, data);
+    return data;
+  }
   const cacheKey = `${campaign}::${target}`;
   if (!force && CACHE.featureSelections.has(cacheKey)) {
     return CACHE.featureSelections.get(cacheKey)?.combinations?.[group] || null;
   }
-  const definition = await campaignDefinition(campaign);
-  const root = definition?.feature_selections_path || './cache/feature_selections';
   const res = await fetch(`${root}/${encodeURIComponent(target)}.json`, { cache: 'no-store' });
   if (!res.ok) throw new Error(`Feature selection detail HTTP error ${res.status}`);
   const data = await res.json();
@@ -221,7 +239,7 @@ export async function fetchComparison(target, model, split, force = false, campa
           display_name: combo.display_name,
           groups: combo.groups,
           group_count: combo.group_count,
-          feature_count: combo.feature_count,
+          feature_count: res_item.feature_count ?? combo.feature_count,
           category_names: combo.group_names,
           category_ids: combo.groups,
           features: combo.features,
@@ -233,6 +251,7 @@ export async function fetchComparison(target, model, split, force = false, campa
           is_winner: (gid === winner_group),
           params: res_item.params || {},
           best_epoch: res_item.best_epoch,
+          n_eval: res_item.n_eval || 0,
           bounded: res_item.bounded || {},
           raw: res_item.raw || {}
         });

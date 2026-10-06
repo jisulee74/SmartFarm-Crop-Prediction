@@ -688,11 +688,11 @@
           </div>
         </div>
 
-        <div class="campaign-basis-panel" id="exp_campaign_panel" aria-label="시설 제어 변수 구성 기준 선택">
+        <div class="campaign-basis-panel" id="exp_campaign_panel" aria-label="실험 결과 기준 선택">
           <div class="campaign-basis-heading">
             <div>
-              <span class="campaign-basis-kicker">시설 제어 변수 구성 기준</span>
-              <h3>어떤 방식으로 시설 제어 기록을 연결했는지 선택하세요</h3>
+              <span class="campaign-basis-kicker">실험 결과 기준</span>
+              <h3>비교할 데이터 구성과 실험 방식을 선택하세요</h3>
             </div>
             <span class="campaign-progress-badge" id="exp_campaign_progress">불러오는 중</span>
           </div>
@@ -854,7 +854,7 @@
           <div class="exp-card-title-group">
             <h3 class="exp-card-title">📋 127개 입력변수군 조합별 모델 성능 비교표</h3>
             <p class="exp-card-subtitle">
-              선택한 시설 제어 변수 구성 기준에서 E1~E7 조합의 성능 지표를 비교합니다. 완료 결과와 진행 중·실험 예정·범위 외 조합을 함께 표시하며, 행을 클릭하면 상세 예측 결과가 하단에 표시됩니다.
+              선택한 실험 결과 기준에서 E1~E7 조합의 성능 지표를 비교합니다. 완료 결과와 실행 불가·진행 중·범위 외 조합을 함께 표시하며, 조합명을 클릭하면 실제 선택·제외 변수를 확인할 수 있습니다.
             </p>
           </div>
           <span class="filter-count-badge" id="exp_candidates_count_badge">후보 조합 127개</span>
@@ -960,10 +960,9 @@
         <!-- 미실행 / 결과 없음 상태 표시 -->
         <div id="exp_empty_predictions" class="chart-empty-state-large" style="display:none;">
           <div class="empty-icon">⏳</div>
-          <div class="empty-title">전수실험 결과 대기 중 (실험 미실행)</div>
+          <div class="empty-title" id="exp_empty_predictions_title">선택한 조건의 예측 결과 없음</div>
           <div class="empty-message" id="exp_empty_predictions_msg">
-            선택하신 <strong>[<span id="exp_empty_combo_label">조합</span>]</strong>에 대한 전수실험(8개 타깃 × 6개 모델 × 127개 조합 × 3개 시드) 결과가 아직 생성되지 않았습니다.<br>
-            향후 <code>bash run_ax_exhaustive.sh</code> 실험 완료 후 <code>python sync_exhaustive_experiments.py</code>를 통해 실제 예측값과 평가지표가 자동으로 연결됩니다.
+            선택하신 <strong>[<span id="exp_empty_combo_label">조합</span>]</strong> 조건에는 게시할 개별 예측 시계열이 없습니다.
           </div>
         </div>
 
@@ -1769,6 +1768,6 @@
 
 
   <!-- 메인 애플리케이션 진입점 -->
-  <script type="module" src="./src/app.js?v=24"></script>
+  <script type="module" src="./src/app.js?v=25"></script>
 </body>
 </html>

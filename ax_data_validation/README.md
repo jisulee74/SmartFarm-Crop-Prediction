@@ -1,8 +1,8 @@
 # 🌿 꽃수·착과수 전수실험(127개 변수군 조합) 대시보드
 
-토마토 꽃 수(4종)와 딸기 착과수(4종)에 대한 관측 시계열 데이터 탐색, **8개 타깃 × 6개 모델 × 127개 입력 변수군 조합(E1~E7) × 3개 시드(42, 52, 62)** 전수실험 결과 비교, 그리고 AX 방향성 분석을 통합 제공하는 반응형 스마트팜 웹 대시보드입니다.
+토마토 꽃 수(4종)와 딸기 착과수(4종)에 대한 관측 시계열 데이터 탐색, **8개 타깃 × 6개 모델 × 127개 입력 변수군 조합(E1~E7)** 실험 결과 비교, 그리고 AX 방향성 분석을 통합 제공하는 반응형 스마트팜 웹 대시보드입니다. 기존 3개 시드 전수실험과 E6 의미 통합 실험을 보존하면서, E1·E2를 보완한 단일 시드 빠른 선별 결과를 별도 기준으로 제공합니다.
 
-- **온라인 배포 주소 (GitHub Pages)**: [https://jisulee74.github.io/SmartFarm-Crop-Prediction/flower_fruit_prediction_exhaustive/](https://jisulee74.github.io/SmartFarm-Crop-Prediction/flower_fruit_prediction_exhaustive/)
+- **온라인 배포 주소 (GitHub Pages)**: [https://jisulee74.github.io/SmartFarm-Crop-Prediction/ax_data_validation/](https://jisulee74.github.io/SmartFarm-Crop-Prediction/ax_data_validation/)
 - **기존 예시 사이트**: [https://jisulee74.github.io/SmartFarm-Crop-Prediction/flower_fruit_prediction/](https://jisulee74.github.io/SmartFarm-Crop-Prediction/flower_fruit_prediction/)
 
 ---
@@ -95,10 +95,11 @@ flower_fruit_prediction_exhaustive/
 └── README.md
 ```
 
-## 시설 제어 변수 구성 기준 비교
+## 실험 결과 기준 비교
 
-실험 결과 비교 화면은 내부 캠페인 ID 대신 다음 두 이름을 사용합니다.
+실험 결과 비교 화면은 내부 캠페인 ID 대신 다음 세 이름을 사용합니다.
 
+- **E1·E2 보완 빠른 선별**: 과거 꽃수·착과수 이력(E1)과 영양생장(E2)을 정상 생성하고, 8개 타깃·6개 모델·127개 조합을 Seed 42와 제한된 학습 횟수로 평가한 후보 선별 결과입니다. 6,096건 중 6,048건이 성공했고 48건은 모든 후보 변수가 제외되어 실행 불가였습니다. 캠페인 내부 순위 비교용이며 정식 3시드 검증과 직접 혼합하지 않습니다.
 - **시설별 제어코드 기준**: DB에 저장된 시설별 제어 코드를 그대로 구분해 수행한 최초 전수실험입니다. 기존 `exhaustive_e1_e7_v1` 결과 파일과 대시보드 캐시는 그대로 보존합니다.
 - **장치 의미 통합 기준**: 방향·층수 표현을 제거하고 장치 종류와 측정값 의미를 유지해 E6 포함 유효 조합 16개를 다시 학습합니다. E6가 없는 유효 조합 15개는 기존 완료 결과를 재사용합니다.
 
@@ -107,6 +108,7 @@ flower_fruit_prediction_exhaustive/
 현재 결과 캐시는 다음 명령으로 다시 생성합니다.
 
 ```bash
+python ax_data_validation/sync_e1_e2_quick_dashboard.py
 python flower_fruit_prediction_exhaustive/sync_e6_semantic_dashboard.py
 ```
 

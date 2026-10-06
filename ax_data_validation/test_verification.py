@@ -77,6 +77,8 @@ def test_endpoints():
         f"{BASE_URL}/cache/experiment_index.json",
         f"{BASE_URL}/cache/campaign_catalog.json",
         f"{BASE_URL}/cache/campaigns/semantic_control/experiment_index.json",
+        f"{BASE_URL}/cache/campaigns/growth_history_quick_screening/experiment_index.json",
+        f"{BASE_URL}/cache/campaigns/growth_history_quick_screening/feature_selections/tomato_first/COMBO_b5b76a4693c1.json",
         f"{BASE_URL}/tomato_observed_counts_by_crop_cycle.csv",
         f"{BASE_URL}/strawberry_observed_counts_by_crop_cycle.csv",
         f"{BASE_URL}/api/experiments/catalog",
@@ -145,11 +147,34 @@ def test_comparison_127_combinations():
 
 
 def test_campaign_comparison_integrity():
-    print("\n=== 5. Control-variable basis campaign integrity ===")
+    print("\n=== 5. Experiment campaign integrity ===")
     cache = LOCAL_DIR / "cache"
     campaign_catalog = json.loads((cache / "campaign_catalog.json").read_text(encoding="utf-8"))
     campaigns = campaign_catalog.get("campaigns", [])
-    assert [item["name"] for item in campaigns] == ["시설별 제어코드 기준", "장치 의미 통합 기준"]
+    assert campaign_catalog["default_campaign"] == "growth_history_quick_screening"
+    assert [item["name"] for item in campaigns] == [
+        "E1·E2 보완 빠른 선별",
+        "시설별 제어코드 기준",
+        "장치 의미 통합 기준",
+    ]
+
+    quick = json.loads(
+        (cache / "campaigns" / "growth_history_quick_screening" / "experiment_index.json").read_text(encoding="utf-8")
+    )
+    quick_campaign = quick["campaign"]
+    assert quick_campaign["processed_combination_summaries"] == 6096
+    assert quick_campaign["summary_status_counts"] == {"ineligible": 48, "success": 6048}
+    assert quick_campaign["seeds"] == [42]
+    assert quick_campaign["total_seeds"] == 1
+    assert len(quick["targets"]) == 8
+    quick_results = sum(len(target["results"]) for target in quick["targets"].values())
+    quick_winners = sum(len(target["frozen"]["winners"]) for target in quick["targets"].values())
+    assert quick_results == 6096
+    assert quick_winners == 48
+    for target_id, target in quick["targets"].items():
+        assert len(target["groups"]) == 127
+        detail_dir = cache / "campaigns" / "growth_history_quick_screening" / "feature_selections" / target_id
+        assert len(list(detail_dir.glob("COMBO_*.json"))) == 127
 
     baseline_path = cache / "experiment_index.json"
     semantic = json.loads((cache / "campaigns" / "semantic_control" / "experiment_index.json").read_text(encoding="utf-8"))
@@ -164,6 +189,7 @@ def test_campaign_comparison_integrity():
         assert len(target.get("groups", {})) == 127, f"{target_id}: semantic view must keep all future-addressable combinations"
         assert all(result.get("status") in allowed_statuses for result in target.get("results", {}).values())
     print(f"Campaigns: {[item['name'] for item in campaigns]}")
+    print(f"Quick screening results: {quick_results}/6096, winners: {quick_winners}/48")
     print(f"Semantic lanes: {semantic['campaign']['completed_lanes']}/{semantic['campaign']['total_lanes']}")
     print("[PASS] Baseline preservation and semantic campaign scope verified.")
 
