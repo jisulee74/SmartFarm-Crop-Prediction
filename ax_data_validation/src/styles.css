@@ -1479,6 +1479,108 @@ body {
   margin-top: 3px;
 }
 
+.interim-validation-panel {
+  margin: 0 0 20px;
+  padding: 16px 18px;
+  border: 1px solid #f2d27b;
+  border-left: 4px solid #d9a51c;
+  border-radius: 12px;
+  background: #fffaf0;
+}
+
+.interim-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 13px;
+}
+
+.interim-panel-header > div {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 9px;
+}
+
+.interim-snapshot,
+.interim-loading {
+  color: #7c6a3d;
+  font-size: 12px;
+}
+
+.interim-progress-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.interim-progress-grid.compact {
+  margin-top: 0;
+}
+
+.interim-progress-card {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 4px;
+  padding: 13px 14px;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  background: #fff;
+}
+
+.interim-progress-card.highlight {
+  border-color: #9fd7cc;
+  background: #effaf7;
+}
+
+.interim-progress-card span {
+  color: #64748b;
+  font-size: 11.5px;
+  font-weight: 700;
+}
+
+.interim-progress-card strong {
+  color: #173f45;
+  font-size: 19px;
+  line-height: 1.25;
+}
+
+.interim-progress-card small {
+  color: #849298;
+  font-size: 10.5px;
+  line-height: 1.35;
+}
+
+.interim-description {
+  margin: 13px 0 0;
+  color: #5f563e;
+  font-size: 12.5px;
+  line-height: 1.65;
+}
+
+.interim-target-panel {
+  margin-top: 18px;
+  padding: 16px;
+  border: 1px solid #dbe7e8;
+  border-radius: 12px;
+  background: #fbfdfd;
+}
+
+.interim-target-title {
+  margin-bottom: 12px;
+  color: #234a50;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.interim-delta.positive { color: #087a63; font-weight: 800; }
+.interim-delta.negative { color: #b45309; font-weight: 800; }
+.interim-status-text { font-size: 16px; }
+.interim-caution { border-left-color: #d9a51c; }
+
 /* Comparison Table */
 .table-responsive {
   width: 100%;
@@ -2537,6 +2639,12 @@ body {
   border: 1px solid #fde68a;
 }
 
+.anl-badge-tag.success {
+  background: #ecfdf5;
+  color: #087a63;
+  border: 1px solid #a7f3d0;
+}
+
 .anl-badge-status {
   font-size: 11px;
   color: #64748b;
@@ -3051,6 +3159,9 @@ body {
 }
 
 @media (max-width: 1100px) {
+  .interim-progress-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
   .anl-kpi-cards-grid {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -3084,6 +3195,9 @@ body {
 }
 
 @media (max-width: 480px) {
+  .interim-progress-grid {
+    grid-template-columns: 1fr;
+  }
   .anl-kpi-cards-grid {
     grid-template-columns: 1fr;
   }

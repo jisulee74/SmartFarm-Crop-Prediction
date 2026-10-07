@@ -12,8 +12,8 @@ import {
   extractIndividualTrends
 } from './analytics.js';
 import { ChartManager, METRIC_CONFIGS } from './charts.js';
-import { ExperimentViewController } from './experiment_view.js?v=9';
-import { AnalysisViewController } from './analysis_view.js';
+import { ExperimentViewController } from './experiment_view.js?v=10';
+import { AnalysisViewController } from './analysis_view.js?v=3';
 
 // 전역 상태
 const state = {

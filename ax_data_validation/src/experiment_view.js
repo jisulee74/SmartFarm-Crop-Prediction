@@ -12,6 +12,7 @@
  */
 
 import { fetchCatalog, fetchCampaignCatalog, fetchMetadata, fetchComparison, fetchPredictions, fetchFeatureSelection, refreshExperiments } from './experiment_api.js?v=6';
+import { fetchAnalysisBundle } from './analysis_api.js?v=2';
 
 const CROP_TARGETS = {
   tomato: [
@@ -82,7 +83,47 @@ export class ExperimentViewController {
     this.initChart();
     this.bindEvents();
     await this.loadInitialData();
+    await this.renderFormalInterimStatus();
     this.initialized = true;
+  }
+
+  async renderFormalInterimStatus() {
+    const container = document.getElementById('exp_interim_validation_status');
+    if (!container) return;
+
+    try {
+      const bundle = await fetchAnalysisBundle();
+      const interim = bundle?.tables?.interim_e1_e2_validation;
+      if (!interim) {
+        container.style.display = 'none';
+        return;
+      }
+
+      const completedModels = (interim.completed_models || []).map(model => MODEL_LABELS[model] || model);
+      const pendingModels = (interim.pending_models || []).map(model => MODEL_LABELS[model] || model);
+      container.innerHTML = `
+        <div class="interim-panel-header">
+          <div>
+            <strong>🧪 정식 3시드 실험 중간 현황</strong>
+            <span class="interim-snapshot">${this.escapeHtml(interim.snapshot_label || '')} 스냅샷</span>
+          </div>
+          <span class="status-badge in-progress">${Number(interim.progress_percent).toFixed(2)}% 진행</span>
+        </div>
+        <div class="interim-progress-grid compact">
+          <div class="interim-progress-card"><span>완료 결과</span><strong>${Number(interim.processed).toLocaleString()} / ${Number(interim.total).toLocaleString()}</strong></div>
+          <div class="interim-progress-card"><span>완료 모델</span><strong>${interim.completed_model_count} / ${interim.total_model_count}</strong></div>
+          <div class="interim-progress-card"><span>E1·E2 개선 비교</span><strong>${interim.e12_improved_pair_count} / ${interim.comparison_pair_count}</strong></div>
+          <div class="interim-progress-card"><span>RMSE 개선율 중앙값</span><strong>${Number(interim.median_rmse_improvement_pct).toFixed(2)}%</strong></div>
+        </div>
+        <p class="interim-description">
+          완료: ${this.escapeHtml(completedModels.join(', '))} · 진행 중: ${this.escapeHtml(pendingModels.join(', ') || '없음')}<br>
+          현재 정식 결과는 조합별 3시드 평가지표까지 제공합니다. <strong>시설·작기·개체별 실제값과 예측값 시계열은 전체 완료 후 최종 우승 모델을 재실행하여 추가</strong>할 예정입니다.
+        </p>
+      `;
+    } catch (error) {
+      console.warn('[ExperimentView] Interim validation status unavailable:', error);
+      container.style.display = 'none';
+    }
   }
 
   initChart() {
