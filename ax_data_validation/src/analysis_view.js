@@ -280,7 +280,6 @@ export class AnalysisViewController {
 
     // Subtab 3: Validation Protocol & KPI
     this.renderComparisonArmsPipeline();
-    this.renderInterimValidationSummary();
     this.renderTargetKpiCard();
     this.renderFullKpiTable();
   }
@@ -292,7 +291,6 @@ export class AnalysisViewController {
     this.renderBaselineComparisonTable();
     this.renderCrossedStrataTable();
     this.renderStrataVisuals();
-    this.renderInterimTargetPanel();
     this.renderTargetKpiCard();
   }
 
@@ -1329,63 +1327,6 @@ export class AnalysisViewController {
   // =========================================================================
   // SUBTAB 3: VALIDATION PROTOCOL & KPI
   // =========================================================================
-  renderInterimValidationSummary() {
-    const interim = this.bundle?.tables?.interim_e1_e2_validation;
-    if (!interim) return;
-
-    const badge = document.getElementById('anl_interim_snapshot_badge');
-    if (badge) badge.textContent = `${interim.snapshot_label} · 잠정`;
-
-    const summary = document.getElementById('anl_interim_summary_grid');
-    if (summary) {
-      summary.innerHTML = `
-        <div class="interim-progress-card"><span>전체 진행률</span><strong>${Number(interim.progress_percent).toFixed(2)}%</strong><small>${Number(interim.processed).toLocaleString()} / ${Number(interim.total).toLocaleString()}건</small></div>
-        <div class="interim-progress-card"><span>비교 완료 모델</span><strong>${interim.completed_model_count} / ${interim.total_model_count}</strong><small>${(interim.pending_models || []).map(m => m.toUpperCase()).join(', ')} 진행 중</small></div>
-        <div class="interim-progress-card highlight"><span>E1·E2 포함 후보 개선</span><strong>${interim.e12_improved_pair_count} / ${interim.comparison_pair_count}</strong><small>타깃×완료 모델 비교 기준</small></div>
-        <div class="interim-progress-card highlight"><span>RMSE 개선율 중앙값</span><strong>${Number(interim.median_rmse_improvement_pct).toFixed(2)}%</strong><small>기존 입력 최적 대비</small></div>
-      `;
-    }
-
-    const tbody = document.getElementById('anl_interim_target_tbody');
-    if (tbody) {
-      tbody.innerHTML = (interim.target_results || []).map(row => {
-        const deltaClass = row.e12_improved ? 'positive' : 'negative';
-        const verdict = row.e12_improved ? '잠정 개선' : '기존 입력 우세';
-        return `
-          <tr>
-            <td><strong>${row.target_label}</strong></td>
-            <td>${row.baseline_model.toUpperCase()} · ${(row.baseline_groups || []).join('+')}</td>
-            <td class="td-right">${Number(row.baseline_rmse).toFixed(4)}</td>
-            <td>${row.e12_model.toUpperCase()} · ${(row.e12_groups || []).join('+')}</td>
-            <td class="td-right">${Number(row.e12_rmse).toFixed(4)}</td>
-            <td class="td-right interim-delta ${deltaClass}">${row.e12_improved ? '▼' : '▲'} ${Math.abs(Number(row.rmse_improvement_pct)).toFixed(2)}%</td>
-            <td><span class="anl-badge-tag ${row.e12_improved ? 'success' : 'warning'}">${verdict}</span></td>
-          </tr>
-        `;
-      }).join('');
-    }
-
-    this.renderInterimTargetPanel();
-  }
-
-  renderInterimTargetPanel() {
-    const interim = this.bundle?.tables?.interim_e1_e2_validation;
-    const panel = document.getElementById('anl_interim_target_panel');
-    if (!interim || !panel) return;
-    const row = (interim.target_results || []).find(item => item.target === this.state.target);
-    if (!row) return;
-
-    panel.innerHTML = `
-      <div class="interim-target-title">${row.target_label} · 완료된 5개 모델 기준 잠정 비교</div>
-      <div class="anl-target-kpi-grid">
-        <div class="anl-kpi-item-card"><span class="kpi-item-lbl">기존 입력 최적 RMSE</span><div class="kpi-item-val">${Number(row.baseline_rmse).toFixed(4)}</div><span class="kpi-item-sub">${row.baseline_model.toUpperCase()} · ${(row.baseline_groups || []).join('+')}</span></div>
-        <div class="anl-kpi-item-card highlight"><span class="kpi-item-lbl">E1·E2 포함 최적 RMSE</span><div class="kpi-item-val text-primary">${Number(row.e12_rmse).toFixed(4)}</div><span class="kpi-item-sub text-primary">${row.e12_model.toUpperCase()} · ${(row.e12_groups || []).join('+')}</span></div>
-        <div class="anl-kpi-item-card"><span class="kpi-item-lbl">RMSE 변화</span><div class="kpi-item-val interim-delta ${row.e12_improved ? 'positive' : 'negative'}">${row.e12_improved ? '▼' : '▲'} ${Math.abs(Number(row.rmse_improvement_pct)).toFixed(2)}%</div><span class="kpi-item-sub">낮을수록 개선</span></div>
-        <div class="anl-kpi-item-card"><span class="kpi-item-lbl">결과 상태</span><div class="kpi-item-val interim-status-text">${row.e12_improved ? '잠정 개선' : '기존 입력 우세'}</div><span class="kpi-item-sub">TFT 완료 후 최종 확정</span></div>
-      </div>
-    `;
-  }
-
   renderComparisonArmsPipeline() {
     if (!this.bundle) return;
     const { comparison_arms } = this.bundle.tables;
@@ -1474,26 +1415,33 @@ export class AnalysisViewController {
     const item = kpi_planning_reference.find(r => r.target === this.state.target) || kpi_planning_reference[0];
     if (!item) return;
 
+    const provisionalSource = item.reference_is_provisional
+      ? `정식 3시드 중간 BEST · ${(item.reference_model || '').toUpperCase()} · ${(item.reference_groups || []).join('+')}`
+      : '현재 동결 선정 모델';
+    const snapshotNote = item.reference_is_provisional
+      ? `${item.reference_snapshot_label || '중간 집계'} · TFT 완료 후 갱신`
+      : '목표 오차 상한 제안';
+
     container.innerHTML = `
       <div class="anl-kpi-item-card">
         <span class="kpi-item-lbl">현 기준 RMSE (As-Is)</span>
         <div class="kpi-item-val font-bold">${item.reference_rmse.toFixed(4)}</div>
-        <span class="kpi-item-sub">현재 동결 선정 모델</span>
+        <span class="kpi-item-sub">${provisionalSource}</span>
       </div>
       <div class="anl-kpi-item-card highlight">
         <span class="kpi-item-lbl">10% RMSE 개선 기획 예시</span>
         <div class="kpi-item-val font-bold text-primary">${item.illustrative_10pct_rmse.toFixed(4)}</div>
-        <span class="kpi-item-sub text-primary">목표 오차 상한 제안</span>
+        <span class="kpi-item-sub text-primary">${snapshotNote}</span>
       </div>
       <div class="anl-kpi-item-card">
-        <span class="kpi-item-lbl">현 수량변화 MAE</span>
+        <span class="kpi-item-lbl">기존 변화구간 MAE</span>
         <div class="kpi-item-val font-bold">${item.reference_change_mae.toFixed(4)}</div>
-        <span class="kpi-item-sub">수량 변동 구간 절대오차</span>
+        <span class="kpi-item-sub">행별 예측값 생성 후 갱신</span>
       </div>
       <div class="anl-kpi-item-card highlight">
         <span class="kpi-item-lbl">15% 변화 MAE 개선 기획 예시</span>
         <div class="kpi-item-val font-bold text-primary">${item.illustrative_15pct_change_mae.toFixed(4)}</div>
-        <span class="kpi-item-sub text-primary">목표 변동 오차 제안</span>
+        <span class="kpi-item-sub text-primary">기존 진단 기준의 목표 예시</span>
       </div>
     `;
   }
@@ -1517,7 +1465,7 @@ export class AnalysisViewController {
           <td class="td-right text-primary font-bold">${r.illustrative_15pct_change_mae.toFixed(4)}</td>
           <td class="td-right text-muted">${r.reference_persistence_rmse.toFixed(4)}</td>
           <td class="td-right text-muted">${r.reference_zero_rmse.toFixed(4)}</td>
-          <td><span class="anl-badge-tag warning">기획 참고치</span></td>
+          <td><span class="anl-badge-tag warning">${r.reference_is_provisional ? '3시드 중간 BEST · 추후 갱신' : '기획 참고치'}</span></td>
         </tr>
       `;
     }).join('');

@@ -210,29 +210,26 @@ def test_observation_datasets():
     print("[PASS] Observation datasets verified.")
 
 
-def test_interim_three_seed_snapshot():
-    print("\n=== 7. Interim E1/E2 Three-Seed Snapshot ===")
-    bundle_path = LOCAL_DIR / "ax_direction" / "dashboard_bundle.json"
-    bundle = json.loads(bundle_path.read_text(encoding="utf-8"))
-    interim = bundle["tables"]["interim_e1_e2_validation"]
-    assert interim["status"] == "in_progress"
-    assert interim["seeds"] == [42, 52, 62]
-    assert interim["total"] == 6096
-    assert 0 < interim["processed"] < interim["total"]
-    assert interim["completed_model_count"] == 5
-    assert interim["pending_models"] == ["tft"]
-    assert interim["comparison_pair_count"] == 40
-    assert len(interim["target_results"]) == 8
-    assert {row["target"] for row in interim["target_results"]} == {
-        "tomato_first", "tomato_second", "tomato_third", "tomato_sum123",
-        "strawberry_first", "strawberry_second", "strawberry_third", "strawberry_sum123",
-    }
-    print(
-        f"Snapshot: {interim['processed']}/{interim['total']} "
-        f"({interim['progress_percent']}%), E1/E2 improved "
-        f"{interim['e12_improved_pair_count']}/{interim['comparison_pair_count']} comparisons"
+def test_provisional_three_seed_kpi_reference():
+    print("\n=== 7. Provisional Three-Seed KPI Reference ===")
+    bundle = json.loads(
+        (LOCAL_DIR / "ax_direction" / "dashboard_bundle.json").read_text(encoding="utf-8")
     )
-    print("[PASS] Interim snapshot is explicitly provisional and internally consistent.")
+    rows = bundle["tables"]["kpi_planning_reference"]
+    assert len(rows) == 8
+    for row in rows:
+        assert row["reference_is_provisional"] is True
+        assert row["reference_model"] in {
+            "poisson", "random_forest", "catboost", "mlp", "tabm", "tft"
+        }
+        assert row["reference_groups"]
+        assert row["reference_campaign_progress"]["processed"] < 6096
+        assert np.isclose(row["illustrative_10pct_rmse"], row["reference_rmse"] * 0.9)
+    print(
+        f"Snapshot: {rows[0]['reference_snapshot_label']} · "
+        f"{rows[0]['reference_campaign_progress']['processed']}/6096"
+    )
+    print("[PASS] Existing KPI cards use provisional three-seed BEST RMSE values.")
 
 
 if __name__ == "__main__":
@@ -243,7 +240,7 @@ if __name__ == "__main__":
     test_comparison_127_combinations()
     test_campaign_comparison_integrity()
     test_observation_datasets()
-    test_interim_three_seed_snapshot()
+    test_provisional_three_seed_kpi_reference()
     print("\n=======================================================")
     print(" ALL VERIFICATION TESTS PASSED SUCCESSFULLY! ")
     print("=======================================================")
