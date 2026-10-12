@@ -77,8 +77,6 @@ def test_endpoints():
         f"{BASE_URL}/cache/experiment_index.json",
         f"{BASE_URL}/cache/campaign_catalog.json",
         f"{BASE_URL}/cache/campaigns/semantic_control/experiment_index.json",
-        f"{BASE_URL}/cache/campaigns/growth_history_quick_screening/experiment_index.json",
-        f"{BASE_URL}/cache/campaigns/growth_history_quick_screening/feature_selections/tomato_first/COMBO_b5b76a4693c1.json",
         f"{BASE_URL}/tomato_observed_counts_by_crop_cycle.csv",
         f"{BASE_URL}/strawberry_observed_counts_by_crop_cycle.csv",
         f"{BASE_URL}/api/experiments/catalog",
@@ -151,47 +149,54 @@ def test_campaign_comparison_integrity():
     cache = LOCAL_DIR / "cache"
     campaign_catalog = json.loads((cache / "campaign_catalog.json").read_text(encoding="utf-8"))
     campaigns = campaign_catalog.get("campaigns", [])
-    assert campaign_catalog["default_campaign"] == "growth_history_quick_screening"
+    assert campaign_catalog["default_campaign"] == "stored_control_codes"
     assert [item["name"] for item in campaigns] == [
-        "E1·E2 보완 빠른 선별",
         "시설별 제어코드 기준",
         "장치 의미 통합 기준",
     ]
-
-    quick = json.loads(
-        (cache / "campaigns" / "growth_history_quick_screening" / "experiment_index.json").read_text(encoding="utf-8")
-    )
-    quick_campaign = quick["campaign"]
-    assert quick_campaign["processed_combination_summaries"] == 6096
-    assert quick_campaign["summary_status_counts"] == {"ineligible": 48, "success": 6048}
-    assert quick_campaign["seeds"] == [42]
-    assert quick_campaign["total_seeds"] == 1
-    assert len(quick["targets"]) == 8
-    quick_results = sum(len(target["results"]) for target in quick["targets"].values())
-    quick_winners = sum(len(target["frozen"]["winners"]) for target in quick["targets"].values())
-    assert quick_results == 6096
-    assert quick_winners == 48
-    for target_id, target in quick["targets"].items():
-        assert len(target["groups"]) == 127
-        detail_dir = cache / "campaigns" / "growth_history_quick_screening" / "feature_selections" / target_id
-        assert len(list(detail_dir.glob("COMBO_*.json"))) == 127
-
     baseline_path = cache / "experiment_index.json"
+    baseline = json.loads(baseline_path.read_text(encoding="utf-8"))
     semantic = json.loads((cache / "campaigns" / "semantic_control" / "experiment_index.json").read_text(encoding="utf-8"))
     baseline_hash = hashlib.sha256(baseline_path.read_bytes()).hexdigest()
-    assert semantic["campaign"]["baseline_index_sha256"] == baseline_hash, "Baseline index changed after semantic publication"
+    assert semantic["campaign"]["integrated_baseline_index_sha256"] == baseline_hash
+    assert baseline["campaign"]["e1_e2_backfilled_combinations"] == 96
+    assert baseline["campaign"]["summary_status_counts"] == {"failed": 72, "success": 6024}
     assert semantic["campaign"]["semantic_retrained_combinations"] == 16
-    assert semantic["campaign"]["reused_combinations"] == 15
-    assert semantic["campaign"]["out_of_scope_combinations"] == 96
+    assert semantic["campaign"]["reused_combinations"] == 63
+    assert semantic["campaign"]["out_of_scope_combinations"] == 48
+    assert semantic["campaign"]["summary_status_counts"] == {
+        "failed": 24, "not_in_scope": 2304, "success": 3768
+    }
+
+    combo_catalog = json.loads((cache / "combination_catalog.json").read_text(encoding="utf-8"))
+    combo_by_groups = {tuple(item["groups"]): item["combination_id"] for item in combo_catalog["combinations"]}
+    e1_combo = combo_by_groups[("E1",)]
+    e1_e6_combo = combo_by_groups[("E1", "E6")]
 
     allowed_statuses = {"success", "failed", "ineligible", "running", "queued", "not_in_scope", "not_evaluated"}
+    for target_id, target in baseline["targets"].items():
+        validation = [item for item in target["results"].values() if item.get("split") == "validation"]
+        assert len(validation) == 127 * 6
+        assert all(target["results"][f"{e1_combo}::{model}::validation"]["status"] == "success"
+                   for model in ("poisson", "random_forest", "catboost", "mlp", "tabm", "tft"))
+        assert all(target["results"][f"{e1_combo}::{model}::validation"]["completed_seeds"] == 3
+                   for model in ("poisson", "random_forest", "catboost", "mlp", "tabm", "tft"))
     for target_id, target in semantic["targets"].items():
         assert len(target.get("groups", {})) == 127, f"{target_id}: semantic view must keep all future-addressable combinations"
         assert all(result.get("status") in allowed_statuses for result in target.get("results", {}).values())
+        assert target["results"][f"{e1_combo}::mlp::validation"]["status"] == "success"
+        assert target["results"][f"{e1_e6_combo}::mlp::validation"]["status"] == "not_in_scope"
+
+        base_features = json.loads((cache / "feature_selections" / f"{target_id}.json").read_text(encoding="utf-8"))
+        semantic_features = json.loads((cache / "campaigns" / "semantic_control" / "feature_selections" / f"{target_id}.json").read_text(encoding="utf-8"))
+        assert base_features["combinations"][e1_combo]["selected_count"] > 0
+        assert semantic_features["combinations"][e1_combo]["selected_count"] > 0
+        assert semantic_features["combinations"][e1_e6_combo]["status"] == "not_in_scope"
     print(f"Campaigns: {[item['name'] for item in campaigns]}")
-    print(f"Quick screening results: {quick_results}/6096, winners: {quick_winners}/48")
+    print("Stored-control results: 6024 success, 72 failed")
+    print("Semantic-control results: 3768 success, 24 failed, 2304 out of scope")
     print(f"Semantic lanes: {semantic['campaign']['completed_lanes']}/{semantic['campaign']['total_lanes']}")
-    print("[PASS] Baseline preservation and semantic campaign scope verified.")
+    print("[PASS] E1/E2 final integration and semantic campaign scope verified.")
 
 
 def test_observation_datasets():
@@ -210,26 +215,27 @@ def test_observation_datasets():
     print("[PASS] Observation datasets verified.")
 
 
-def test_provisional_three_seed_kpi_reference():
-    print("\n=== 7. Provisional Three-Seed KPI Reference ===")
+def test_final_three_seed_kpi_reference():
+    print("\n=== 7. Final Three-Seed KPI Reference ===")
     bundle = json.loads(
         (LOCAL_DIR / "ax_direction" / "dashboard_bundle.json").read_text(encoding="utf-8")
     )
     rows = bundle["tables"]["kpi_planning_reference"]
     assert len(rows) == 8
     for row in rows:
-        assert row["reference_is_provisional"] is True
+        assert row["reference_is_provisional"] is False
         assert row["reference_model"] in {
             "poisson", "random_forest", "catboost", "mlp", "tabm", "tft"
         }
         assert row["reference_groups"]
-        assert row["reference_campaign_progress"]["processed"] < 6096
+        assert row["reference_campaign_progress"] == {"processed": 6096, "total": 6096, "percent": 100.0}
+        assert row["reference_method_label"] == "E1·E2 보완 고정설정 3시드"
         assert np.isclose(row["illustrative_10pct_rmse"], row["reference_rmse"] * 0.9)
     print(
         f"Snapshot: {rows[0]['reference_snapshot_label']} · "
         f"{rows[0]['reference_campaign_progress']['processed']}/6096"
     )
-    print("[PASS] Existing KPI cards use provisional three-seed BEST RMSE values.")
+    print("[PASS] Existing KPI cards use completed three-seed BEST RMSE values.")
 
 
 if __name__ == "__main__":
@@ -240,7 +246,7 @@ if __name__ == "__main__":
     test_comparison_127_combinations()
     test_campaign_comparison_integrity()
     test_observation_datasets()
-    test_provisional_three_seed_kpi_reference()
+    test_final_three_seed_kpi_reference()
     print("\n=======================================================")
     print(" ALL VERIFICATION TESTS PASSED SUCCESSFULLY! ")
     print("=======================================================")

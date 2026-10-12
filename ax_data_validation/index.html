@@ -1568,9 +1568,9 @@
           <div class="anl-card-header-between">
             <div>
               <h3 class="anl-card-title">🎯 선택 타깃 KPI 기획 제안치 (10% RMSE / 15% 변화 MAE 개선안)</h3>
-              <p class="anl-card-subtitle">현 기준 RMSE는 현재까지 완료된 정식 3시드 결과 중 타깃별 BEST를 잠정 적용하며, TFT 전수실험 완료 후 최종 갱신합니다.</p>
+              <p class="anl-card-subtitle">현 기준 RMSE는 E1·E2를 보완한 고정설정 3시드 실험 6,096건의 타깃별 BEST입니다.</p>
             </div>
-            <span class="anl-badge-tag warning">⚠️ RMSE 잠정 기준 · 목표치는 기획 참고</span>
+            <span class="anl-badge-tag success">✅ 3시드 완료 기준 · 목표치는 기획 참고</span>
           </div>
 
           <!-- 타깃별 KPI 4단 그리드 -->
@@ -1580,7 +1580,7 @@
             <div class="guide-icon">⚠️</div>
             <div class="guide-text">
               <h4>KPI 기획 예시 안내</h4>
-              <p><strong>현 기준 RMSE와 10% 개선 기획치는 정식 3시드 실험의 현재 완료 결과를 반영한 잠정값</strong>이며, TFT 전수실험 완료 후 달라질 수 있습니다. 변화구간 MAE와 15% 개선치는 기존 진단 기준의 참고값으로, 최종 우승 모델의 행별 예측값 생성 후 갱신합니다. 모든 목표치는 확정 통과 기준이나 달성 실적이 아니며 신규 코호트 PoC에서 별도로 검증합니다.</p>
+              <p><strong>현 기준 RMSE와 10% 개선 기획치는 완료된 E1·E2 보완 고정설정 3시드 결과</strong>를 반영합니다. 이 캠페인은 타깃·모델별 고정 하이퍼파라미터를 사용했으므로 조합별 하이퍼파라미터 재탐색 결과와 구분해 해석해야 합니다. 변화구간 MAE와 15% 개선치는 기존 진단 기준의 참고값이며, 모든 목표치는 신규 코호트 PoC에서 별도로 검증합니다.</p>
             </div>
           </div>
         </section>
@@ -1597,7 +1597,7 @@
                 <thead>
                   <tr>
                     <th>타깃 과제</th>
-                    <th class="td-right">현 기준 RMSE (잠정 BEST)</th>
+                    <th class="td-right">현 기준 RMSE (3시드 BEST)</th>
                     <th class="td-right text-primary font-bold">10% 개선 기획치</th>
                     <th class="td-right">현 변화 MAE</th>
                     <th class="td-right text-primary font-bold">15% 개선 기획치</th>
@@ -1768,6 +1768,6 @@
 
 
   <!-- 메인 애플리케이션 진입점 -->
-  <script type="module" src="./src/app.js?v=26"></script>
+  <script type="module" src="./src/app.js?v=27"></script>
 </body>
 </html>

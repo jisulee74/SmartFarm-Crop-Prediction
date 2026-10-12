@@ -11,7 +11,7 @@
  * - Hyperparameters card
  */
 
-import { fetchCatalog, fetchCampaignCatalog, fetchMetadata, fetchComparison, fetchPredictions, fetchFeatureSelection, refreshExperiments } from './experiment_api.js?v=6';
+import { fetchCatalog, fetchCampaignCatalog, fetchMetadata, fetchComparison, fetchPredictions, fetchFeatureSelection, refreshExperiments } from './experiment_api.js?v=7';
 
 const CROP_TARGETS = {
   tomato: [
@@ -47,7 +47,7 @@ export class ExperimentViewController {
 
     // View state
     this.state = {
-      campaign: 'growth_history_quick_screening',
+      campaign: 'stored_control_codes',
       crop: 'tomato',
       target: 'tomato_first',
       model: 'tabm',

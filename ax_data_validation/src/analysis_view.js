@@ -1415,12 +1415,11 @@ export class AnalysisViewController {
     const item = kpi_planning_reference.find(r => r.target === this.state.target) || kpi_planning_reference[0];
     if (!item) return;
 
-    const provisionalSource = item.reference_is_provisional
-      ? `정식 3시드 중간 BEST · ${(item.reference_model || '').toUpperCase()} · ${(item.reference_groups || []).join('+')}`
-      : '현재 동결 선정 모델';
+    const resultLabel = item.reference_is_provisional ? '3시드 중간 BEST' : '고정설정 3시드 BEST';
+    const provisionalSource = `${resultLabel} · ${(item.reference_model || '').toUpperCase()} · ${(item.reference_groups || []).join('+')}`;
     const snapshotNote = item.reference_is_provisional
-      ? `${item.reference_snapshot_label || '중간 집계'} · TFT 완료 후 갱신`
-      : '목표 오차 상한 제안';
+      ? `${item.reference_snapshot_label || '중간 집계'} · 완료 후 갱신`
+      : `${item.reference_snapshot_label || '실험 완료'} · 6,096/6,096`;
 
     container.innerHTML = `
       <div class="anl-kpi-item-card">
@@ -1436,7 +1435,7 @@ export class AnalysisViewController {
       <div class="anl-kpi-item-card">
         <span class="kpi-item-lbl">기존 변화구간 MAE</span>
         <div class="kpi-item-val font-bold">${item.reference_change_mae.toFixed(4)}</div>
-        <span class="kpi-item-sub">행별 예측값 생성 후 갱신</span>
+        <span class="kpi-item-sub">기존 진단 결과 · 별도 참고</span>
       </div>
       <div class="anl-kpi-item-card highlight">
         <span class="kpi-item-lbl">15% 변화 MAE 개선 기획 예시</span>
@@ -1465,7 +1464,7 @@ export class AnalysisViewController {
           <td class="td-right text-primary font-bold">${r.illustrative_15pct_change_mae.toFixed(4)}</td>
           <td class="td-right text-muted">${r.reference_persistence_rmse.toFixed(4)}</td>
           <td class="td-right text-muted">${r.reference_zero_rmse.toFixed(4)}</td>
-          <td><span class="anl-badge-tag warning">${r.reference_is_provisional ? '3시드 중간 BEST · 추후 갱신' : '기획 참고치'}</span></td>
+          <td><span class="anl-badge-tag ${r.reference_is_provisional ? 'warning' : 'success'}">${r.reference_is_provisional ? '3시드 중간 BEST · 추후 갱신' : '고정설정 3시드 BEST · 완료'}</span></td>
         </tr>
       `;
     }).join('');

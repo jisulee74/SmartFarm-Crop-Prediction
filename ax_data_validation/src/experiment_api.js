@@ -15,9 +15,8 @@ const CACHE = {
 let staticCatalog = null;
 const staticIndexes = new Map();
 
-// The local Python API serves the original stored-code campaign only.
-// Other campaigns, including the dashboard default quick screening, use their
-// own static index declared in campaign_catalog.json.
+// The local Python API serves the stored-code campaign. The semantic-control
+// campaign uses its own static index declared in campaign_catalog.json.
 const DEFAULT_CAMPAIGN = 'stored_control_codes';
 
 export async function fetchCatalog(force = false) {
