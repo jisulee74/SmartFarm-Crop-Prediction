@@ -1428,19 +1428,19 @@ export class AnalysisViewController {
         <span class="kpi-item-sub">${provisionalSource}</span>
       </div>
       <div class="anl-kpi-item-card highlight">
-        <span class="kpi-item-lbl">10% RMSE 개선 기획 예시</span>
+        <span class="kpi-item-lbl">목표 RMSE (To-Be · 10% 개선)</span>
         <div class="kpi-item-val font-bold text-primary">${item.illustrative_10pct_rmse.toFixed(4)}</div>
-        <span class="kpi-item-sub text-primary">${snapshotNote}</span>
+        <span class="kpi-item-sub text-primary">내부 계획 KPI · ${snapshotNote}</span>
       </div>
       <div class="anl-kpi-item-card">
-        <span class="kpi-item-lbl">기존 변화구간 MAE</span>
+        <span class="kpi-item-lbl">변화구간 MAE 참고 기준</span>
         <div class="kpi-item-val font-bold">${item.reference_change_mae.toFixed(4)}</div>
-        <span class="kpi-item-sub">기존 진단 결과 · 별도 참고</span>
+        <span class="kpi-item-sub">기존 진단 결과 · 신규 AX 데이터에서 재산정</span>
       </div>
       <div class="anl-kpi-item-card highlight">
-        <span class="kpi-item-lbl">15% 변화 MAE 개선 기획 예시</span>
+        <span class="kpi-item-lbl">보조 KPI 후보 (변화 MAE 15% 개선)</span>
         <div class="kpi-item-val font-bold text-primary">${item.illustrative_15pct_change_mae.toFixed(4)}</div>
-        <span class="kpi-item-sub text-primary">기존 진단 기준의 목표 예시</span>
+        <span class="kpi-item-sub text-primary">행 단위 예측 연결 후 기준 확정</span>
       </div>
     `;
   }

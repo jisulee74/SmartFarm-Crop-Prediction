@@ -231,6 +231,12 @@ def test_final_three_seed_kpi_reference():
         assert row["reference_campaign_progress"] == {"processed": 6096, "total": 6096, "percent": 100.0}
         assert row["reference_method_label"] == "E1·E2 보완 고정설정 3시드"
         assert np.isclose(row["illustrative_10pct_rmse"], row["reference_rmse"] * 0.9)
+    index_html = (LOCAL_DIR / "index.html").read_text(encoding="utf-8")
+    analysis_js = (LOCAL_DIR / "src" / "analysis_view.js").read_text(encoding="utf-8")
+    assert "선택 타깃 AX 데이터 성능 개선 KPI" in index_html
+    assert "내부 계획 KPI · 동일 조건 비교" in index_html
+    assert "10% RMSE 개선 기획 예시" not in analysis_js
+    assert "목표 RMSE (To-Be · 10% 개선)" in analysis_js
     print(
         f"Snapshot: {rows[0]['reference_snapshot_label']} · "
         f"{rows[0]['reference_campaign_progress']['processed']}/6096"
