@@ -1,114 +1,38 @@
-# 🌿 꽃수·착과수 전수실험(127개 변수군 조합) 대시보드
+# AX 데이터 구축·검증 대시보드
 
-토마토 꽃 수(4종)와 딸기 착과수(4종)에 대한 관측 시계열 데이터 탐색, **8개 타깃 × 6개 모델 × 127개 입력 변수군 조합(E1~E7)** 실험 결과 비교, 그리고 AX 방향성 분석을 통합 제공하는 반응형 스마트팜 웹 대시보드입니다. 시설별 제어코드 기준 결과에 E1·E2 보완 고정설정 3시드 결과를 통합하고, E6 장치 의미 통합 결과는 별도 기준으로 비교합니다.
+공개 주소: https://jisulee74.github.io/SmartFarm-Crop-Prediction/ax_data_validation/
 
-- **온라인 배포 주소 (GitHub Pages)**: [https://jisulee74.github.io/SmartFarm-Crop-Prediction/ax_data_validation/](https://jisulee74.github.io/SmartFarm-Crop-Prediction/ax_data_validation/)
-- **기존 예시 사이트**: [https://jisulee74.github.io/SmartFarm-Crop-Prediction/flower_fruit_prediction/](https://jisulee74.github.io/SmartFarm-Crop-Prediction/flower_fruit_prediction/)
+사업 개요, 관측 현황, AI 예측모델 검증, AX 구축/검증 계획의 기존 4개 탭을 유지합니다. 공개 실험 화면은 **장치 의미 통합 기준**만 표시합니다. 방향·층수 세분 코드 결과는 `technical_archive/granular_control_codes_v1/`에 보존합니다.
 
----
+## 2026-10-14 게시 결과
 
-## 📌 주요 화면 구성 (3개 탭)
+- 127개 변수군 조합 × 8개 타깃 × 6개 모델 = 6,096건 선별 평가, 모두 성공.
+- Validation: 시드 42, 타깃·모델별 기존 고정 하이퍼파라미터를 사용한 빠른 선별. 조합별 재튜닝 결과가 아닙니다. 실제 파라미터·학습 epoch는 결과에 기록합니다.
+- 우승 조합: Validation RMSE → MAE → 선택 변수 수 → 조합 ID 순으로 선정. Test로 순위를 변경하지 않습니다.
+- Test: 타깃·모델별 우승 조합 48개 × 시드 42/52/62 = 144건. 선별 당시 train에서 선택한 변수 목록을 동결하고 train+validation으로 재학습합니다.
+- 선별 단계는 평가지표를 저장했습니다. 행별 예측 시계열은 우승 조합의 **Test**에서 조회합니다. Validation에 가짜 예측 Run ID를 부여하지 않습니다.
+- KPI As-Is는 게시된 타깃별 Validation 최저 RMSE, To-Be는 그 값의 90%입니다. 신규 AX 데이터의 효과가 이미 입증됐다는 의미가 아닙니다.
+- 별도 정식 추가 검증이 완료되면 동일 화면을 갱신합니다. 현재 선별 결과를 정식 3-fold CV 완료 결과로 해석하지 않습니다.
+- 선별 변수 선택은 결측·중복·상관·VIF 기준을 적용한 compact 구현입니다. VIF는 작은 정규화항을 더한 상관행렬 역행렬로 계산하므로, 정식 반복 최소제곱 구현과 수치적으로 완전히 같다고 보장하지 않습니다.
 
-1. **📊 관측 현황 (Observation Views)**
-   - **8개 시계열 시각화 (Apache ECharts)**: 토마토 1·2·3화방 및 전체 꽃 수 / 딸기 1·2·3화방 및 전체 착과수
-   - **2가지 분석 모드**: 개체당 평균 모드 및 개체별 상세 추이 모드
-   - **다차원 연계 필터**: 작물, 시설, 작기, 개체번호, 날짜 범위 선택
+## 재생성·검증
 
-2. **🧪 실험 결과 비교 (127개 조합 전수실험 탐색 및 비교)**
-   - **127개 입력 변수군 조합 전수 탐색 ($2^7 - 1 = 127$)**:
-     - **변수군 수 분류**: 단독 1개(7), 2개(21), 3개(35), 4개(35), 5개(21), 6개(7), 7개 전체(1)
-     - **포함 변수군 다중 태그 필터**: E1(목표·생식), E2(영양생장), E3(시설내환경), E4(외부기상), E5(근권양액), E6(시설제어), E7(시설작기맥락)
-     - **실시간 검색**: 변수군 코드, 한글 명칭, 세부 변수명 실시간 필터링
-     - **127개 조합 전체 탐색기 모달**: 전체 127개 조합을 반응형 카드로 한눈에 조회하고 1-클릭 선택
-     - **세부 변수 사전 모달**: 선택된 조합에 포함된 49개 변수 정의서 및 고정 메타데이터(C0) 조회
-   - **8개 타깃 × 6개 모델 × 3개 시드 (42, 52, 62) + 앙상블 평균**:
-     - Poisson, Random Forest, CatBoost, MLP, TabM, TFT
-   - **상태 분리 및 무결성 보장**:
-     - 아직 실행되지 않은 조합은 임의 수치 없이 명확히 `⏳ 결과 대기 (0/3)`로 표시
-     - 실제 결과 파일이 확인된 조합만 성능 지표 및 순위 랭킹 부여
-     - 시설·작기·개체별 실제값 vs 모델 예측값 시계열 추이 (관측 현황과 동일한 UI 및 조작 방식)
-
-3. **📋 생육 예측 분석 (AX Direction & Strategy)**
-   - 핵심 요약 KPI, 베이스라인 대비 개선도, 오차 취약 구간 진단, 데이터 수집 가이드 및 스키마 로드맵
-
----
-
-## 🚀 로컬 실행 방법
-
-Python 3 환경에서 즉시 실행할 수 있습니다.
+프로젝트 루트에서:
 
 ```bash
-# 폴더 이동
-cd flower_fruit_prediction_exhaustive
-
-# 로컬 웹서버 실행
-python server.py
+python ax_data_validation/sync_semantic_screening_dashboard.py
+python -m pytest -q ax_data_validation/test_semantic_screening_static.py
+bash finalize_ax_semantic_screening_dashboard.sh
 ```
 
-브라우저에서 **`http://localhost:8000`** 으로 접속합니다.
+Python은 프로젝트 의존성이 설치된 환경을 사용합니다. 배포 스크립트는 원본 Test 완료 확인, 데이터 검증, JavaScript 구문 검사 후에만 commit/push를 수행합니다.
 
----
+주요 파일:
 
-## 🔄 추후 전수실험 결과 연결 및 갱신 절차
+- `cache/campaigns/semantic_control/experiment_index.json`: 6,096건 Validation과 48개 Test 요약
+- `cache/campaigns/semantic_control/predictions/`: 144개 Test 예측 파일
+- `cache/campaigns/semantic_control/feature_selections/`: 조합별 선택·제외 변수 및 사유
+- 같은 캠페인 폴더의 `validation_rankings.csv`, `validation_winners.csv`, `test_results.csv`
+- `ax_direction/dashboard_bundle.json`: KPI 기준값과 기존 진단 자료. 기존 성능·오차 진단 자료는 별도 출처이며 이번 선별로 재산출한 것으로 간주하지 않습니다.
 
-전수실험(`run_ax_exhaustive.sh`)이 완료되면 아래 명령어로 웹 대시보드 데이터를 즉시 갱신할 수 있습니다.
-
-### 1. 실험 결과 인덱스 자동 빌드
-```bash
-python sync_exhaustive_experiments.py
-```
-- `ax_catalog_experiments/outputs/exhaustive_e1_e7_v1/`의 `csv/` 및 `predictions/` (또는 `handoff/dashboard_bundle.json`)을 자동으로 파싱하여 `cache/experiment_index.json` 및 세부 예측 JSON을 생성합니다.
-- 서버가 실행 중인 상태라면 웹 화면 상단의 `[🔄 최신 실험 결과 새로고침]` 버튼을 눌러 브라우저 캐시를 즉시 갱신할 수도 있습니다.
-
-### 2. 무결성 검증
-```bash
-python test_verification.py
-```
-- 127개 조합 카탈로그 무결성, 8개 타깃 및 6개 모델, 3개 시드, 관측 데이터 행 수 및 API 응답을 자동 검증합니다.
-
----
-
-## 📁 프로젝트 구조
-
-```text
-flower_fruit_prediction_exhaustive/
-├── index.html                               # 메인 대시보드 마크업 (127개 조합 탐색기 & 모달 포함)
-├── server.py                                # 로컬 정적 웹서버 및 REST API (Python 3)
-├── sync_exhaustive_experiments.py           # 전수실험 산출물 파싱 및 웹 캐시 빌더
-├── test_verification.py                     # 127개 조합 무결성 및 엔드포인트 검증 스크립트
-├── tomato_observed_counts_by_crop_cycle.csv # 토마토 실제 관측 데이터 (2,239행)
-├── strawberry_observed_counts_by_crop_cycle.csv # 딸기 실제 관측 데이터 (5,218행)
-├── cache/
-│   ├── combination_catalog.json             # 127개 조합 및 49개 변수 정의 사전
-│   ├── experiment_index.json                # 전수실험 결과 인덱스
-│   └── predictions/                         # 개별 Run 예측 시계열 캐시
-├── src/
-│   ├── app.js                               # 메인 앱 진입점
-│   ├── parser.js                            # 관측 CSV 파서
-│   ├── analytics.js                         # 관측 데이터 통계 엔진
-│   ├── charts.js                            # 관측 8종 차트 렌더러
-│   ├── experiment_api.js                    # 127개 조합 카탈로그 및 실험 결과 API 클라이언트
-│   ├── experiment_view.js                   # 127개 조합 탐색/필터/모달/비교표 뷰 컨트롤러
-│   ├── analysis_api.js                      # AX 분석 API 클라이언트
-│   ├── analysis_view.js                     # AX 방향성 분석 뷰 컨트롤러
-│   └── styles.css                           # 프리미엄 디자인 시스템 및 127 조합 탐색기 스타일
-└── README.md
-```
-
-## 실험 결과 기준 비교
-
-실험 결과 비교 화면은 내부 캠페인 ID 대신 다음 두 이름을 사용합니다.
-
-- **시설별 제어코드 기준**: DB에 저장된 시설별 제어 코드를 그대로 구분한 기존 결과에 E1·E2 포함 96개 조합의 고정설정 3시드 결과를 통합합니다. E1·E2 보완 캠페인은 타깃·모델별 고정 하이퍼파라미터를 재사용했으므로 기존 조합별 튜닝 결과와 실험 방식이 다릅니다.
-- **장치 의미 통합 기준**: 방향·층수 표현을 제거하고 장치 종류와 측정값 의미를 유지해 E6 포함 유효 조합 16개를 다시 학습한 결과입니다. E6가 없는 63개 조합은 시설별 코드 기준 또는 E1·E2 보완 결과를 재사용합니다. E1·E2와 E6를 함께 포함한 48개 조합은 의미 통합 E6로 재학습하지 않았으므로 `실험 범위 외`로 표시합니다.
-
-두 기준을 나눈 이유는 시설별 원 제어코드 결과를 기준선으로 유지하면서, 시설 간 코드 표현 차이가 E6 데이터 연결률과 예측 성능에 미친 영향을 분리해 확인하기 위해서입니다. 실제로 수행하지 않은 `E1·E2 + 의미 통합 E6` 조합은 다른 캠페인 결과로 대체하지 않습니다.
-
-현재 결과 캐시는 다음 명령으로 다시 생성합니다.
-
-```bash
-python ax_data_validation/sync_e6_semantic_dashboard.py
-python ax_data_validation/sync_e1_e2_final_dashboard.py
-```
-
-두 번째 명령은 완료된 6,096건을 두 기존 기준 탭에 통합하고 KPI 기준값을 갱신합니다.
+원본 캠페인과 배포 전 대시보드 백업은 서버에 보존합니다. 정식 후속 배포는 선별 전에 보존한 기존 결과를 읽어, 선별 결과가 정식 결과로 섞이지 않도록 합니다.

@@ -11,7 +11,7 @@
  * - Hyperparameters card
  */
 
-import { fetchCatalog, fetchCampaignCatalog, fetchMetadata, fetchComparison, fetchPredictions, fetchFeatureSelection, refreshExperiments } from './experiment_api.js?v=7';
+import { fetchCatalog, fetchCampaignCatalog, fetchMetadata, fetchComparison, fetchPredictions, fetchFeatureSelection, refreshExperiments } from './experiment_api.js?v=9';
 
 const CROP_TARGETS = {
   tomato: [
@@ -47,7 +47,7 @@ export class ExperimentViewController {
 
     // View state
     this.state = {
-      campaign: 'stored_control_codes',
+      campaign: 'semantic_control',
       crop: 'tomato',
       target: 'tomato_first',
       model: 'tabm',
@@ -363,7 +363,7 @@ export class ExperimentViewController {
       this.campaignCatalog = await fetchCampaignCatalog();
       const availableCampaigns = this.campaignCatalog?.campaigns || [];
       if (!availableCampaigns.some(item => item.id === this.state.campaign)) {
-        this.state.campaign = this.campaignCatalog?.default_campaign || availableCampaigns[0]?.id || 'stored_control_codes';
+        this.state.campaign = this.campaignCatalog?.default_campaign || availableCampaigns[0]?.id || 'semantic_control';
       }
       this.metadata = await fetchMetadata(false, this.state.campaign);
       this.renderCampaignSelector();
@@ -380,6 +380,11 @@ export class ExperimentViewController {
   }
 
   renderCampaignSelector() {
+    const subtitle = document.getElementById('exp_method_summary');
+    const campaign = this.metadata?.campaign || {};
+    if (subtitle) subtitle.textContent = campaign.validation_method === 'single_seed_fixed_configuration_screening'
+      ? '장치 의미 통합 기준 · 127개 조합 × 8개 타깃 × 6개 모델 선별 완료. Validation은 고정 설정·1시드, 우승 후보 Test는 3시드입니다. 정식 추가 검증 완료 후 갱신합니다.'
+      : '방향·층수 표현을 장치 의미로 통합한 기준에서 127개 조합의 성능과 최종 Test 예측을 확인합니다.';
     const options = document.getElementById('exp_campaign_options');
     const explanation = document.getElementById('exp_campaign_explanation');
     const progress = document.getElementById('exp_campaign_progress');
@@ -424,9 +429,10 @@ export class ExperimentViewController {
   updateSeedDropdown(resetSelection = false) {
     const seedSelect = document.getElementById('exp_seed_select');
     if (!seedSelect) return;
-    const seeds = Array.isArray(this.metadata?.seeds) && this.metadata.seeds.length
-      ? this.metadata.seeds
-      : [42, 52, 62];
+    const configured = this.state.split === 'test'
+      ? (this.metadata?.campaign?.test_seeds || this.metadata?.seeds)
+      : this.metadata?.seeds;
+    const seeds = Array.isArray(configured) && configured.length ? configured : [42, 52, 62];
     const options = [];
     if (seeds.length > 1) {
       options.push(`<option value="all">${seeds.length}개 Seed 앙상블 평균 (권장)</option>`);
@@ -564,7 +570,15 @@ export class ExperimentViewController {
   }
 
   async onSplitChange() {
+    this.updateSeedDropdown(true);
     await this.loadComparisonData();
+    if (this.state.split === 'test' && this.currentComparison?.frozen_winner) {
+      this.state.group_id = this.currentComparison.frozen_winner;
+      const select = document.getElementById('exp_group_select');
+      if (select) select.value = this.state.group_id;
+      this.updateGroupMetaBar();
+      this.renderComparisonTable();
+    }
     await this.loadPredictionsAndRender();
   }
 
@@ -648,11 +662,11 @@ export class ExperimentViewController {
 
       const rankBadge = r.rank != null ? `<span class="rank-pill font-bold">#${r.rank}</span>` : `<span class="text-muted">-</span>`;
       const winnerBadge = isWinner ? `<span class="badge-winner">🏆 우승</span>` : `-`;
-      const seedTotal = Number(this.metadata?.campaign?.total_seeds || this.metadata?.seeds?.length || 3);
+      const seedTotal = this.state.split === 'test' ? (this.metadata?.campaign?.test_seeds?.length || 3) : Number(this.metadata?.campaign?.total_seeds || this.metadata?.seeds?.length || 3);
 
       let statusTag;
-      if (hasResult && r.source === 'reused_stored_control_codes') {
-        statusTag = `<span class="status-tag reused" title="E6가 없는 조합이므로 완료된 기존 결과를 그대로 사용했습니다.">기존 결과 재사용 (${r.completed_seeds}/${seedTotal})</span>`;
+      if (hasResult && ['semantic_common_no_e6', 'reused_stored_control_codes', 'reused_e1_e2_fixed_config_no_e6'].includes(r.source)) {
+        statusTag = `<span class="status-tag reused" title="E6가 없는 조합은 제어코드 통합 여부와 입력이 동일합니다.">E6 미포함 공통 결과 (${r.completed_seeds}/${seedTotal})</span>`;
       } else if (hasResult && r.source === 'semantic_retrained') {
         statusTag = `<span class="status-tag complete">의미 통합 완료 (${r.completed_seeds}/${seedTotal})</span>`;
       } else if (hasResult) {
@@ -785,7 +799,21 @@ export class ExperimentViewController {
       if (nEl) nEl.textContent = row.n_eval ? `${row.n_eval}건` : '-';
       if (paramsEl) paramsEl.textContent = row.params ? JSON.stringify(row.params, null, 2) : '// 하이퍼파라미터 정보 없음';
       if (emptyTitle) emptyTitle.textContent = '조합별 평가지표 제공 · 개별 예측 시계열 미제공';
-      if (emptyMessage) emptyMessage.innerHTML = '선택한 실험의 평가지표는 위 비교표와 아래 요약 카드에 표시됩니다.<br>이 조합의 행별 예측값은 현재 정적 배포 묶음에 포함되지 않았습니다.';
+      if (emptyMessage) {
+        emptyMessage.textContent = this.currentPredictions?.metadata?.prediction_note || '선택한 실험의 평가지표는 비교표와 요약 카드에 표시됩니다. 행별 예측값은 우승 조합의 Test에서 확인할 수 있습니다.';
+        if (this.state.split === 'validation' && this.currentComparison?.frozen_winner) {
+          const button = document.createElement('button');
+          button.type = 'button';
+          button.className = 'exp-refresh-btn';
+          button.textContent = '우승 조합 Test 시계열 보기';
+          button.addEventListener('click', async () => {
+            this.state.split = 'test';
+            this.updateSplitButtons();
+            await this.onSplitChange();
+          });
+          emptyMessage.append(document.createElement('br'), button);
+        }
+      }
     } else {
       if (rmseEl) rmseEl.textContent = '-';
       if (maeEl) maeEl.textContent = '-';

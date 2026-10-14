@@ -103,18 +103,18 @@
         <div class="overview-status-grid">
           <article class="overview-status-card complete">
             <span class="overview-status-badge">완료</span>
-            <strong>기존 가용 변수군 전수실험</strong>
-            <p>E3~E7 기반 조합과 6개 모델의 검증 결과를 대시보드에 반영했습니다.</p>
+            <strong>127개 변수군 조합 Validation</strong>
+            <p>8개 예측 타깃·6개 모델의 127개 입력 조합 순위와 우승 조합을 확정했습니다.</p>
           </article>
           <article class="overview-status-card complete">
             <span class="overview-status-badge">완료</span>
             <strong>시설 제어 의미 통합 실험</strong>
             <p>시설마다 다른 방향·층수 표현을 장치 의미 기준으로 통합해 추가 검증했습니다.</p>
           </article>
-          <article class="overview-status-card ongoing">
-            <span class="overview-status-badge">진행</span>
+          <article class="overview-status-card complete">
+            <span class="overview-status-badge">완료</span>
             <strong>E1·E2 보완 실험</strong>
-            <p>생육 이력과 영양생장 변수를 올바르게 파생해 비어 있던 조합을 채우고 있습니다.</p>
+            <p>생육 이력과 영양생장 변수를 파생해 누락됐던 조합까지 최종 비교에 포함했습니다.</p>
           </article>
           <article class="overview-status-card next">
             <span class="overview-status-badge">다음 단계</span>
@@ -664,7 +664,7 @@
             <div class="header-icon">🧪</div>
             <div>
               <h1 class="header-title">AI 예측모델 검증</h1>
-              <p class="header-subtitle">변수군 조합별 성능 비교와 선정 모델의 오차 발생 구간을 함께 확인합니다.</p>
+              <p id="exp_method_summary" class="header-subtitle">방향·층수 표현을 장치 의미로 통합한 기준에서 127개 조합의 성능과 최종 Test 예측을 확인합니다.</p>
             </div>
           </div>
         </div>
@@ -686,18 +686,6 @@
               <span class="refresh-icon">🔄</span> 최신 실험 결과 새로고침
             </button>
           </div>
-        </div>
-
-        <div class="campaign-basis-panel" id="exp_campaign_panel" aria-label="실험 결과 기준 선택">
-          <div class="campaign-basis-heading">
-            <div>
-              <span class="campaign-basis-kicker">실험 결과 기준</span>
-              <h3>비교할 데이터 구성과 실험 방식을 선택하세요</h3>
-            </div>
-            <span class="campaign-progress-badge" id="exp_campaign_progress">불러오는 중</span>
-          </div>
-          <div class="campaign-basis-options" id="exp_campaign_options"></div>
-          <div class="campaign-basis-explanation" id="exp_campaign_explanation"></div>
         </div>
 
         <div class="exp-selectors-grid">
@@ -1568,7 +1556,7 @@
           <div class="anl-card-header-between">
             <div>
               <h3 class="anl-card-title">🎯 선택 타깃 AX 데이터 성능 개선 KPI</h3>
-              <p class="anl-card-subtitle">완료된 3시드 실험의 타깃별 최저 RMSE를 As-Is로 고정하고, 신규 AX 입력으로 10% 이상 낮추는 것을 To-Be 목표로 설정합니다.</p>
+              <p class="anl-card-subtitle">장치 의미 통합 기준 127개 조합의 게시된 Validation 최저 RMSE를 As-Is로 사용하고, 신규 AX 입력으로 10% 이상 낮추는 것을 To-Be 목표로 설정합니다. 잠정 기준값은 정식 추가 검증 완료 후 갱신합니다.</p>
             </div>
             <span class="anl-badge-tag success">✅ 내부 계획 KPI · 동일 조건 비교</span>
           </div>
@@ -1580,7 +1568,7 @@
             <div class="guide-icon">📌</div>
             <div class="guide-text">
               <h4>KPI 적용 기준</h4>
-              <p><strong>1차 내부 계획 KPI는 동일 평가 대상·분할·시드에서 As-Is 대비 RMSE 10% 이상 감소</strong>입니다. As-Is는 E1·E2를 보완한 고정설정 3시드 실험 6,096건의 타깃별 최저값으로 고정합니다. MAE는 감소하고 R²·CCC는 하락하지 않는지도 함께 확인합니다. 변화구간 MAE 15% 개선값은 행 단위 예측 결과를 새 AX 데이터에 연결한 뒤 기준을 다시 산정할 보조 KPI입니다.</p>
+              <p><strong>1차 내부 계획 KPI는 동일 평가 대상·분할·시드에서 As-Is 대비 RMSE 10% 이상 감소</strong>입니다. As-Is는 방향·층수를 장치 의미로 통합한 127개 조합 전체 Validation 순위의 타깃별 최저값입니다. 현재 1시드 선별 기준값은 정식 추가 검증 완료 후 갱신하며, 신규 AX 데이터 비교 시 동일한 평가 조건으로 다시 고정합니다. MAE는 감소하고 R²·CCC는 하락하지 않는지도 함께 확인합니다. 변화구간 MAE 15% 개선값은 행 단위 예측 결과를 새 AX 데이터에 연결한 뒤 기준을 다시 산정할 보조 KPI입니다.</p>
             </div>
           </div>
         </section>
@@ -1597,7 +1585,7 @@
                 <thead>
                   <tr>
                     <th>타깃 과제</th>
-                    <th class="td-right">현 기준 RMSE (3시드 BEST)</th>
+                    <th class="td-right">현 기준 RMSE (Validation BEST)</th>
                     <th class="td-right text-primary font-bold">To-Be 목표 RMSE (10% 개선)</th>
                     <th class="td-right">변화구간 MAE 참고 기준</th>
                     <th class="td-right text-primary font-bold">보조 KPI 후보 (15% 개선)</th>
@@ -1768,6 +1756,6 @@
 
 
   <!-- 메인 애플리케이션 진입점 -->
-  <script type="module" src="./src/app.js?v=28"></script>
+  <script type="module" src="./src/app.js?v=29"></script>
 </body>
 </html>

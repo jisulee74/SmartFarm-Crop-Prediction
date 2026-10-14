@@ -1415,11 +1415,11 @@ export class AnalysisViewController {
     const item = kpi_planning_reference.find(r => r.target === this.state.target) || kpi_planning_reference[0];
     if (!item) return;
 
-    const resultLabel = item.reference_is_provisional ? '3시드 중간 BEST' : '고정설정 3시드 BEST';
+    const resultLabel = item.reference_method_label || (item.reference_is_provisional ? '잠정 Validation BEST' : '최종 Validation BEST');
     const provisionalSource = `${resultLabel} · ${(item.reference_model || '').toUpperCase()} · ${(item.reference_groups || []).join('+')}`;
     const snapshotNote = item.reference_is_provisional
       ? `${item.reference_snapshot_label || '중간 집계'} · 완료 후 갱신`
-      : `${item.reference_snapshot_label || '실험 완료'} · 6,096/6,096`;
+      : `${item.reference_snapshot_label || '실험 완료'} · ${item.reference_campaign_progress?.processed || 6096}/${item.reference_campaign_progress?.total || 6096}`;
 
     container.innerHTML = `
       <div class="anl-kpi-item-card">
@@ -1464,7 +1464,7 @@ export class AnalysisViewController {
           <td class="td-right text-primary font-bold">${r.illustrative_15pct_change_mae.toFixed(4)}</td>
           <td class="td-right text-muted">${r.reference_persistence_rmse.toFixed(4)}</td>
           <td class="td-right text-muted">${r.reference_zero_rmse.toFixed(4)}</td>
-          <td><span class="anl-badge-tag ${r.reference_is_provisional ? 'warning' : 'success'}">${r.reference_is_provisional ? '3시드 중간 BEST · 추후 갱신' : '고정설정 3시드 BEST · 완료'}</span></td>
+          <td><span class="anl-badge-tag ${r.reference_is_provisional ? 'warning' : 'success'}">${r.reference_is_provisional ? `${r.reference_method_label || '잠정 Validation BEST'} · 정식 추가 검증 후 갱신` : `${r.reference_method_label || '최종 Validation BEST'} · 완료`}</span></td>
         </tr>
       `;
     }).join('');

@@ -15,9 +15,13 @@ const CACHE = {
 let staticCatalog = null;
 const staticIndexes = new Map();
 
-// The local Python API serves the stored-code campaign. The semantic-control
-// campaign uses its own static index declared in campaign_catalog.json.
-const DEFAULT_CAMPAIGN = 'stored_control_codes';
+// The public dashboard exposes the semantic-control result only.  The former
+// facility-specific code campaign is preserved in the technical archive.
+const DEFAULT_CAMPAIGN = 'semantic_control';
+
+function usesStaticCampaignData(campaign) {
+  return campaign === 'semantic_control';
+}
 
 export async function fetchCatalog(force = false) {
   if (!force && CACHE.catalog) return CACHE.catalog;
@@ -62,12 +66,12 @@ export async function fetchCampaignCatalog(force = false) {
     default_campaign: DEFAULT_CAMPAIGN,
     campaigns: [{
       id: DEFAULT_CAMPAIGN,
-      name: '시설별 제어코드 기준',
-      description: 'DB에 저장된 시설 제어 코드를 구분한 최초 전수실험',
+      name: '장치 의미 통합 기준',
+      description: '방향·층수 표현을 통합하고 장치 종류와 측정 의미를 유지한 127개 조합 최종 결과',
       status: 'completed', progress_percent: 100,
-      data_path: './cache/experiment_index.json',
-      predictions_path: './cache/predictions',
-      feature_selections_path: './cache/feature_selections'
+      data_path: './cache/campaigns/semantic_control/experiment_index.json',
+      predictions_path: './cache/campaigns/semantic_control/predictions',
+      feature_selections_path: './cache/campaigns/semantic_control/feature_selections'
     }]
   };
   return CACHE.campaignCatalog;
@@ -94,7 +98,7 @@ async function getStaticIndex(campaign = DEFAULT_CAMPAIGN, force = false) {
 export async function fetchMetadata(force = false, campaign = DEFAULT_CAMPAIGN) {
   if (!force && CACHE.metadata.has(campaign)) return CACHE.metadata.get(campaign);
   try {
-    if (campaign !== DEFAULT_CAMPAIGN) throw new Error('campaign-specific static metadata');
+    if (usesStaticCampaignData(campaign)) throw new Error('campaign-specific static metadata');
     const res = await fetch('./api/experiments/metadata');
     if (res.ok) {
       const data = await res.json();
@@ -102,7 +106,7 @@ export async function fetchMetadata(force = false, campaign = DEFAULT_CAMPAIGN) 
       return data;
     }
   } catch (err) {
-    if (campaign === DEFAULT_CAMPAIGN) console.warn('[ExperimentAPI] API metadata failed, falling back to static index:', err);
+    if (!usesStaticCampaignData(campaign)) console.warn('[ExperimentAPI] API metadata failed, falling back to static index:', err);
   }
 
   // Fallback to static cache/experiment_index.json
@@ -179,7 +183,7 @@ export async function fetchComparison(target, model, split, force = false, campa
     return CACHE.comparison.get(cacheKey);
   }
   try {
-    if (campaign !== DEFAULT_CAMPAIGN) throw new Error('campaign-specific static comparison');
+    if (usesStaticCampaignData(campaign)) throw new Error('campaign-specific static comparison');
     const url = `./api/experiments/comparison?target=${encodeURIComponent(target)}&model=${encodeURIComponent(model)}&split=${encodeURIComponent(split)}`;
     const res = await fetch(url);
     if (res.ok) {
@@ -188,7 +192,7 @@ export async function fetchComparison(target, model, split, force = false, campa
       return data;
     }
   } catch (err) {
-    if (campaign === DEFAULT_CAMPAIGN) console.warn('[ExperimentAPI] API comparison failed, falling back to static calculation:', err);
+    if (!usesStaticCampaignData(campaign)) console.warn('[ExperimentAPI] API comparison failed, falling back to static calculation:', err);
   }
 
   // Fallback to computing comparison from static catalog & index
@@ -266,7 +270,7 @@ export async function fetchComparison(target, model, split, force = false, campa
         const aMae = a.bounded?.mae_mean ?? 999999;
         const bMae = b.bounded?.mae_mean ?? 999999;
         if (aMae !== bMae) return aMae - bMae;
-        return (a.feature_count || 999) - (b.feature_count || 999);
+        return ((a.feature_count ?? 999) - (b.feature_count ?? 999)) || a.group_id.localeCompare(b.group_id);
       }
       if (aRmse != null) return -1;
       if (bRmse != null) return 1;
@@ -311,7 +315,7 @@ export async function fetchPredictions(target, group, model, split, seed = 'all'
     return CACHE.predictions.get(cacheKey);
   }
   try {
-    if (campaign !== DEFAULT_CAMPAIGN) throw new Error('campaign-specific static predictions');
+    if (usesStaticCampaignData(campaign)) throw new Error('campaign-specific static predictions');
     const url = `./api/experiments/predictions?target=${encodeURIComponent(target)}&group=${encodeURIComponent(group)}&model=${encodeURIComponent(model)}&split=${encodeURIComponent(split)}&seed=${encodeURIComponent(seed)}`;
     const res = await fetch(url);
     if (res.ok) {
@@ -320,7 +324,7 @@ export async function fetchPredictions(target, group, model, split, seed = 'all'
       return data;
     }
   } catch (err) {
-    if (campaign === DEFAULT_CAMPAIGN) console.warn('[ExperimentAPI] API predictions failed, falling back to static predictions cache:', err);
+    if (!usesStaticCampaignData(campaign)) console.warn('[ExperimentAPI] API predictions failed, falling back to static predictions cache:', err);
   }
 
   // Fallback to static cache files
@@ -332,10 +336,13 @@ export async function fetchPredictions(target, group, model, split, seed = 'all'
     if (!res_entry) {
       return { status: "no_results", group_id: group, model, split, target, predictions: [], metadata: {} };
     }
+    if (res_entry.predictions_available === false) {
+      return { status: "no_predictions", predictions: [], metadata: res_entry };
+    }
     const seeds_dict = res_entry.seeds || {};
     const available_seeds = Object.keys(seeds_dict).map(s => parseInt(s, 10)).sort((a, b) => a - b);
     const definition = await campaignDefinition(campaign);
-    const predictionRoot = campaign === 'semantic_control' && res_entry.source === 'reused_stored_control_codes'
+    const predictionRoot = campaign === 'semantic_control' && (res_entry.prediction_source === 'baseline' || res_entry.source === 'reused_stored_control_codes')
       ? (definition?.baseline_predictions_path || './cache/predictions')
       : (definition?.predictions_path || './cache/predictions');
 
@@ -429,6 +436,17 @@ export async function fetchPredictions(target, group, model, split, seed = 'all'
 }
 
 export async function refreshExperiments(campaign = DEFAULT_CAMPAIGN) {
+  if (usesStaticCampaignData(campaign)) {
+    CACHE.catalog = null;
+    CACHE.campaignCatalog = null;
+    CACHE.metadata.clear();
+    CACHE.comparison.clear();
+    CACHE.predictions.clear();
+    CACHE.featureSelections.clear();
+    staticCatalog = null;
+    staticIndexes.clear();
+    return await fetchMetadata(true, campaign);
+  }
   try {
     const res = await fetch('./api/experiments/refresh');
     if (!res.ok) throw new Error(`HTTP error ${res.status}`);

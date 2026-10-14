@@ -1,0 +1,33 @@
+{
+  "generated_at": "2026-10-14T02:49:32.440812+00:00",
+  "files": {
+    "README.md": {
+      "sha256": "097bfc80f1c6b3d518c2c8631f78af23ff3cb50f0b9361142e50fad8be823720",
+      "bytes": 1195
+    },
+    "combination_catalog.csv": {
+      "sha256": "fd56fadeec45147625521d0a26ea965b2799d3ad6a8c1a3f410c4972e79596ed",
+      "bytes": 5407
+    },
+    "data_quality.csv": {
+      "sha256": "9a6f7f6713c2b4090ff1eb7ff68ce658eb6aef9a62df02b24747efc3a92be398",
+      "bytes": 2767
+    },
+    "e1_e2_backfill_campaign_manifest.json": {
+      "sha256": "d7d51f9469987eb5a806a3f54c2e6644b9f400671a6d0695f007d09ef396ce4c",
+      "bytes": 18102
+    },
+    "e1_e2_backfill_completion_report.json": {
+      "sha256": "1d267658012bbdf40a154abbb5882f2c8599745cb21bbda4176e3d1de43ae708",
+      "bytes": 346
+    },
+    "original_campaign_manifest.json": {
+      "sha256": "fb082d14aa288d1e23ed278218e8637861af361a91848927220ca4cc0551dd13",
+      "bytes": 11892
+    },
+    "validation_results_compact.csv": {
+      "sha256": "cf9af0e16e6cd28bb3f305ab855f578581139a43ce5f0af6973a7ed66c3cf4a1",
+      "bytes": 1420318
+    }
+  }
+}

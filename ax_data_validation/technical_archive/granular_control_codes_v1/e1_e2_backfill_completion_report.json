@@ -1,0 +1,17 @@
+{
+  "Campaign_ID": "exhaustive_e1_e2_deadline_v1",
+  "Method": "deadline_fixed_configuration_screening",
+  "Completed": 6096,
+  "Total": 6096,
+  "Percent": 100.0,
+  "Statuses": {
+    "success": 6048,
+    "ineligible": 48
+  },
+  "Generated_At": 1791610875.0374577,
+  "Files": [
+    "metrics.csv",
+    "rankings.csv",
+    "status_summary.csv"
+  ]
+}
