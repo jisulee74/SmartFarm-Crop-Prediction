@@ -535,7 +535,7 @@ export class AnalysisViewController {
             <span>⚠️</span> <strong>토마토 꽃수 정답의 0 편중(Zero-Inflation) 및 표본 특성 진단</strong>
           </div>
           <div class="warn-summary-chips">
-            <div class="warn-chip">선택 코호트 (${splitLabel}셋): 0 비율 ${(zero_rate * 100).toFixed(1)}%</div>
+            <div class="warn-chip">선택 평가 대상 (${splitLabel}셋): 0 비율 ${(zero_rate * 100).toFixed(1)}%</div>
             <div class="warn-chip">양수(개화) 정답: 단 ${positive_n}행 / 전체 ${total_n}행 (${(positive_rate * 100).toFixed(1)}%)</div>
             <div class="warn-chip" style="${isSmallPos ? 'background:#fee2e2;border-color:#fca5a5;color:#991b1b;' : ''}">
               ${isSmallPos ? '⚠️ 양수 소표본 (N < 30)' : '표본 확보'}
@@ -544,7 +544,7 @@ export class AnalysisViewController {
           <ul class="warn-desc-list">
             <li><strong>개화 구간 성능 판단의 한계:</strong> 0이 대다수인 전체 평균 성능(RMSE/MAE)만으로는 실제 개화(꽃 발생) 구간의 모델 성능을 판단하기 어렵습니다.</li>
             <li><strong>0 예측 기준의 착시:</strong> 항상 0만 예측하는 진단용 더미 모델이라도 대다수 표본에서 오차가 0이 되므로 겉보기 RMSE가 매우 낮게 왜곡됩니다. 0 예측 기준의 낮은 RMSE가 실제 개화 포착 성공을 의미하지 않습니다.</li>
-            <li><strong>선택 코호트 실태:</strong> ${splitLabel}셋의 양수 정답은 ${positive_n}행입니다. 구간별 성능은 해당 표본 수와 함께 해석해야 하며 시드를 3번 평가해도 독립 표본이 3배 늘어나지는 않습니다.</li>
+            <li><strong>선택 평가 대상 실태:</strong> ${splitLabel}셋의 양수 정답은 ${positive_n}행입니다. 구간별 성능은 해당 표본 수와 함께 해석해야 하며 시드를 3번 평가해도 독립 표본이 3배 늘어나지는 않습니다.</li>
           </ul>
         `;
       } else {
@@ -553,7 +553,7 @@ export class AnalysisViewController {
             <span>🍓</span> <strong>딸기 착과수 정답 분포 및 표본 특성 진단</strong>
           </div>
           <div class="warn-summary-chips">
-            <div class="warn-chip">선택 코호트 (${splitLabel}셋): 0 비율 ${(zero_rate * 100).toFixed(1)}%</div>
+            <div class="warn-chip">선택 평가 대상 (${splitLabel}셋): 0 비율 ${(zero_rate * 100).toFixed(1)}%</div>
             <div class="warn-chip">착과(양수) 정답: ${positive_n}행 / 전체 ${total_n}행 (${(positive_rate * 100).toFixed(1)}%)</div>
             <div class="warn-chip">${isSmallPos ? '⚠️ 소표본 (N < 30)' : '양수 관측 N ≥ 30 · 일반화는 별도 검증'}</div>
           </div>
@@ -633,7 +633,7 @@ export class AnalysisViewController {
               <span style="font-weight:800;color:#60a5fa;">${pct}%</span>
             </div>
             <div style="font-size:11px;color:#cbd5e1;margin-top:4px;">
-              (전체 코호트 N=${total_n.toLocaleString()}건 기준)
+              (전체 평가 대상 N=${total_n.toLocaleString()}건 기준)
             </div>
           `;
         }
@@ -1392,7 +1392,7 @@ export class AnalysisViewController {
             <h4 class="anl-arm-lg-title">${arm.name}</h4>
           </div>
           <span class="anl-status-badge ${isToBe ? 'unexp' : 'exp'}">
-            ${isToBe ? '⚠️ 향후 신규 코호트 PoC 미실험 단계' : '✔️ 현재 완료된 실험군'}
+            ${isToBe ? '신규 AX 자료 수령 후 검증 예정' : '✔️ 현재 완료된 실험군'}
           </span>
         </div>
 
@@ -1449,7 +1449,7 @@ export class AnalysisViewController {
       <div class="anl-kpi-item-card highlight">
         <span class="kpi-item-lbl">보조 KPI 후보 (변화 MAE 15% 개선)</span>
         <div class="kpi-item-val font-bold text-primary">${item.illustrative_15pct_change_mae?.toFixed(4) ?? "미제공"}</div>
-        <span class="kpi-item-sub text-primary">최신 Test 참고 목표 · 신규 AX 비교 코호트에서 재확정</span>
+        <span class="kpi-item-sub text-primary">최신 Test 참고 목표 · 신규 AX 비교 평가 대상에서 재확정</span>
       </div>
     `;
   }
