@@ -21,6 +21,7 @@
 
 ```bash
 python ax_data_validation/sync_semantic_screening_dashboard.py
+python ax_data_validation/sync_screening_analysis.py
 python -m pytest -q ax_data_validation/test_semantic_screening_static.py
 bash finalize_ax_semantic_screening_dashboard.sh
 ```
@@ -33,6 +34,13 @@ Python은 프로젝트 의존성이 설치된 환경을 사용합니다. 배포 
 - `cache/campaigns/semantic_control/predictions/`: 144개 Test 예측 파일
 - `cache/campaigns/semantic_control/feature_selections/`: 조합별 선택·제외 변수 및 사유
 - 같은 캠페인 폴더의 `validation_rankings.csv`, `validation_winners.csv`, `test_results.csv`
-- `ax_direction/dashboard_bundle.json`: KPI 기준값과 기존 진단 자료. 기존 성능·오차 진단 자료는 별도 출처이며 이번 선별로 재산출한 것으로 간주하지 않습니다.
+- `ax_direction/dashboard_bundle.json`: 최신 선별 전체 성능과 Test 구간별 진단·분포·KPI. `screening_analysis/`에 CSV와 출처 해시를 보존합니다. 사업 스키마·원천 관측 품질 자료는 고정 원본 기준으로 유지하고 출처를 구분합니다.
 
 원본 캠페인과 배포 전 대시보드 백업은 서버에 보존합니다. 정식 후속 배포는 선별 전에 보존한 기존 결과를 읽어, 선별 결과가 정식 결과로 섞이지 않도록 합니다.
+
+## 진단 해석
+
+- Validation은 저장된 집계 성능만 제공하며, 구간별 상세 오차는 최신 Test에서 제공합니다. 분할 전환 시 이전 Test 수치가 Validation 화면에 남지 않습니다.
+- 현재값 유지 기준선은 미관측 현재값을 train 중앙값으로 대체해 전체 평가 행을 보존합니다. 대체 행 수를 표시하며 모델과 같은 행에서 비교합니다. 변화구간은 현재값이 관측된 행만 대상으로 하고 미관측은 별도 구간입니다.
+- KPI의 RMSE 및 단순 기준선은 Validation, 변화구간 MAE는 Test 진단 참고값입니다. 신규 AX 효과 검증에서는 같은 새 코호트와 평가 조건으로 다시 기준을 고정합니다.
+- 상세 가설의 기존 시설명·오차 비율을 새 Test 진단 근거로 갱신했습니다. 변수군 추가 비교는 상관적 비교이며 인과 효과를 입증하지 않습니다.

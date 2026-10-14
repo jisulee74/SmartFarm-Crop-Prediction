@@ -104,17 +104,17 @@
           <article class="overview-status-card complete">
             <span class="overview-status-badge">완료</span>
             <strong>127개 변수군 조합 Validation</strong>
-            <p>8개 예측 타깃·6개 모델의 127개 입력 조합 순위와 우승 조합을 확정했습니다.</p>
+            <p>8개 타깃·6개 모델·127개 조합의 1시드 선별 6,096건을 완료했습니다. 정식 추가 검증 후 순위를 갱신합니다.</p>
           </article>
           <article class="overview-status-card complete">
             <span class="overview-status-badge">완료</span>
             <strong>시설 제어 의미 통합 실험</strong>
-            <p>시설마다 다른 방향·층수 표현을 장치 의미 기준으로 통합해 추가 검증했습니다.</p>
+            <p>방향·층수를 장치 의미로 통합해 선별했으며, 우승 후보 48개의 3시드 Test 144건을 완료했습니다.</p>
           </article>
           <article class="overview-status-card complete">
             <span class="overview-status-badge">완료</span>
             <strong>E1·E2 보완 실험</strong>
-            <p>생육 이력과 영양생장 변수를 파생해 누락됐던 조합까지 최종 비교에 포함했습니다.</p>
+            <p>생육 이력·영양생장 변수를 포함한 전체 조합을 선별했습니다. 별도 정식 3-fold 추가 검증은 진행 중입니다.</p>
           </article>
           <article class="overview-status-card next">
             <span class="overview-status-badge">다음 단계</span>
@@ -181,6 +181,7 @@
       <div class="guide-icon">💡</div>
       <div class="guide-text">
         <h4>생육 관측 데이터 해석 및 산출 기준 안내</h4>
+          <p>기존 고정 원천 스냅숏의 관측·품질 현황입니다. 이번 업데이트는 실험 분석 갱신이며 실시간 DB 신규 적재를 재조회하지 않았습니다.</p>
         <p>
           • <strong>개체당 평균 모드:</strong> 특정 조사일에 조사된 유효 개체들의 평균값입니다. 조사일마다 조사 개체군(N수)이 달라질 수 있으므로 단순 총합이 아닌 평균값을 비교합니다.<br>
           • <strong>결측치 및 0의 구분:</strong> 빈칸(미관측)은 결측값으로 처리되어 표본(N)에서 제외되며, 실제 관측값 0은 정상 포함됩니다.<br>
@@ -1045,8 +1046,9 @@
         <div class="guide-icon">💡</div>
         <div class="guide-text">
           <h4>생육 예측 분석 및 지표 해석 기준 안내</h4>
+          <p id="anl_source_notice">최신 선별 우승 조합의 Test 예측을 기준으로 재산출한 진단입니다.</p>
           <p>
-            • <strong>검증 선정 기준:</strong> 모델과 변수군은 Validation 분할에서 동결 선정되었으며, Test 결과는 순수 일반화 성능 평가용입니다.<br>
+            • <strong>검증 선정 기준:</strong> 모델과 변수군은 1시드 선별 Validation에서 선정하고, Test는 선정된 모델의 3시드 성능을 보고합니다. 기존에 확인한 Test 코호트를 재사용한 사후 진단이며 새로운 독립 외부 검증은 아닙니다.<br>
             • <strong>표본 및 R² 해석:</strong> N은 고유 평가 행 수(조사 개체)이며, 불균형 타깃에서 토마토 음수 R²는 분산 대비 잔차오차를 정직하게 반영한 수치입니다. (미정의 R²는 임의 0 처리하지 않음)<br>
             • <strong>진단 구분:</strong> 미래 정답에 기반한 구간(수량 변화, 양수 여부 등)은 사전 입력이 아닌 <strong>[사후 진단]</strong> 항목입니다.
           </p>
@@ -1568,7 +1570,7 @@
             <div class="guide-icon">📌</div>
             <div class="guide-text">
               <h4>KPI 적용 기준</h4>
-              <p><strong>1차 내부 계획 KPI는 동일 평가 대상·분할·시드에서 As-Is 대비 RMSE 10% 이상 감소</strong>입니다. As-Is는 방향·층수를 장치 의미로 통합한 127개 조합 전체 Validation 순위의 타깃별 최저값입니다. 현재 1시드 선별 기준값은 정식 추가 검증 완료 후 갱신하며, 신규 AX 데이터 비교 시 동일한 평가 조건으로 다시 고정합니다. MAE는 감소하고 R²·CCC는 하락하지 않는지도 함께 확인합니다. 변화구간 MAE 15% 개선값은 행 단위 예측 결과를 새 AX 데이터에 연결한 뒤 기준을 다시 산정할 보조 KPI입니다.</p>
+              <p><strong>1차 내부 계획 KPI는 동일 평가 대상·분할·시드에서 As-Is 대비 RMSE 10% 이상 감소</strong>입니다. As-Is는 방향·층수를 장치 의미로 통합한 127개 조합 전체 Validation 순위의 타깃별 최저값입니다. 현재 1시드 선별 기준값은 정식 추가 검증 완료 후 갱신하며, 신규 AX 데이터 비교 시 동일한 평가 조건으로 다시 고정합니다. MAE는 감소하고 R²·CCC는 하락하지 않는지도 함께 확인합니다. 변화구간 MAE는 최신 Test에서 현재값과 다음 조사값이 다른 행의 3시드 평균입니다. 미관측 현재값은 변화 구간에서 제외합니다. 15% 개선값은 Test 진단용 참고 목표이며, 신규 AX 데이터 비교 시 같은 코호트에서 재산정합니다. 현재값 유지 기준선은 미관측 행에 train 중앙값을 사용하고 0 예측 기준선과 함께 동일 평가 행에서 계산합니다.</p>
             </div>
           </div>
         </section>
@@ -1587,10 +1589,10 @@
                     <th>타깃 과제</th>
                     <th class="td-right">현 기준 RMSE (Validation BEST)</th>
                     <th class="td-right text-primary font-bold">To-Be 목표 RMSE (10% 개선)</th>
-                    <th class="td-right">변화구간 MAE 참고 기준</th>
+                    <th class="td-right">변화구간 MAE (Test 참고)</th>
                     <th class="td-right text-primary font-bold">보조 KPI 후보 (15% 개선)</th>
-                    <th class="td-right text-muted">유지 기준 RMSE</th>
-                    <th class="td-right text-muted">0 예측 RMSE</th>
+                    <th class="td-right text-muted">유지 기준 RMSE (Validation)</th>
+                    <th class="td-right text-muted">0 예측 RMSE (Validation)</th>
                     <th>상태 구분</th>
                   </tr>
                 </thead>
@@ -1602,7 +1604,7 @@
 
         <!-- 3-4. 세부 보고서 바로가기 링크 바 -->
         <div class="anl-doc-links-bar" style="margin-top: 24px;">
-          <div class="doc-links-title">📄 관련 세부 보고서 원문 문서 열기:</div>
+          <div class="doc-links-title">📄 기존 9월 보고서 보관본 (최신 실험 수치는 화면·CSV 기준):</div>
           <div class="doc-links-list">
             <a href="./ax_direction/01_%EC%84%B1%EB%8A%A5_%EC%98%A4%EC%B0%A8_%EC%9B%90%EC%9D%B8%EB%B6%84%EC%84%9D.md" target="_blank" class="doc-link">01. 성능 및 오차 원인 분석</a>
             <a href="./ax_direction/02_AX_%EC%B6%94%EA%B0%80%EB%8D%B0%EC%9D%B4%ED%84%B0_%EA%B5%AC%EC%B6%95%EB%B0%A9%ED%96%A5.md" target="_blank" class="doc-link">02. AX 추가 데이터 구축 방향</a>
@@ -1756,6 +1758,6 @@
 
 
   <!-- 메인 애플리케이션 진입점 -->
-  <script type="module" src="./src/app.js?v=29"></script>
+  <script type="module" src="./src/app.js?v=30"></script>
 </body>
 </html>

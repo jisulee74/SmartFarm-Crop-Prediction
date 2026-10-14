@@ -1,0 +1,9 @@
+﻿target,model,group_id,feature_count,categories,selection_validation_rmse,source
+strawberry_first,random_forest,COMBO_0d89866b5a7a,45,E1 + E2 + E6,1.350434041931065,exhaustive_e6_semantic_screening_v1
+strawberry_second,mlp,COMBO_b5b76a4693c1,24,E1,1.128832312851881,exhaustive_e6_semantic_screening_v1
+strawberry_sum123,tabm,COMBO_b5b76a4693c1,23,E1,1.7588254960519114,exhaustive_e6_semantic_screening_v1
+strawberry_third,mlp,COMBO_000eab9fb7bb,46,E1 + E2,1.310723623430342,exhaustive_e6_semantic_screening_v1
+tomato_first,tabm,COMBO_0d89866b5a7a,80,E1 + E2 + E6,0.2622976061555551,exhaustive_e6_semantic_screening_v1
+tomato_second,random_forest,COMBO_bc468510ef02,6,E6 + E7,0.2692253364264043,exhaustive_e6_semantic_screening_v1
+tomato_sum123,random_forest,COMBO_54566964639b,44,E1 + E6 + E7,0.447531891515179,exhaustive_e6_semantic_screening_v1
+tomato_third,random_forest,COMBO_4ccea3b19117,87,E1 + E2 + E6 + E7,0.4393371625289041,exhaustive_e6_semantic_screening_v1

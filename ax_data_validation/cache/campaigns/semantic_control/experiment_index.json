@@ -11,7 +11,7 @@
     "has_real_results": true,
     "partial_results": true,
     "provisional": true,
-    "snapshot_generated_at": "2026-10-14T02:49:20.251048+00:00",
+    "snapshot_generated_at": "2026-10-14T04:36:48.530768+00:00",
     "snapshot_note": "장치 의미 통합 기준 127개 조합의 1시드 잠정 Validation 순위와 우승 후보 3시드 Test 결과입니다.",
     "total_combinations": 127,
     "semantic_retrained_combinations": 127,

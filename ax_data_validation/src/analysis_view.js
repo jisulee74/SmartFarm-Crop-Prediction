@@ -291,6 +291,7 @@ export class AnalysisViewController {
     this.renderBaselineComparisonTable();
     this.renderCrossedStrataTable();
     this.renderStrataVisuals();
+    this.renderModelComparisonChart();
     this.renderTargetKpiCard();
   }
 
@@ -306,12 +307,16 @@ export class AnalysisViewController {
     const baseRow = (baseline_performance || []).find(
       r => r.target === this.state.target && r.split === this.state.split
     );
-    const selModel = (selected_models || []).find(r => r.target === this.state.target);
+    const selModel = (selected_models || []).find(r => r.target === this.state.target && (!r.split || r.split === this.state.split));
     const cohort = (cohort_profile || []).find(
       r => r.target === this.state.target && r.split === this.state.split
     );
 
     if (!baseRow) return;
+    const sourceNotice = document.getElementById('anl_source_notice');
+    if (sourceNotice) sourceNotice.textContent = this.state.split === 'validation'
+      ? '최신 1시드 선별 Validation 집계 성능입니다. 행별 예측이 저장되지 않아 구간·교차 오차는 미제공이며 Test에서 확인할 수 있습니다.'
+      : '최신 1시드 선별에서 선정한 타깃별 우승 모델의 3시드 Test 진단입니다. Test 성능으로 모델을 다시 선정하지 않았습니다.';
 
     // Filter status bar
     const modelEl = document.getElementById('anl_summary_model');
@@ -417,7 +422,7 @@ export class AnalysisViewController {
     if (!baseRow) return;
 
     const mlRmse = baseRow.rmse_mean;
-    const persRmse = baseRow.persistence_rmse || 0;
+    const persRmse = baseRow.persistence_rmse ?? 0;
     const zeroRmse = baseRow.zero_rmse || 0;
 
     const option = {
@@ -430,10 +435,10 @@ export class AnalysisViewController {
           if (p.name.includes('선정 모델')) {
             extra = '<br><span style="color:#2563eb;font-size:11px;">※ 검증 동결 1순위 최적 모델</span>';
           } else if (p.name.includes('유지')) {
-            const diff = ((mlRmse - persRmse) / persRmse * 100).toFixed(1);
-            extra = `<br><span style="color:#64748b;font-size:11px;">현재 수량 유지 대비 ${diff > 0 ? '+' + diff + '% 악화' : diff + '% 개선'}</span>`;
+            const diff = persRmse ? ((mlRmse - persRmse) / persRmse * 100).toFixed(1) : null;
+            extra = `<br><span style="color:#64748b;font-size:11px;">현재 수량 유지 대비 ${diff == null ? '개선율 미정의' : (diff > 0 ? '+' + diff + '% 악화' : diff + '% 개선')} · 현재값 미관측 ${baseRow.persistence_missing_n || 0}행은 train 중앙값</span>`;
           } else if (p.name.includes('0 예측')) {
-            extra = '<br><span style="color:#f59e0b;font-size:11px;">※ 불균형 정답(96%가 0)으로 인한 착시, 실제 대안 불가</span>';
+            extra = `<br><span style="color:#f59e0b;font-size:11px;">※ 현재 분할의 0 비율 ${(baseRow.zero_rate * 100).toFixed(1)}% · 개화·착과 포착 성능과 구분</span>`;
           }
           return `<strong>${p.name}</strong><br>RMSE: <strong>${p.value.toFixed(4)}</strong> (개수)${extra}`;
         }
@@ -519,6 +524,10 @@ export class AnalysisViewController {
       warnCard.style.display = 'block';
       const isTomato = this.state.target.startsWith('tomato');
       const isSmallPos = positive_n < 30;
+      const increase = this.bundle.tables.error_strata?.find(r => r.target === this.state.target && r.split === this.state.split && r.dimension === 'change' && r.level === 'increase_ge2');
+      const changeNotice = increase
+        ? `선택한 ${splitLabel}셋에서 2개 이상 증가한 ${increase.n}행이 전체 제곱오차의 ${(increase.squared_error_share * 100).toFixed(1)}%를 차지합니다.`
+        : (this.state.split === 'validation' ? 'Validation 행별 예측은 미저장 상태입니다. 증가 구간의 상세 오차는 Test에서 확인하세요.' : '현재값이 관측된 행 중 2개 이상 증가한 구간이 없습니다.');
 
       if (isTomato) {
         warnCard.innerHTML = `
@@ -535,7 +544,7 @@ export class AnalysisViewController {
           <ul class="warn-desc-list">
             <li><strong>개화 구간 성능 판단의 한계:</strong> 0이 대다수인 전체 평균 성능(RMSE/MAE)만으로는 실제 개화(꽃 발생) 구간의 모델 성능을 판단하기 어렵습니다.</li>
             <li><strong>0 예측 기준의 착시:</strong> 항상 0만 예측하는 진단용 더미 모델이라도 대다수 표본에서 오차가 0이 되므로 겉보기 RMSE가 매우 낮게 왜곡됩니다. 0 예측 기준의 낮은 RMSE가 실제 개화 포착 성공을 의미하지 않습니다.</li>
-            <li><strong>테스트 코호트 실태:</strong> 테스트셋 기준 토마토 4개 타깃의 0 비율은 96.3~97.0%에 달하며, 양수 정답은 타깃별 9~12행에 불과한 극소 표본입니다 (현재 화면 수치는 선택된 ${splitLabel}셋 데이터로 동적 계산됨).</li>
+            <li><strong>선택 코호트 실태:</strong> ${splitLabel}셋의 양수 정답은 ${positive_n}행입니다. 구간별 성능은 해당 표본 수와 함께 해석해야 하며 시드를 3번 평가해도 독립 표본이 3배 늘어나지는 않습니다.</li>
           </ul>
         `;
       } else {
@@ -546,10 +555,10 @@ export class AnalysisViewController {
           <div class="warn-summary-chips">
             <div class="warn-chip">선택 코호트 (${splitLabel}셋): 0 비율 ${(zero_rate * 100).toFixed(1)}%</div>
             <div class="warn-chip">착과(양수) 정답: ${positive_n}행 / 전체 ${total_n}행 (${(positive_rate * 100).toFixed(1)}%)</div>
-            <div class="warn-chip">${isSmallPos ? '⚠️ 소표본 (N < 30)' : '충분 표본 (N ≥ 30)'}</div>
+            <div class="warn-chip">${isSmallPos ? '⚠️ 소표본 (N < 30)' : '양수 관측 N ≥ 30 · 일반화는 별도 검증'}</div>
           </div>
           <ul class="warn-desc-list">
-            <li><strong>수량 변화 구간 오차 편중:</strong> 딸기는 토마토 대비 착과 발생 비율(${(positive_rate * 100).toFixed(1)}%)이 높으나, 2개 이상 급증 구간에 전체 제곱오차(SSE)의 91.6~96.0%가 편중되어 있습니다.</li>
+            <li><strong>수량 변화 구간 오차 편중:</strong> ${changeNotice}</li>
             <li><strong>변화 대응력 검증 필요:</strong> 전체 평균 RMSE뿐만 아니라 실제 착과 수량이 변하는 시점의 변화 포착 정확도를 함께 검증해야 합니다.</li>
           </ul>
         `;
@@ -890,7 +899,7 @@ export class AnalysisViewController {
     // Update subtitle
     const subTitle = document.getElementById('anl_chart_strata_subtitle');
     const dimMeta = DIMENSION_META[this.state.dimension] || { label: this.state.dimension };
-    if (subTitle) subTitle.textContent = `${dimMeta.label} 구간별 RMSE 분포 (${rows.length}개 구간)`;
+    if (subTitle) subTitle.textContent = rows.length ? `${dimMeta.label} 구간별 RMSE 분포 (${rows.length}개 구간)` : 'Validation 상세 오차 미제공 · 최신 Test에서 확인';
 
     // Render Chart 2 (Strata RMSE Bar)
     if (this.chartErrorStrata) {
@@ -1025,7 +1034,7 @@ export class AnalysisViewController {
     const tbody = document.getElementById('anl_strata_tbody');
     if (tbody) {
       if (rows.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="10" class="td-center text-muted">선택한 조건의 구간별 오차 데이터가 없습니다.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="10" class="td-center text-muted">선택한 조건의 구간별 오차가 없습니다. Validation 행별 예측은 미저장이므로 Test에서 상세 오차를 확인하세요.</td></tr>`;
       } else {
         tbody.innerHTML = rows.map(r => {
           const smallNBadge = r.small_n ? `<span class="anl-badge-small-n" title="표본 30건 미만 소표본">소표본</span>` : '';
@@ -1059,7 +1068,7 @@ export class AnalysisViewController {
   renderDiagnosisCard() {
     if (!this.bundle) return;
     const { target_diagnosis } = this.bundle.tables;
-    const item = (target_diagnosis || []).find(r => r.target === this.state.target);
+    const item = (target_diagnosis || []).find(r => r.target === this.state.target && (!r.split || r.split === this.state.split));
     const container = document.getElementById('anl_diagnosis_content');
     if (!container) return;
 
@@ -1101,9 +1110,9 @@ export class AnalysisViewController {
       return;
     }
 
-    const persDiff = row.persistence_rmse ? ((row.rmse_mean - row.persistence_rmse) / row.persistence_rmse * 100) : 0;
+    const persDiff = row.persistence_rmse ? ((row.rmse_mean - row.persistence_rmse) / row.persistence_rmse * 100) : null;
     const persDiffClass = persDiff <= 0 ? 'text-success font-bold' : 'text-danger font-bold';
-    const persDiffText = persDiff <= 0 ? `${Math.abs(persDiff).toFixed(1)}% 개선` : `${persDiff.toFixed(1)}% 악화`;
+    const persDiffText = persDiff == null ? '기준 오차 0 · 개선율 미정의' : persDiff <= 0 ? `${Math.abs(persDiff).toFixed(1)}% 개선` : `${persDiff.toFixed(1)}% 악화`;
 
     const r2Val = (row.r2_mean !== null && !isNaN(row.r2_mean)) ? row.r2_mean.toFixed(4) : '<span class="text-muted">미정의</span>';
     const cccVal = (row.ccc_mean !== null && !isNaN(row.ccc_mean)) ? row.ccc_mean.toFixed(4) : '-';
@@ -1120,19 +1129,19 @@ export class AnalysisViewController {
       </tr>
       <tr>
         <td>현재값 유지 (Persistence)</td>
-        <td class="td-right">${row.persistence_rmse ? row.persistence_rmse.toFixed(4) : '-'}</td>
-        <td class="td-right">${row.persistence_mae ? row.persistence_mae.toFixed(4) : '-'}</td>
+        <td class="td-right">${row.persistence_rmse?.toFixed(4) ?? '-'}</td>
+        <td class="td-right">${row.persistence_mae?.toFixed(4) ?? '-'}</td>
         <td class="td-right text-muted">-</td>
         <td class="td-right text-muted">-</td>
         <td class="td-right text-muted">기준선 (0.0%)</td>
-        <td>직전 조사일의 실제 수량을 그대로 예측값으로 사용하는 기준</td>
+        <td>예측 기준일의 실제 수량 유지. 현재값 미관측 ${row.persistence_missing_n || 0}행은 train 중앙값 ${row.persistence_fallback_value ?? "-"} 사용</td>
       </tr>
       <tr>
         <td>항상 0 예측 (Zero Predictor)</td>
-        <td class="td-right">${row.zero_rmse ? row.zero_rmse.toFixed(4) : '-'}</td>
-        <td class="td-right">${row.zero_mae ? row.zero_mae.toFixed(4) : '-'}</td>
-        <td class="td-right text-muted">0.0000</td>
-        <td class="td-right text-muted">0.0000</td>
+        <td class="td-right">${row.zero_rmse?.toFixed(4) ?? '-'}</td>
+        <td class="td-right">${row.zero_mae?.toFixed(4) ?? '-'}</td>
+        <td class="td-right text-muted">${row.zero_r2?.toFixed(4) ?? "미정의"}</td>
+        <td class="td-right text-muted">${row.zero_ccc?.toFixed(4) ?? "미정의"}</td>
         <td class="td-right text-muted">-</td>
         <td>정답 0 비율 착시 진단용 (실제 운영 대안으로 채택 불가)</td>
       </tr>
@@ -1146,9 +1155,9 @@ export class AnalysisViewController {
     const tbody = document.getElementById('anl_crossed_tbody');
     if (!tbody) return;
 
-    const rows = (crossed_error_strata || []).filter(r => r.target === this.state.target);
+    const rows = (crossed_error_strata || []).filter(r => r.target === this.state.target && r.split === this.state.split);
     if (rows.length === 0) {
-      tbody.innerHTML = `<tr><td colspan="4" class="td-center text-muted">해당 타깃의 복합 교차 오차 데이터가 없습니다.</td></tr>`;
+      tbody.innerHTML = `<tr><td colspan="4" class="td-center text-muted">해당 분할의 복합 교차 오차는 미제공입니다. 최신 Test에서 확인하세요.</td></tr>`;
       return;
     }
 
@@ -1434,13 +1443,13 @@ export class AnalysisViewController {
       </div>
       <div class="anl-kpi-item-card">
         <span class="kpi-item-lbl">변화구간 MAE 참고 기준</span>
-        <div class="kpi-item-val font-bold">${item.reference_change_mae.toFixed(4)}</div>
-        <span class="kpi-item-sub">기존 진단 결과 · 신규 AX 데이터에서 재산정</span>
+        <div class="kpi-item-val font-bold">${item.reference_change_mae?.toFixed(4) ?? "미제공"}</div>
+        <span class="kpi-item-sub">최신 Test 변화 행 N=${item.reference_change_n ?? "-"} · 3시드 평균 · 현재값 미관측 제외</span>
       </div>
       <div class="anl-kpi-item-card highlight">
         <span class="kpi-item-lbl">보조 KPI 후보 (변화 MAE 15% 개선)</span>
-        <div class="kpi-item-val font-bold text-primary">${item.illustrative_15pct_change_mae.toFixed(4)}</div>
-        <span class="kpi-item-sub text-primary">행 단위 예측 연결 후 기준 확정</span>
+        <div class="kpi-item-val font-bold text-primary">${item.illustrative_15pct_change_mae?.toFixed(4) ?? "미제공"}</div>
+        <span class="kpi-item-sub text-primary">최신 Test 참고 목표 · 신규 AX 비교 코호트에서 재확정</span>
       </div>
     `;
   }
@@ -1460,8 +1469,8 @@ export class AnalysisViewController {
           <td><strong>${meta.icon} ${meta.name}</strong></td>
           <td class="td-right font-bold">${r.reference_rmse.toFixed(4)}</td>
           <td class="td-right text-primary font-bold">${r.illustrative_10pct_rmse.toFixed(4)}</td>
-          <td class="td-right">${r.reference_change_mae.toFixed(4)}</td>
-          <td class="td-right text-primary font-bold">${r.illustrative_15pct_change_mae.toFixed(4)}</td>
+          <td class="td-right">${r.reference_change_mae?.toFixed(4) ?? "미제공"}</td>
+          <td class="td-right text-primary font-bold">${r.illustrative_15pct_change_mae?.toFixed(4) ?? "미제공"}</td>
           <td class="td-right text-muted">${r.reference_persistence_rmse.toFixed(4)}</td>
           <td class="td-right text-muted">${r.reference_zero_rmse.toFixed(4)}</td>
           <td><span class="anl-badge-tag ${r.reference_is_provisional ? 'warning' : 'success'}">${r.reference_is_provisional ? `${r.reference_method_label || '잠정 Validation BEST'} · 정식 추가 검증 후 갱신` : `${r.reference_method_label || '최종 Validation BEST'} · 완료`}</span></td>
