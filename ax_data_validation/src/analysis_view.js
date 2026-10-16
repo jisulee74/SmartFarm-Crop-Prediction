@@ -13,6 +13,7 @@
  */
 
 import { fetchAnalysisBundle } from './analysis_api.js';
+import { DATASET_AUDIT } from './dataset_audit.js?v=1';
 
 export const TARGET_META = {
   tomato_first: { crop: 'tomato', name: '토마토 1화방 꽃수', icon: '🍅', truss: '1화방' },
@@ -285,6 +286,7 @@ export class AnalysisViewController {
   }
 
   renderTargetDependentViews() {
+    this.renderDatasetComposition();
     this.renderKpiSummaryCards();
     this.renderTargetDistributionSection();
     this.renderDiagnosisCard();
@@ -298,6 +300,16 @@ export class AnalysisViewController {
   // =========================================================================
   // SUBTAB 1: PERFORMANCE & ERROR ANALYSIS
   // =========================================================================
+
+  renderDatasetComposition() {
+    const el = document.getElementById('anl_dataset_composition');
+    if (!el) return;
+    const audit = DATASET_AUDIT.targets[this.state.target];
+    if (!audit || this.bundle?.metadata?.source_campaign !== DATASET_AUDIT.campaign) { el.textContent = '현재 실험 버전의 데이터 구성 확인 중'; return; }
+    const labels = {train: ['학습 · Train', '모델 학습·변수 선택'], validation: ['검증 · Validation', '모델·입력 조합 선정'], test: ['평가 · Test', '선정된 모델 성능 확인']};
+    el.innerHTML = `<p class="reading-lead"><strong>${TARGET_META[this.state.target].name}</strong> · 시설 중복 없음 · 현재 게시된 선별 실험 기준</p>
+      <div class="table-responsive"><table class="styled-comparison-table anl-table"><thead><tr><th>구분</th><th>역할</th><th>시설</th><th>조사쌍</th><th>예측 기준일 범위</th><th>다음 조사일 범위</th><th>0 비율</th></tr></thead><tbody>${Object.entries(labels).map(([key,label])=>{const r=audit.splits[key];return `<tr><td><strong>${label[0]}</strong></td><td>${label[1]}</td><td>${r.facilities}개</td><td>${r.n.toLocaleString()}건</td><td>${r.feature_date_start} ~ ${r.feature_date_end}</td><td>${r.target_date_start} ~ ${r.target_date_end}</td><td>${(r.zero_rate*100).toFixed(1)}%</td></tr>`;}).join('')}</tbody></table></div>`;
+  }
 
   // 1-1. 4 KPI Summary Cards
   renderKpiSummaryCards() {
@@ -529,40 +541,41 @@ export class AnalysisViewController {
         ? `선택한 ${splitLabel}셋에서 2개 이상 증가한 ${increase.n}행이 전체 제곱오차의 ${(increase.squared_error_share * 100).toFixed(1)}%를 차지합니다.`
         : (this.state.split === 'validation' ? 'Validation 행별 예측은 미저장 상태입니다. 증가 구간의 상세 오차는 Test에서 확인하세요.' : '현재값이 관측된 행 중 2개 이상 증가한 구간이 없습니다.');
 
-      if (isTomato) {
-        warnCard.innerHTML = `
-          <div class="warn-header">
-            <span>⚠️</span> <strong>토마토 꽃수 정답의 0 편중(Zero-Inflation) 및 표본 특성 진단</strong>
-          </div>
-          <div class="warn-summary-chips">
-            <div class="warn-chip">선택 평가 대상 (${splitLabel}셋): 0 비율 ${(zero_rate * 100).toFixed(1)}%</div>
-            <div class="warn-chip">양수(개화) 정답: 단 ${positive_n}행 / 전체 ${total_n}행 (${(positive_rate * 100).toFixed(1)}%)</div>
-            <div class="warn-chip" style="${isSmallPos ? 'background:#fee2e2;border-color:#fca5a5;color:#991b1b;' : ''}">
-              ${isSmallPos ? '⚠️ 양수 소표본 (N < 30)' : '표본 확보'}
-            </div>
-          </div>
-          <ul class="warn-desc-list">
-            <li><strong>개화 구간 성능 판단의 한계:</strong> 0이 대다수인 전체 평균 성능(RMSE/MAE)만으로는 실제 개화(꽃 발생) 구간의 모델 성능을 판단하기 어렵습니다.</li>
-            <li><strong>0 예측 기준의 착시:</strong> 항상 0만 예측하는 진단용 더미 모델이라도 대다수 표본에서 오차가 0이 되므로 겉보기 RMSE가 매우 낮게 왜곡됩니다. 0 예측 기준의 낮은 RMSE가 실제 개화 포착 성공을 의미하지 않습니다.</li>
-            <li><strong>선택 평가 대상 실태:</strong> ${splitLabel}셋의 양수 정답은 ${positive_n}행입니다. 구간별 성능은 해당 표본 수와 함께 해석해야 하며 시드를 3번 평가해도 독립 표본이 3배 늘어나지는 않습니다.</li>
-          </ul>
-        `;
-      } else {
-        warnCard.innerHTML = `
-          <div class="warn-header">
-            <span>🍓</span> <strong>딸기 착과수 정답 분포 및 표본 특성 진단</strong>
-          </div>
-          <div class="warn-summary-chips">
-            <div class="warn-chip">선택 평가 대상 (${splitLabel}셋): 0 비율 ${(zero_rate * 100).toFixed(1)}%</div>
-            <div class="warn-chip">착과(양수) 정답: ${positive_n}행 / 전체 ${total_n}행 (${(positive_rate * 100).toFixed(1)}%)</div>
-            <div class="warn-chip">${isSmallPos ? '⚠️ 소표본 (N < 30)' : '양수 관측 N ≥ 30 · 일반화는 별도 검증'}</div>
-          </div>
-          <ul class="warn-desc-list">
-            <li><strong>수량 변화 구간 오차 편중:</strong> ${changeNotice}</li>
-            <li><strong>변화 대응력 검증 필요:</strong> 전체 평균 RMSE뿐만 아니라 실제 착과 수량이 변하는 시점의 변화 포착 정확도를 함께 검증해야 합니다.</li>
-          </ul>
-        `;
-      }
+      const audit = DATASET_AUDIT.targets[this.state.target];
+      const matches = audit && this.bundle.metadata?.source_campaign === DATASET_AUDIT.campaign && this.bundle.metadata?.source_hashes?.['final_test_predictions.parquet'] === DATASET_AUDIT.prediction_sha256 && this.bundle.tables.selected_models?.some(r => r.target === this.state.target && r.model === audit.model && r.group_id === audit.group_id);
+      const evidence = matches && this.state.split === 'test' ? audit.test : null;
+      const base = this.bundle.tables.baseline_performance?.find(r => r.target === this.state.target && r.split === this.state.split);
+      const negativeR2 = base?.r2_mean < 0;
+      const share = evidence?.zero_error_share;
+      const headline = isTomato
+        ? '꽃이 있는 관측이 드뭅니다. 전체 오차와 개화 사례를 나눠 봐야 합니다.'
+        : '착과 수량의 변화까지 맞히는지 확인해야 합니다.';
+      const errorFact = share != null
+        ? `전체 제곱오차의 ${(share*100).toFixed(1)}%가 실제값 0인 기록에서 발생`
+        : changeNotice;
+      const interpretation = share != null && share > 0.5
+        ? '없는 수량을 있다고 예측한 오차가 큽니다. 누락 데이터만으로 원인을 단정할 수 없습니다.'
+        : '평균 오차만으로 변화 대응력을 판단할 수 없습니다. 오차가 큰 시점의 기록을 함께 확인해야 합니다.';
+      warnCard.innerHTML = `
+        <div class="insight-heading"><span class="insight-label">선택 항목 핵심 해석</span><h4>${headline}</h4></div>
+        <div class="insight-metrics">
+          <div><span>실제값이 0인 비율</span><strong>${(zero_rate*100).toFixed(1)}%</strong><small>${zero_n.toLocaleString()} / ${total_n.toLocaleString()}건</small></div>
+          <div><span>${isTomato ? '꽃이 있는' : '착과가 있는'} 관측</span><strong>${positive_n.toLocaleString()}건</strong><small>${isSmallPos ? '소수 사례 · 해석에 주의' : '일반화 가능성은 별도 검증'}</small></div>
+          <div><span>평가 범위</span><strong>${this.state.split === 'test' ? '선정 후 평가' : '후보 선정'}</strong><small>${this.state.split === 'test' ? '3회 반복 · 관측 수는 동일' : '1회 선별 · 구간별 예측 미저장'}</small></div>
+        </div>
+        <div class="insight-chain">
+          <article><span class="insight-label">01 · 관측된 사실</span><h4>${isTomato ? '0에 집중된 관측' : '0과 양수 관측이 함께 존재'}</h4><p>${isTomato ? `양수 사례는 ${positive_n}건입니다. 소수 사례의 오차가 지표에 큰 영향을 줄 수 있습니다.` : `양수 사례는 ${positive_n}건입니다. 수량 규모가 다르므로 토마토와 RMSE 숫자만 비교하지 않습니다.`}</p></article>
+          <article><span class="insight-label">02 · 성능에 미친 영향</span><h4>${errorFact}</h4><p>${interpretation}</p></article>
+          <article><span class="insight-label">03 · AX 보완 제안 · 효과 검증 전</span><h4>${isTomato ? '개화 전후 기록과 조사 의미 연결' : '착과 변화 전후의 행동 기록 연결'}</h4><p>${isTomato ? '실제 0·미조사·생육 종료를 구분하고, 같은 개체의 개화 전후 조사와 적화·적과 작업 시각·대상을 연결합니다.' : '착과·수확·적과 작업의 시각과 수량, 생육 단계 및 환경 기록을 같은 조사 대상에 연결합니다.'}</p></article>
+        </div>
+        <p class="insight-bottom">${negativeR2 ? '현재 R²는 음수입니다. 평가 자료의 평균값을 일괄 예측하는 기준보다 제곱오차가 큽니다.' : 'R²·CCC와 함께 실제 수량 변화 구간의 오차를 확인하세요.'} 수집 보완의 개선 효과는 동일 평가 대상에서 별도로 검증합니다.</p>
+        <details class="reading-details"><summary>해석 근거·추가 확인 사항</summary>
+          <dl class="reading-definitions">
+            <div><dt>0과 미관측</dt><dd>여기의 0 비율은 저장된 실제값 기준입니다. 원천 조사에서 미조사가 0으로 입력됐는지는 별도 확인이 필요합니다.</dd></div>
+            <div><dt>추가 원인 점검</dt><dd>시설별 조사 방식, 생육 단계, 큰 관측값의 원기록, 학습·평가 분포 차이를 확인합니다. 결측 또는 입력 오류가 원인이라고 확정한 것은 아닙니다.</dd></div>
+            ${evidence ? `<div><dt>학습·평가 범위</dt><dd>학습 실제값 최대 ${audit.splits.train.max}개 · 평가 실제값 최대 ${audit.splits.test.max}개 · 예측 최대 ${evidence.prediction_max.toFixed(2)}개. 최대값 차이만으로 오류를 판정하지 않습니다.</dd></div><div><dt>오차 비중 계산</dt><dd>선정 모델의 제약 적용 예측값으로 계산했습니다. 3개 시드에서 실제값 0인 행의 제곱오차 합을 전체 제곱오차 합으로 나눈 값이며, 오답 건수 비율이 아닙니다.</dd></div>` : '<div><dt>상세 오차</dt><dd>검증 구간의 행별 예측은 저장되지 않아 원인별 오차 비중은 제공하지 않습니다. Test에서 확인할 수 있습니다.</dd></div>'}
+          </dl>
+        </details>`;
     }
 
     this.renderTargetDistributionCharts();

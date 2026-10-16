@@ -4485,3 +4485,41 @@ body {
   .model-subnav-btn,
   .anl-subnav-btn { flex: 1; justify-content: center; padding: 8px 10px; }
 }
+
+/* Compact interpretation guides: scoped to editorial content only. */
+.reading-guide { background: #fff; border: 1px solid #dbe4ef; border-radius: 14px; padding: 20px 24px; margin-bottom: 24px; }
+.reading-guide-heading { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 18px; justify-content: space-between; }
+.reading-guide-heading h3 { margin: 0; font-size: 16px; color: #1e293b; }
+.reading-status { padding: 5px 10px; border-radius: 6px; background: #fff7ed; color: #9a3412; font-size: 13px; font-weight: 600; }
+.reading-guide .reading-lead, .guide-text .reading-lead { margin: 10px 0 14px; font-size: 14px; line-height: 1.7; color: #475569; }
+.reading-facts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin: 16px 0; }
+.reading-facts > div { border-left: 3px solid #cbd5e1; padding: 2px 12px; }
+.reading-facts dt { font-size: 13px; color: #475569; margin-bottom: 5px; }
+.reading-facts dd { margin: 0; font-size: 14px; font-weight: 600; color: #1e293b; line-height: 1.6; }
+.reading-details { border-top: 1px solid #e2e8f0; margin-top: 14px; padding-top: 12px; }
+.reading-details summary { cursor: pointer; color: #334155; font-size: 14px; font-weight: 600; padding: 5px 0; }
+.reading-details summary:focus-visible { outline: 2px solid #2563eb; outline-offset: 4px; border-radius: 3px; }
+.reading-definitions { margin: 12px 0 0; }
+.reading-definitions > div { display: grid; grid-template-columns: 130px minmax(0, 1fr); gap: 16px; padding: 10px 0; border-top: 1px solid #f1f5f9; font-size: 14px; line-height: 1.7; }
+.reading-definitions dt { font-weight: 600; color: #334155; }
+.reading-definitions dd { margin: 0; color: #475569; }
+@media (max-width: 680px) { .reading-guide { padding: 18px 16px; } .reading-facts { grid-template-columns: 1fr; } .reading-definitions > div { grid-template-columns: 1fr; gap: 4px; } }
+
+.chart-reading-help { font-size: 13px; line-height: 1.6; color: #64748b; margin: 12px 0; }
+
+/* Evidence -> interpretation -> collection action, without changing chart controls. */
+#anl_dist_warning_card { background: #f8fafc; border: 1px solid #dbe4ef; border-radius: 12px; padding: 22px; }
+.insight-heading h4 { margin: 8px 0 16px; font-size: 19px; line-height: 1.6; color: #1e293b; }
+.insight-label { font-size: 12px; font-weight: 700; color: #475569; }
+.insight-metrics { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 16px; margin-bottom: 20px; }
+.insight-metrics > div { display: flex; flex-direction: column; gap: 5px; padding: 16px; border-radius: 10px; background: #fff; border: 1px solid #e2e8f0; }
+.insight-metrics span, .insight-metrics small { font-size: 13px; color: #475569; }
+.insight-metrics strong { font-size: 24px; color: #0f172a; }
+.insight-chain { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 16px; }
+.insight-chain article { padding: 18px; background: #fff; border-top: 3px solid #94a3b8; border-radius: 8px; }
+.insight-chain article:last-child { background: #f0fdfa; border-color: #0d9488; }
+.insight-chain h4 { font-size: 16px; line-height: 1.6; margin: 10px 0; color: #1e293b; }
+.insight-chain p, .insight-bottom { font-size: 14px; line-height: 1.8; color: #475569; }
+.insight-bottom { margin: 16px 0 0; }
+@media(max-width:900px) { .insight-chain { grid-template-columns: 1fr; } }
+@media(max-width:600px) { .insight-metrics { grid-template-columns: 1fr; } #anl_dist_warning_card { padding: 16px; } }
