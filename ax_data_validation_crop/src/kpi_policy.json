@@ -1,0 +1,30 @@
+{
+  "version": "2026-10-27-v3.1",
+  "source": "AX 데이터 수집 중간보고_더아이엠씨_261027 1400.pdf, p7",
+  "baseline_campaign": "upper_truss_full_20261020",
+  "baseline_mode": "quick",
+  "baseline_seed_count": 1,
+  "baseline_split": "test",
+  "baseline_aggregation": "pooled",
+  "automatic_rebase": false,
+  "primary_relative_rmse_reduction": 0.05,
+  "official_acceptance_criterion": false,
+  "crops": {
+    "tomato": {
+      "limit": 20,
+      "baseline_rmse_display": "0.47",
+      "rmse_target_display": "0.44",
+      "mae_target_display": "0.19",
+      "r2_target_display": "0.44",
+      "ccc_target_display": "0.66"
+    },
+    "strawberry": {
+      "limit": 5,
+      "baseline_rmse_display": "1.36",
+      "rmse_target_display": "1.29",
+      "mae_target_display": "0.58",
+      "r2_target_display": "0.73",
+      "ccc_target_display": "0.82"
+    }
+  }
+}

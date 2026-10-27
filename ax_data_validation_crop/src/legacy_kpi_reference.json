@@ -1,0 +1,252 @@
+{
+  "status": "historical_reference_only",
+  "source_path": "ax_data_validation/ax_direction/dashboard_bundle.json",
+  "source_sha256": "48658f718ec9798cb34b4f4c2c0e0f268585157f4ba42dbd5cd0513661049e22",
+  "preserved_at": "2026-10-27",
+  "reason": "v3.1 p7 uses pooled Test crop-level baseline and 5% internal target",
+  "previous_kpi": [
+    {
+      "target": "tomato_first",
+      "reference_rmse": 0.2622976061555551,
+      "illustrative_10pct_rmse": 0.23606784553999957,
+      "reference_change_mae": 0.7081140793743543,
+      "illustrative_15pct_change_mae": 0.6018969674682012,
+      "reference_persistence_rmse": 0.41005071993639275,
+      "reference_zero_rmse": 0.5644325210301584,
+      "status": "provisional semantic-control single-seed validation best",
+      "reference_model": "tabm",
+      "reference_groups": [
+        "E1",
+        "E2",
+        "E6"
+      ],
+      "reference_combination_id": "COMBO_0d89866b5a7a",
+      "reference_is_provisional": true,
+      "reference_snapshot_label": "2026-10-14 13:37 KST",
+      "reference_campaign_progress": {
+        "processed": 6096,
+        "total": 6096,
+        "percent": 100.0
+      },
+      "reference_method_label": "의미 통합 127개 조합 1시드 잠정 Validation BEST",
+      "reference_change_n": 32,
+      "reference_change_split": "test",
+      "reference_change_label": "최신 Test · 실제 수량 변화 행 · 3시드 MAE 평균",
+      "reference_change_small_n": false,
+      "reference_persistence_missing_n": 0,
+      "reference_persistence_policy": "현재 관측값 유지; 현재값 미관측 행은 train 현재값 중앙값 사용"
+    },
+    {
+      "target": "tomato_second",
+      "reference_rmse": 0.2692253364264043,
+      "illustrative_10pct_rmse": 0.24230280278376387,
+      "reference_change_mae": 1.7997037409000816,
+      "illustrative_15pct_change_mae": 1.5297481797650694,
+      "reference_persistence_rmse": 0.5317883355426687,
+      "reference_zero_rmse": 0.6012620352104586,
+      "status": "provisional semantic-control single-seed validation best",
+      "reference_model": "random_forest",
+      "reference_groups": [
+        "E6",
+        "E7"
+      ],
+      "reference_combination_id": "COMBO_bc468510ef02",
+      "reference_is_provisional": true,
+      "reference_snapshot_label": "2026-10-14 13:37 KST",
+      "reference_campaign_progress": {
+        "processed": 6096,
+        "total": 6096,
+        "percent": 100.0
+      },
+      "reference_method_label": "의미 통합 127개 조합 1시드 잠정 Validation BEST",
+      "reference_change_n": 31,
+      "reference_change_split": "test",
+      "reference_change_label": "최신 Test · 실제 수량 변화 행 · 3시드 MAE 평균",
+      "reference_change_small_n": false,
+      "reference_persistence_missing_n": 7,
+      "reference_persistence_policy": "현재 관측값 유지; 현재값 미관측 행은 train 현재값 중앙값 사용"
+    },
+    {
+      "target": "tomato_third",
+      "reference_rmse": 0.4393371625289041,
+      "illustrative_10pct_rmse": 0.3954034462760137,
+      "reference_change_mae": 2.310384126862665,
+      "illustrative_15pct_change_mae": 1.963826507833265,
+      "reference_persistence_rmse": 0.6185537128270866,
+      "reference_zero_rmse": 0.6894652412127675,
+      "status": "provisional semantic-control single-seed validation best",
+      "reference_model": "random_forest",
+      "reference_groups": [
+        "E1",
+        "E2",
+        "E6",
+        "E7"
+      ],
+      "reference_combination_id": "COMBO_4ccea3b19117",
+      "reference_is_provisional": true,
+      "reference_snapshot_label": "2026-10-14 13:37 KST",
+      "reference_campaign_progress": {
+        "processed": 6096,
+        "total": 6096,
+        "percent": 100.0
+      },
+      "reference_method_label": "의미 통합 127개 조합 1시드 잠정 Validation BEST",
+      "reference_change_n": 27,
+      "reference_change_split": "test",
+      "reference_change_label": "최신 Test · 실제 수량 변화 행 · 3시드 MAE 평균",
+      "reference_change_small_n": true,
+      "reference_persistence_missing_n": 9,
+      "reference_persistence_policy": "현재 관측값 유지; 현재값 미관측 행은 train 현재값 중앙값 사용"
+    },
+    {
+      "target": "tomato_sum123",
+      "reference_rmse": 0.447531891515179,
+      "illustrative_10pct_rmse": 0.40277870236366115,
+      "reference_change_mae": 3.6419473746588658,
+      "illustrative_15pct_change_mae": 3.095655268460036,
+      "reference_persistence_rmse": 0.6458931135338334,
+      "reference_zero_rmse": 0.5939366432510449,
+      "status": "provisional semantic-control single-seed validation best",
+      "reference_model": "random_forest",
+      "reference_groups": [
+        "E1",
+        "E6",
+        "E7"
+      ],
+      "reference_combination_id": "COMBO_54566964639b",
+      "reference_is_provisional": true,
+      "reference_snapshot_label": "2026-10-14 13:37 KST",
+      "reference_campaign_progress": {
+        "processed": 6096,
+        "total": 6096,
+        "percent": 100.0
+      },
+      "reference_method_label": "의미 통합 127개 조합 1시드 잠정 Validation BEST",
+      "reference_change_n": 29,
+      "reference_change_split": "test",
+      "reference_change_label": "최신 Test · 실제 수량 변화 행 · 3시드 MAE 평균",
+      "reference_change_small_n": true,
+      "reference_persistence_missing_n": 2,
+      "reference_persistence_policy": "현재 관측값 유지; 현재값 미관측 행은 train 현재값 중앙값 사용"
+    },
+    {
+      "target": "strawberry_first",
+      "reference_rmse": 1.350434041931065,
+      "illustrative_10pct_rmse": 1.2153906377379584,
+      "reference_change_mae": 2.763249623568285,
+      "illustrative_15pct_change_mae": 2.348762180033042,
+      "reference_persistence_rmse": 1.5393679767426547,
+      "reference_zero_rmse": 3.377021910758558,
+      "status": "provisional semantic-control single-seed validation best",
+      "reference_model": "random_forest",
+      "reference_groups": [
+        "E1",
+        "E2",
+        "E6"
+      ],
+      "reference_combination_id": "COMBO_0d89866b5a7a",
+      "reference_is_provisional": true,
+      "reference_snapshot_label": "2026-10-14 13:37 KST",
+      "reference_campaign_progress": {
+        "processed": 6096,
+        "total": 6096,
+        "percent": 100.0
+      },
+      "reference_method_label": "의미 통합 127개 조합 1시드 잠정 Validation BEST",
+      "reference_change_n": 228,
+      "reference_change_split": "test",
+      "reference_change_label": "최신 Test · 실제 수량 변화 행 · 3시드 MAE 평균",
+      "reference_change_small_n": false,
+      "reference_persistence_missing_n": 28,
+      "reference_persistence_policy": "현재 관측값 유지; 현재값 미관측 행은 train 현재값 중앙값 사용"
+    },
+    {
+      "target": "strawberry_second",
+      "reference_rmse": 1.128832312851881,
+      "illustrative_10pct_rmse": 1.015949081566693,
+      "reference_change_mae": 2.403580779855957,
+      "illustrative_15pct_change_mae": 2.0430436628775634,
+      "reference_persistence_rmse": 1.2062927637797898,
+      "reference_zero_rmse": 2.3695737274646236,
+      "status": "provisional semantic-control single-seed validation best",
+      "reference_model": "mlp",
+      "reference_groups": [
+        "E1"
+      ],
+      "reference_combination_id": "COMBO_b5b76a4693c1",
+      "reference_is_provisional": true,
+      "reference_snapshot_label": "2026-10-14 13:37 KST",
+      "reference_campaign_progress": {
+        "processed": 6096,
+        "total": 6096,
+        "percent": 100.0
+      },
+      "reference_method_label": "의미 통합 127개 조합 1시드 잠정 Validation BEST",
+      "reference_change_n": 196,
+      "reference_change_split": "test",
+      "reference_change_label": "최신 Test · 실제 수량 변화 행 · 3시드 MAE 평균",
+      "reference_change_small_n": false,
+      "reference_persistence_missing_n": 28,
+      "reference_persistence_policy": "현재 관측값 유지; 현재값 미관측 행은 train 현재값 중앙값 사용"
+    },
+    {
+      "target": "strawberry_third",
+      "reference_rmse": 1.310723623430342,
+      "illustrative_10pct_rmse": 1.179651261087308,
+      "reference_change_mae": 2.177161846663803,
+      "illustrative_15pct_change_mae": 1.8505875696642324,
+      "reference_persistence_rmse": 1.465900281862186,
+      "reference_zero_rmse": 2.0913784058279927,
+      "status": "provisional semantic-control single-seed validation best",
+      "reference_model": "mlp",
+      "reference_groups": [
+        "E1",
+        "E2"
+      ],
+      "reference_combination_id": "COMBO_000eab9fb7bb",
+      "reference_is_provisional": true,
+      "reference_snapshot_label": "2026-10-14 13:37 KST",
+      "reference_campaign_progress": {
+        "processed": 6096,
+        "total": 6096,
+        "percent": 100.0
+      },
+      "reference_method_label": "의미 통합 127개 조합 1시드 잠정 Validation BEST",
+      "reference_change_n": 200,
+      "reference_change_split": "test",
+      "reference_change_label": "최신 Test · 실제 수량 변화 행 · 3시드 MAE 평균",
+      "reference_change_small_n": false,
+      "reference_persistence_missing_n": 23,
+      "reference_persistence_policy": "현재 관측값 유지; 현재값 미관측 행은 train 현재값 중앙값 사용"
+    },
+    {
+      "target": "strawberry_sum123",
+      "reference_rmse": 1.7588254960519114,
+      "illustrative_10pct_rmse": 1.5829429464467204,
+      "reference_change_mae": 3.2555538415862997,
+      "illustrative_15pct_change_mae": 2.7672207653483545,
+      "reference_persistence_rmse": 1.9283752691598242,
+      "reference_zero_rmse": 3.6363535545430006,
+      "status": "provisional semantic-control single-seed validation best",
+      "reference_model": "tabm",
+      "reference_groups": [
+        "E1"
+      ],
+      "reference_combination_id": "COMBO_b5b76a4693c1",
+      "reference_is_provisional": true,
+      "reference_snapshot_label": "2026-10-14 13:37 KST",
+      "reference_campaign_progress": {
+        "processed": 6096,
+        "total": 6096,
+        "percent": 100.0
+      },
+      "reference_method_label": "의미 통합 127개 조합 1시드 잠정 Validation BEST",
+      "reference_change_n": 271,
+      "reference_change_split": "test",
+      "reference_change_label": "최신 Test · 실제 수량 변화 행 · 3시드 MAE 평균",
+      "reference_change_small_n": false,
+      "reference_persistence_missing_n": 9,
+      "reference_persistence_policy": "현재 관측값 유지; 현재값 미관측 행은 train 현재값 중앙값 사용"
+    }
+  ]
+}

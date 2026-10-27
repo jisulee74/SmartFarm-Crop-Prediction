@@ -8,7 +8,7 @@
 <link href="./src/styles.css?v=20" rel="stylesheet"/>
 <!-- Apache ECharts CDN (최신 안정 버전) -->
 <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
-<link href="../ax_data_validation_crop/src/summary.css" rel="stylesheet"/></head>
+<link href="../ax_data_validation_crop/src/summary.css?v=20261027" rel="stylesheet"/></head>
 <body>
 <!-- 최상단 글로벌 헤더 & 1차 주 탭 (전체 제목 및 탭 선택) -->
 <header class="global-navbar">
@@ -1345,7 +1345,7 @@
 <div class="anl-rule-card">
 <span class="rule-num">S</span>
 <strong>상태 State</strong>
-<p>환경·생육·관찰 당시 상태</p>
+<p>토마토 1~20·딸기 1~5화방의 Validation 선정 모델을 동일 Test 행에서 평가하고, 발표자료 기준 AS-IS와 향후 실험 기준을 구분</p>
 </div>
 <div class="anl-rule-card">
 <span class="rule-num">A</span>
@@ -1475,52 +1475,19 @@
 <div class="anl-arm-detail-panel" id="anl_arm_detail_panel"></div>
 </section>
 <!-- 3-2. 선택 타깃 AX 데이터 성능 개선 KPI 카드 & 안내 -->
-<section aria-label="타깃별 AX 데이터 성능 개선 KPI" class="anl-card anl-kpi-target-card" style="margin-top: 24px;">
-<div class="anl-card-header-between">
-<div>
-<h3 class="anl-card-title">🎯 선택 타깃 AX 데이터 성능 개선 KPI</h3>
-<p class="anl-card-subtitle">현재 수치는 잠정 참고값입니다. 신규 자료 수령 후 같은 평가 대상으로 기준 성능을 다시 산정합니다.</p>
-</div>
-<span class="anl-badge-tag success">✅ 내부 계획 KPI · 동일 조건 비교</span>
-</div>
-<!-- 타깃별 KPI 4단 그리드 -->
-<div class="anl-target-kpi-grid" id="anl_target_kpi_grid"></div>
-<div class="guide-banner anl-kpi-notice" style="margin-top: 16px; margin-bottom: 0;">
-<div class="guide-icon">📌</div>
-<div class="guide-text">
-<h4>KPI 적용 기준</h4>
-<p class="reading-lead"><strong>신규 AX 효과는 검증 전입니다.</strong> 같은 평가 자료에서 입력 추가 전후를 비교합니다.</p>
-<dl class="reading-facts"><div><dt>내부 목표</dt><dd>예측 오차 RMSE 10% 감소</dd></div><div><dt>함께 확인</dt><dd>다른 오차 지표·예측 일치도</dd></div><div><dt>최종 판단</dt><dd>품질·연결성·학습 가능성</dd></div></dl>
-<details class="reading-details"><summary>지표 산정 방법 및 참고 목표</summary><p><strong>1차 내부 계획 KPI는 동일 평가 대상·분할·시드에서 As-Is 대비 RMSE 10% 이상 감소</strong>입니다. As-Is는 방향·층수를 장치 의미로 통합한 127개 조합 전체 Validation 순위의 타깃별 최저값입니다. 현재 1시드 선별 기준값은 정식 추가 검증 완료 후 갱신하며, 신규 AX 데이터 비교 시 동일한 평가 조건으로 다시 고정합니다. MAE는 감소하고 R²·CCC는 하락하지 않는지도 함께 확인합니다. 변화구간 MAE는 최신 Test에서 현재값과 다음 조사값이 다른 행의 3시드 평균입니다. 미관측 현재값은 변화 구간에서 제외합니다. 15% 개선값은 Test 진단용 참고 목표이며, 신규 AX 데이터 비교 시 같은 코호트에서 재산정합니다. 현재값 유지 기준선은 미관측 행에 train 중앙값을 사용하고 0 예측 기준선과 함께 동일 평가 행에서 계산합니다.</p></details>
-</div>
-</div>
+<section aria-label="작물별 AX 추가 입력 성능 개선 내부 목표" class="anl-card anl-kpi-target-card crop-kpi-policy" id="crop_kpi_policy" style="margin-top:24px;">
+<div class="anl-card-header-between"><div><h3 class="anl-card-title">🎯 AX 추가 입력 성능 개선 목표</h3>
+<p class="anl-card-subtitle">동일 평가 사례에서 기존 입력 대비 RMSE 5% 감소 · 내부 검토용, 공식 합격 기준 아님</p></div>
+<span class="anl-badge-tag warning">목표 · AX 효과 검증 전</span></div>
+<p>2026-10-27 발표자료 v3.1의 1시드 pooled Test AS-IS를 기준으로 표시한 목표입니다.</p>
+<div class="crop-table-scroll"><table><thead><tr><th>작물 · 평가 범위</th><th>발표 AS-IS RMSE</th><th>TO-BE RMSE · 주 목표</th><th>MAE · 보조</th><th>R² · 연동 참고</th><th>CCC · 보조</th></tr></thead><tbody><tr data-kpi-crop="tomato"><th scope="row">토마토 개화수 · 1~20화방</th><td>0.47</td><td>≤0.44</td><td>≤0.19</td><td>≥0.44</td><td>≥0.66</td></tr><tr data-kpi-crop="strawberry"><th scope="row">딸기 착과수 · 1~5화방</th><td>1.36</td><td>≤1.29</td><td>≤0.58</td><td>≥0.73</td><td>≥0.82</td></tr></tbody></table></div>
+<p class="crop-explanation"><strong>주 목표는 동일 평가 사례에서 RMSE 5% 감소입니다.</strong> R²는 같은 정답·평가 행에서 이 목표를 가정한 참고값이며, MAE·CCC는 기존 성능보다 나빠지지 않는지 확인하는 보조 기준입니다.</p>
+<details class="reading-details"><summary>산정 기준과 표시 자릿수</summary><p>R² 목표 = 1 − 0.95² × (1 − AS-IS R²). 표는 발표자료와 동일한 두 자리 표시값입니다. 실제 개선율과 MAE·CCC 비열화 여부는 반올림 전 값으로 같은 평가 사례에서 비교하며, 표시된 절대값을 공식 합격선으로 사용하지 않습니다.</p></details>
+<p class="crop-caution"><strong data-current-result-stage="">실험 대표 성능과 구분한 발표자료 기준 목표</strong>입니다. 정식 3시드 대표 성능이 반영되어도 이 표의 AS-IS와 목표는 자동 변경하지 않습니다. 기준을 바꾸려면 별도 검토·확인이 필요합니다. 신규 AX 추가 입력의 효과와 목표 달성 여부는 아직 검증되지 않았습니다.</p>
+<details class="reading-details"><summary>목표 변경 이력 · 과거 참고자료</summary><p>과거 8개 타깃 Validation 기준의 RMSE 10% 목표와 변화구간 MAE 참고 목표는 현재 목표와 별도 자료로 보존했습니다.</p><p><a href="../ax_data_validation_crop/src/KPI_HISTORY.md" target="_blank">변경 전후와 근거</a> · <a href="../ax_data_validation_crop/src/legacy_kpi_reference.json" target="_blank">과거 8개 타깃 수치 원본</a> · <a href="../ax_data_validation_crop/src/kpi_policy.json" target="_blank">현재 목표 기준</a></p></details>
 </section>
 <!-- 3-3. 8개 전체 타깃 KPI 계획표 접기/펼치기 -->
-<details class="anl-accordion" id="anl_kpi_details" style="margin-top: 24px;">
-<summary class="anl-accordion-summary">
-<span>📋 8개 예측 타깃 전체 KPI 계획표 펼치기</span>
-<span class="anl-accordion-arrow">▼</span>
-</summary>
-<div class="anl-accordion-content">
-<div class="table-responsive">
-<table class="styled-comparison-table anl-table">
-<thead>
-<tr>
-<th>타깃 과제</th>
-<th class="td-right">현 기준 RMSE (Validation BEST)</th>
-<th class="td-right text-primary font-bold">To-Be 목표 RMSE (10% 개선)</th>
-<th class="td-right">변화구간 MAE (Test 참고)</th>
-<th class="td-right text-primary font-bold">보조 KPI 후보 (15% 개선)</th>
-<th class="td-right text-muted">유지 기준 RMSE (Validation)</th>
-<th class="td-right text-muted">0 예측 RMSE (Validation)</th>
-<th>상태 구분</th>
-</tr>
-</thead>
-<tbody id="anl_kpi_tbody"></tbody>
-</table>
-</div>
-</div>
-</details>
+
 <!-- 3-4. 세부 보고서 바로가기 링크 바 -->
 <div class="anl-doc-links-bar" style="margin-top: 24px;">
 <div class="doc-links-title">📄 기존 9월 보고서 보관본 (최신 실험 수치는 화면·CSV 기준):</div>
@@ -1662,5 +1629,5 @@
 <div class="alert-toast" id="alert_toast"></div>
 <!-- 메인 애플리케이션 진입점 -->
 <script src="./src/app.js?v=32" type="module"></script>
-<script src="../ax_data_validation_crop/src/summary.js" type="module"></script></body>
+<script src="../ax_data_validation_crop/src/summary.js?v=20261027" type="module"></script></body>
 </html>
