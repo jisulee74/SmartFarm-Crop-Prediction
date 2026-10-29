@@ -1,0 +1,17 @@
+{
+  "date": "2026-10-29",
+  "private_archives": [
+    {
+      "file": "AXData_focused.tar",
+      "bytes": 95353559040,
+      "sha256": "3aabe49291c99c1a96b0e333c5a85f9ab01eda8cf390ef4b327fb9b96a60507f"
+    },
+    {
+      "file": "AXData_live_delta.tar",
+      "bytes": 21340160,
+      "sha256": "808e47b2d1972a222dd4f9eabc359ac8e1b87625fc3107bf7d30108af5a112ef"
+    }
+  ],
+  "location": "Access-restricted maintenance_backups directory on the persistent workspace; request from owner",
+  "offsite_copy_completed": false
+}

@@ -85,5 +85,15 @@
       "member_prefix": "AXData/diagnostics/20261020_flower_cap_audit/",
       "restore_prefix": "AXData/diagnostics/20261020_flower_cap_audit/"
     }
+  ],
+  "restore_links": [
+    {
+      "path": "AXData/ax_catalog_experiments/outputs/exhaustive_e6_semantic_screening_v1/prepared",
+      "target": "AXData/ax_catalog_experiments/outputs/exhaustive_e6_semantic_completion_v2/prepared"
+    },
+    {
+      "path": "AXData/ax_catalog_experiments/outputs/exhaustive_e6_semantic_screening_v1/prepared_manifest.json",
+      "target": "AXData/ax_catalog_experiments/outputs/exhaustive_e6_semantic_completion_v2/prepared_manifest.json"
+    }
   ]
 }

@@ -14,3 +14,11 @@
 
 No new training, final-results publication or Excel report generation was performed.
 The full installed package list and detailed logs are in the private workspace backup.
+
+## Actual GitHub clone and private restore
+
+- Fresh GitHub clone: 59 synthetic tests passed with the recorded existing environment.
+- Restore safety: 7 checks passed (no overwrite, traversal/escape rejection, checksum, aliases, delta precedence).
+- Restored six formal parquet hashes matched. Rebuilt six base split files from frozen observations/context; byte hashes, counts, feature lists and facility split membership all matched the archived base.
+- Two prepared-data aliases are restored as reviewed relative links inside the clone.
+- See `reproducibility/clone_validation.json` for the exact tested source revision and limits.

@@ -1,0 +1,77 @@
+{
+  "date": "2026-10-29",
+  "repository": "https://github.com/jisulee74/SmartFarm-Crop-Prediction",
+  "tested_source_commit": "fb088a2690aa424970b72edffc76228dd151eb37",
+  "clone_source": "GitHub, fresh shallow clone",
+  "environment": "Existing recorded Python 3.11 environment; no fresh package install",
+  "synthetic_tests_passed": 59,
+  "restore_safety_tests_passed": 7,
+  "restore_tool_sha256": "aad875fbd9da7e8cabe308820de0b02beb847234119a664f4f2732f381dacaea",
+  "private_restoration_checks": {
+    "status": "PASS",
+    "frozen_formal_split_hashes_verified": 6,
+    "rebuilt_base": {
+      "tomato": {
+        "counts_match": true,
+        "parquet_sha256_match": true,
+        "features_match": true,
+        "split_match": true,
+        "counts": {
+          "train": {
+            "rows": 30148,
+            "positive": 2304,
+            "facilities": 6,
+            "context_available_rate": 0.9569125646809076,
+            "trusses": 20
+          },
+          "validation": {
+            "rows": 6738,
+            "positive": 509,
+            "facilities": 2,
+            "context_available_rate": 0.9146631047788661,
+            "trusses": 20
+          },
+          "test": {
+            "rows": 5505,
+            "positive": 586,
+            "facilities": 2,
+            "context_available_rate": 0.927702089009991,
+            "trusses": 20
+          }
+        }
+      },
+      "strawberry": {
+        "counts_match": true,
+        "parquet_sha256_match": true,
+        "features_match": true,
+        "split_match": true,
+        "counts": {
+          "train": {
+            "rows": 20234,
+            "positive": 5546,
+            "facilities": 14,
+            "context_available_rate": 0.9788969061974894,
+            "trusses": 5
+          },
+          "validation": {
+            "rows": 4339,
+            "positive": 948,
+            "facilities": 3,
+            "context_available_rate": 0.9672735653376354,
+            "trusses": 5
+          },
+          "test": {
+            "rows": 4149,
+            "positive": 901,
+            "facilities": 3,
+            "context_available_rate": 0.9884309472161966,
+            "trusses": 5
+          }
+        }
+      }
+    },
+    "full_sensor_aggregation_executed": false,
+    "full_training_executed": false
+  },
+  "full_retraining_executed": false
+}
