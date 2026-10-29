@@ -1,24 +1,63 @@
-# Python caches and local environments
+# Python environments and generated caches
+.venv/
+venv/
+env/
 __pycache__/
 *.py[cod]
 .pytest_cache/
-.venv/
-venv/
-
-# IDE and operating-system files
+.ruff_cache/
+.mypy_cache/
+.ipynb_checkpoints/
 .idea/
 .vscode/
 .DS_Store
 
-# Local secrets
+# Local credentials and runtime state
 .env
 .env.*
 !.env.example
+*.pem
+*.key
+*.log
+*.pid
+*.lock
+*.sqlite*
+*.db
+*.db-wal
+*.db-shm
 
-# Rebuildable raw database cache exceeding GitHub's single-file limit
-AXData/tomato_flower_count_prediction/data/raw/environment.parquet
+# Model weights, binary datasets and archives (keep in workspace backups)
+*.pkl
+*.pickle
+*.joblib
+*.parquet
+*.pt
+*.pth
+*.ckpt
+*.bin
+*.npy
+*.npz
+*.tar
+*.tar.gz
+*.zip
 
+# Temporary edits and historical copies
+*.orig
+*.rej
+*_backup_*/
+local_backups/
+maintenance_backups/
 
-# Rebuildable training weights and verbose local logs
-AXData/ax_catalog_experiments/outputs/**/*.log
-AXData/ax_catalog_experiments/outputs/**/model.bin
+# Training inputs and outputs stay outside the source repository.
+/AXData/**/data/
+/AXData/**/processed_data/
+/AXData/**/source_processed_data/
+/AXData/**/outputs/
+/AXData/**/artifacts/
+/AXData/**/runs/
+/AXData/**/data_audits/
+/AXData/**/facility_holdout_fixed13_with_tft_v1/
+/AXData/ax_catalog_experiments/analysis/
+/AXData/catboost_info/
+
+# Dashboard cache directories contain deployed public assets: do not ignore them.

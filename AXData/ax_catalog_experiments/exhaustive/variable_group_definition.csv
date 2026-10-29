@@ -1,0 +1,49 @@
+﻿변수군 코드,변수군명,소속 원본 Sheet(Table),참조·사용 Sheet(Table),변수 식별명,변수명(컬럼명),설명,Data Type,수집 구분,실험 역할,적용 조건/주의
+E1,기존 목표·생식생육 이력,crop_stts,-,flclstr_cnt,flclstr_cnt,화방 수 (개),INT,기존 DB 확인,타깃/과거입력,
+E1,기존 목표·생식생육 이력,crop_stts,-,flclstr1_flwr_cnt,flclstr1_flwr_cnt,1화방 꽃수,INT,기존 DB 확인,타깃/과거입력,
+E1,기존 목표·생식생육 이력,crop_stts,-,flclstr2_flwr_cnt,flclstr2_flwr_cnt,2화방 꽃수,INT,기존 DB 확인,타깃/과거입력,
+E1,기존 목표·생식생육 이력,crop_stts,-,flclstr3_flwr_cnt,flclstr3_flwr_cnt,3화방 꽃수,INT,기존 DB 확인,타깃/과거입력,
+E1,기존 목표·생식생육 이력,crop_stts,-,flclstr1_frst_cnt,flclstr1_frst_cnt,1화방 착과수,INT,기존 DB 확인,타깃/과거입력,
+E1,기존 목표·생식생육 이력,crop_stts,-,flclstr2_frst_cnt,flclstr2_frst_cnt,2화방 착과수,INT,기존 DB 확인,타깃/과거입력,
+E1,기존 목표·생식생육 이력,crop_stts,-,flclstr3_frst_cnt,flclstr3_frst_cnt,3화방 착과수,INT,기존 DB 확인,타깃/과거입력,
+E1,기존 목표·생식생육 이력,crop_stts,-,bloom_grp_cnt,bloom_grp_cnt,개화군,INT,기존 DB 확인,타깃/과거입력,
+E1,기존 목표·생식생육 이력,crop_stts,-,flst_grp_cnt,flst_grp_cnt,착화군,INT,기존 DB 확인,타깃/과거입력,
+E1,기존 목표·생식생육 이력,crop_stts,-,fruit_cnt,fruit_cnt,열매수,INT,기존 DB 확인,타깃/과거입력,
+E1,기존 목표·생식생육 이력,crop_stts,-,hrvst_grp,hrvst_grp,수확군,INT,기존 DB 확인,후보입력,
+E1,기존 목표·생식생육 이력,crop_stts,-,ped,ped,PED,FLOAT,기존 DB 확인,후보입력,
+E2,기존 영양생장,crop_stts,crop_stts_rbt,crop_stts.leaf_len,leaf_len,엽장 (cm),FLOAT,기존 DB 확인,후보입력,
+E2,기존 영양생장,crop_stts,-,leaf_cnt,leaf_cnt,엽수 (개),INT,기존 DB 확인,후보입력,
+E2,기존 영양생장,crop_stts,crop_stts_rbt,crop_stts.leaf_wdth,leaf_wdth,엽폭 (cm),FLOAT,기존 DB 확인,후보입력,
+E2,기존 영양생장,crop_stts,-,ptl_len,ptl_len,엽병장,FLOAT,기존 DB 확인,후보입력,
+E2,기존 영양생장,crop_stts,-,stem_dmtr,stem_dmtr,줄기직경 (mm),FLOAT,기존 DB 확인,후보입력,
+E2,기존 영양생장,crop_stts,-,crwn_dmtr,crwn_dmtr,관부 직경,FLOAT,기존 DB 확인,후보입력,
+E2,기존 영양생장,crop_stts,-,plnt_hgt,plnt_hgt,초장 (cm),FLOAT,기존 DB 확인,후보입력,
+E2,기존 영양생장,crop_stts,-,grw_len,grw_len,생장길이 (cm),FLOAT,기존 DB 확인,후보입력,
+E2,기존 영양생장,crop_stts,-,flclstr_hgt,flclstr_hgt,화방높이 (cm),FLOAT,기존 DB 확인,후보입력,
+E3,기존 시설내 환경,crop_stts,-,rcv_lgt_qty,rcv_lgt_qty,수광량,FLOAT,기존 DB 확인,후보입력,
+E3,기존 시설내 환경,env_stts,"fclt_eqpm, ctrl_stts",env_stts.fld_cd,fld_cd,분야코드,VARCHAR,기존 DB 확인,후보입력,sect_cd=EI (동일 구조를 E4·E5에도 조건별 재사용)
+E3,기존 시설내 환경,env_stts,"fclt_eqpm, ctrl_stts",env_stts.sect_cd,sect_cd,분류코드,VARCHAR,기존 DB 확인,후보입력,sect_cd=EI (동일 구조를 E4·E5에도 조건별 재사용)
+E3,기존 시설내 환경,env_stts,"fclt_eqpm, ctrl_stts",env_stts.fatr_cd,fatr_cd,항목코드,VARCHAR,기존 DB 확인,후보입력,sect_cd=EI (동일 구조를 E4·E5에도 조건별 재사용)
+E3,기존 시설내 환경,env_stts,"ctrl_stts, abnrml_dtct_rslt",env_stts.sns_vl,sns_vl,측정값,FLOAT,기존 DB 확인,후보입력,sect_cd=EI (동일 구조를 E4·E5에도 조건별 재사용)
+E4,기존 외부 기상,env_stts,"fclt_eqpm, ctrl_stts",env_stts.fld_cd,fld_cd,분야코드,VARCHAR,기존 DB 확인,후보입력,sect_cd=EO
+E4,기존 외부 기상,env_stts,"fclt_eqpm, ctrl_stts",env_stts.sect_cd,sect_cd,분류코드,VARCHAR,기존 DB 확인,후보입력,sect_cd=EO
+E4,기존 외부 기상,env_stts,"fclt_eqpm, ctrl_stts",env_stts.fatr_cd,fatr_cd,항목코드,VARCHAR,기존 DB 확인,후보입력,sect_cd=EO
+E4,기존 외부 기상,env_stts,"ctrl_stts, abnrml_dtct_rslt",env_stts.sns_vl,sns_vl,측정값,FLOAT,기존 DB 확인,후보입력,sect_cd=EO
+E5,기존 근권·양액·관수,env_stts,"fclt_eqpm, ctrl_stts",env_stts.fld_cd,fld_cd,분야코드,VARCHAR,기존 DB 확인,후보입력,sect_cd=NT
+E5,기존 근권·양액·관수,env_stts,"fclt_eqpm, ctrl_stts",env_stts.sect_cd,sect_cd,분류코드,VARCHAR,기존 DB 확인,후보입력,sect_cd=NT
+E5,기존 근권·양액·관수,env_stts,"fclt_eqpm, ctrl_stts",env_stts.fatr_cd,fatr_cd,항목코드,VARCHAR,기존 DB 확인,후보입력,sect_cd=NT
+E5,기존 근권·양액·관수,env_stts,"ctrl_stts, abnrml_dtct_rslt",env_stts.sns_vl,sns_vl,측정값,FLOAT,기존 DB 확인,후보입력,sect_cd=NT
+E6,기존 시설 제어 이력,ctrl_stts,"fclt_eqpm, env_stts",ctrl_stts.fld_cd,fld_cd,분야코드,VARCHAR,기존 DB 확인,후보입력,sect_cd=CR
+E6,기존 시설 제어 이력,ctrl_stts,"fclt_eqpm, env_stts",ctrl_stts.sect_cd,sect_cd,분류코드,VARCHAR,기존 DB 확인,후보입력,sect_cd=CR
+E6,기존 시설 제어 이력,ctrl_stts,"fclt_eqpm, env_stts",ctrl_stts.fatr_cd,fatr_cd,항목코드,VARCHAR,기존 DB 확인,후보입력,sect_cd=CR
+E6,기존 시설 제어 이력,ctrl_stts,"env_stts, abnrml_dtct_rslt",ctrl_stts.sns_vl,sns_vl,측정값,FLOAT,기존 DB 확인,후보입력,sect_cd=CR
+E7,기존 시설·설비·작기 맥락,cltv,-,cltv_strt_dt,cltv_strt_dt,정식일,DATE,기존 DB 확인,후보입력,
+E7,기존 시설·설비·작기 맥락,cltv,-,cltv_mth_nm,cltv_mth_nm,재배방식,VARCHAR,기존 DB 확인,후보입력,
+E7,기존 시설·설비·작기 맥락,cltv,-,indvd_cnt,indvd_cnt,재배 포기수 (주),INT,기존 DB 확인,후보입력,
+E7,기존 시설·설비·작기 맥락,cltv,-,crop_end_dt,crop_end_dt,작기 종료일,DATE,기존 DB 확인,후보입력,
+E7,기존 시설·설비·작기 맥락,fclt,-,fcar,fcar,온실 면적 (m²),FLOAT,기존 DB 확인,후보입력,
+E7,기존 시설·설비·작기 맥락,fclt,-,cltv_mthd_nm,cltv_mthd_nm,재배 방식,VARCHAR,기존 DB 확인,후보입력,
+E7,기존 시설·설비·작기 맥락,fclt_eqpm,"env_stts, ctrl_stts",fclt_eqpm.fld_cd,fld_cd,분야코드,VARCHAR,기존 DB 확인,후보입력,
+E7,기존 시설·설비·작기 맥락,fclt_eqpm,"env_stts, ctrl_stts",fclt_eqpm.sect_cd,sect_cd,분류코드,VARCHAR,기존 DB 확인,후보입력,
+E7,기존 시설·설비·작기 맥락,fclt_eqpm,"env_stts, ctrl_stts",fclt_eqpm.fatr_cd,fatr_cd,항목코드,VARCHAR,기존 DB 확인,후보입력,
+E7,기존 시설·설비·작기 맥락,fclt_eqpm,abnrml_dtct_rslt,fclt_eqpm.sns_no,sns_no,센서 번호,VARCHAR,기존 DB 확인,후보입력,

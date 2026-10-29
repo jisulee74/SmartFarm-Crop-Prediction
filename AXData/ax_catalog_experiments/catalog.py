@@ -6,8 +6,9 @@ from .core import digest
 
 AX=Path(__file__).resolve().parents[1]
 STRAW=AX/'strawberry_fruit_set_prediction'
-SCHEMA=STRAW/'data_audits/fruit_zero_semantics_20260812/artifacts/schema_columns.csv'
-META=STRAW/'data/sensor_category_cache/sensor_metadata.csv'
+REFERENCE=Path(__file__).resolve().parent/'reference'
+SCHEMA=REFERENCE/'schema_columns.csv'
+META=REFERENCE/'sensor_metadata.csv'
 
 
 def classify(section,code):
@@ -43,7 +44,7 @@ def build_catalog():
         if r.table_name=='sfkr_pvsn_grow' and r.column_name in growth:
             name,unit=growth[r.column_name];cid=add_category('State','작물 생육',name)
             for suffix,der,w in growth_definitions():add(r.column_name+'__'+suffix,str(r.column_comment)+' '+suffix,r.table_name,r.column_name,cid,der,w,'source unit requires verification' if unit!='개' else unit,'individual','needs_review','measurement unit/provenance must be verified' if unit!='개' else 'raw history required')
-        elif r.table_name=='sfkr_pvsn_crop' and r.column_name in {'cropping_system','item_code','cultivation_area','cal_cultivation_area','plant_num','cal_plant_num','plant_density'}:
+        elif r.table_name=='sfkr_pvsn_crop' and r.column_name in {'cropping_system','cultivation_area','cal_cultivation_area','plant_num','cal_plant_num','plant_density'}:
             cid=add_category('Context','재배 맥락','재배방식' if r.column_name in {'cropping_system','item_code'} else '재배규모·밀도')
             add(r.column_name,str(r.column_comment),r.table_name,r.column_name,cid,'current as-of feature date','current','source definition','crop_cycle','needs_review','as-of validity and units require verification')
     for base,name,table,field,cat,level in [('flower_count','전체 꽃 수','sfkr_hbfm_grow','growth_measure_code + resolved value column','꽃 관측정보','individual'),('fruit_count','해당 화방 착과수','sfkr_pvsn_grow','first_fruits_num / second_fruits_num / third_fruits_num','착과 관측정보','truss'),('current_max_truss_number','최대 관측 화방번호','sfkr_hbfm_grow','growth_measure_code','화방 관측정보','individual'),('positive_truss_count','꽃이 있는 화방 수','sfkr_hbfm_grow','growth_measure_code + resolved value column','화방 관측정보','individual'),('observed_truss_count','관측 화방 수','sfkr_hbfm_grow','growth_measure_code','관측범위·품질','individual')]:

@@ -1,40 +1,50 @@
 # AXData
 
-작물 관측 데이터, 예측 실험 코드, 변수 사전과 실행 결과를 보관합니다.
+최신 소스 정리 기준: 2026-10-29.
 
-## 구성
+공통 회귀 모델, 작물별 예측, E1~E7 조합 실험, E6 의미 통합 및 토마토 20화방·딸기
+5화방 실험 코드를 포함합니다. 학습 중간 데이터와 가중치는 Git에서 제외합니다.
 
-| 폴더 | 내용 |
-|---|---|
-| common_regression | 공통 전처리·모델 어댑터·지표·검증 |
-| ax_catalog_experiments | 변수 사전, 범주 조합 실험, 통합 결과 |
-| tomato_flower_count_prediction | 토마토 전체 꽃 수 예측 |
-| strawberry_fruit_set_prediction | 딸기 1·2·3화방 착과수 예측 |
-| strawberry_flower_cluster_prediction | 기존 딸기 화방수 예측 |
+## 설치·실행
 
-## 환경과 실행
-
-저장소 루트에서 Python 3.11 환경을 준비합니다.
+저장소 루트(`AXData/`의 상위 폴더)에서 실행합니다.
 
 ```bash
 python3.11 -m venv .venv
 source .venv/bin/activate
-pip install -r AXData/common_regression/requirements-v1.3.txt
+python -m pip install -r AXData/requirements.txt
+export PYTHONPATH="$PWD:$PWD/AXData${PYTHONPATH:+:$PYTHONPATH}"
 python -m AXData.ax_catalog_experiments --help
 ```
 
-상세 명령은 [범주 조합 실험 README](ax_catalog_experiments/README.md)를 참고하세요.
+`requirements.txt`는 이번 검증 환경의 직접 의존성 버전입니다.
+기존 v1.3 설치 목록은 과거 재현용으로 유지합니다.
+Excel 보고서 생성에는 별도의 Excel 엔진(openpyxl 또는 XlsxWriter)이 필요하며,
+이번 검증에서는 Excel 보고서를 새로 생성하지 않았습니다.
 
-## 결과 위치
+DB 추출에는 `FARMSTOM_DB_HOST`, `FARMSTOM_DB_PORT`, `FARMSTOM_DB_USER`,
+`FARMSTOM_DB_PASSWORD`, `FARMSTOM_DB_NAME` 등의 로컬 환경 설정이 필요합니다.
+인증정보를 코드에 넣거나 Git에 추가하지 마세요. 실제 데이터·모델 복구는
+[복구 안내](../docs/RESTORE.md)를 참고하세요.
 
-- [통합 Excel](ax_catalog_experiments/outputs/AX_Experiment_Report.xlsx)
-- [관측 시계열 CSV](ax_catalog_experiments/outputs/timeseries/)
-- [전체 실험 산출물](ax_catalog_experiments/outputs/): CSV, prepared 데이터, runs 실행 기록 등
+## 실험 안내
 
-기존 결과와 관측 데이터는 보존합니다. 일부 과거 예측의 수치적 불안정성은 폴더 정리로 해결되지 않았으며 재학습 결과와 구분해야 합니다.
+- [기본 범주 조합](ax_catalog_experiments/README.md)
+- [전수실험](ax_catalog_experiments/exhaustive/README.md)
+- [E6 의미 통합](ax_catalog_experiments/exhaustive_e6_semantic/README.md)
+- [상위 화방 간략실험](ax_catalog_experiments/upper_truss_screening/README.md)
+- [20/5화방 전수실험](ax_catalog_experiments/upper_truss_full/README.md)
 
-## DB와 제외 파일
+기존 shell 실행기는 원래 서버 경로·환경을 전제로 합니다. 새 컨테이너에서 사용할 때에는
+경로, GPU, DB 연결, 출력 폴더를 먼저 확인하고 완료된 실행을 덮어쓰지 않도록 재개하세요.
 
-DB 추출에는 FARMSTOM_DB_HOST, FARMSTOM_DB_PORT, FARMSTOM_DB_USER, FARMSTOM_DB_PASSWORD, FARMSTOM_DB_NAME 등 연결 환경 설정이 필요합니다. 인증정보는 저장소에 포함하지 않습니다.
+## 테스트
 
-Python 캐시, 로컬 환경, 모델 가중치 model.bin, 상세 로그와 GitHub 단일 파일 제한을 넘는 토마토 원시 환경 캐시는 제외합니다. 기존 결과 조회에는 DB가 필요하지 않지만 원천 데이터 재구축에는 접속 설정과 누락된 캐시 재생성이 필요합니다.
+```bash
+PYTHONPATH=.:AXData OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 python -m pytest \
+  AXData/common_regression/tests AXData/ax_catalog_experiments/tests \
+  AXData/tomato_flower_count_prediction/tests -q
+```
+
+실험 결과는 `ax_catalog_experiments/outputs/` 등 원래 경로에 복원합니다.
+대시보드 표시 파일은 저장소 루트의 각 웹 폴더에 별도로 유지합니다.

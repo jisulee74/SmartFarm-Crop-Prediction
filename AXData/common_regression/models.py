@@ -62,7 +62,7 @@ class SklearnAdapter(RegressionAdapter):
 
     def fit(self, train, target, validation=None, fixed_epochs=None):
         set_seed(self.seed)
-        self.preprocessor = TabularPreprocessor(self.features, self.categorical, self.scale).fit(train)
+        self.preprocessor = getattr(self, "preprocessor_factory", TabularPreprocessor)(self.features, self.categorical, self.scale).fit(train)
         params = {**self.params}
         if self.model_class is RandomForestRegressor:
             params.setdefault("random_state", self.seed)
@@ -156,39 +156,75 @@ class _TorchAdapter(RegressionAdapter):
         import torch
         from torch.utils.data import DataLoader, TensorDataset
         set_seed(self.seed)
-        self.preprocessor = TabularPreprocessor(self.features, self.categorical, scale=True).fit(train)
+        self.preprocessor = getattr(self, "preprocessor_factory", TabularPreprocessor)(self.features, self.categorical, scale=True).fit(train)
         x = torch.tensor(self.preprocessor.transform(train)); y = torch.tensor(train[target].to_numpy(np.float32))
         device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.model = self._make_model(x.shape[1]).to(device)
         optimizer = torch.optim.AdamW(self.model.parameters(), lr=float(self.params.get("learning_rate", 1e-3)),
                                       weight_decay=float(self.params.get("weight_decay", 3e-4)))
+        checkpoint_dir = self.params.get("_checkpoint_dir")
+        checkpoint_path = Path(checkpoint_dir) / "torch_epoch.pt" if checkpoint_dir else None
+        start_epoch = 1
+        if checkpoint_path and checkpoint_path.exists():
+            payload = torch.load(checkpoint_path, map_location=device, weights_only=False)
+            self.model.load_state_dict(payload["model"]); optimizer.load_state_dict(payload["optimizer"])
+            start_epoch = int(payload["epoch"]) + 1
+            self.best_epoch = payload.get("best_epoch")
+            resumed_best_loss = payload.get("best_loss", float("inf"))
+            resumed_best_state = payload.get("best_state")
+            resumed_stale = int(payload.get("stale", 0))
         loader = DataLoader(TensorDataset(x, y), batch_size=min(int(self.params.get("batch_size", 64)), len(x)),
                             shuffle=True, generator=torch.Generator().manual_seed(self.seed))
         max_epochs = int(fixed_epochs or self.params.get("max_epochs", 500))
         patience = int(self.params.get("early_stopping_rounds", 50))
-        best_loss, best_state, stale = float("inf"), None, 0
+        best_loss = locals().get("resumed_best_loss", float("inf"))
+        best_state = locals().get("resumed_best_state")
+        stale = locals().get("resumed_stale", 0)
+        use_bf16 = device.type == "cuda" and bool(self.params.get("_use_bf16", True))
         val_xy = None
         if validation is not None:
             val_xy = (torch.tensor(self.preprocessor.transform(validation)).to(device),
                       torch.tensor(validation[target].to_numpy(np.float32)).to(device))
-        for epoch in range(1, max_epochs + 1):
+        for epoch in range(start_epoch, max_epochs + 1):
             self.model.train()
             for bx, by in loader:
                 bx, by = bx.to(device), by.to(device)
-                optimizer.zero_grad(); loss = torch.mean((self._forward(bx) - by) ** 2)
-                loss.backward(); torch.nn.utils.clip_grad_norm_(self.model.parameters(), 1.0); optimizer.step()
+                optimizer.zero_grad()
+                with torch.autocast(device_type="cuda", dtype=torch.bfloat16, enabled=use_bf16):
+                    loss = torch.mean((self._forward(bx) - by) ** 2)
+                if getattr(self, "stability_checks", False) and not torch.isfinite(loss):
+                    raise FloatingPointError("Nonfinite training loss/output")
+                loss.backward()
+                torch.nn.utils.clip_grad_norm_(self.model.parameters(), 1.0,
+                    error_if_nonfinite=getattr(self, "stability_checks", False))
+                optimizer.step()
             if val_xy is None:
                 self.best_epoch = epoch
+                if checkpoint_path:
+                    checkpoint_path.parent.mkdir(parents=True, exist_ok=True)
+                    temporary = checkpoint_path.with_suffix(".tmp")
+                    torch.save({"epoch": epoch, "model": self.model.state_dict(), "optimizer": optimizer.state_dict(),
+                                "best_epoch": self.best_epoch, "best_loss": best_loss, "best_state": best_state, "stale": stale}, temporary)
+                    temporary.replace(checkpoint_path)
                 continue
             self.model.eval()
             with torch.no_grad():
-                value = float(torch.sqrt(torch.mean((self._forward(val_xy[0]) - val_xy[1]) ** 2)).cpu())
+                with torch.autocast(device_type="cuda", dtype=torch.bfloat16, enabled=use_bf16):
+                    value = float(torch.sqrt(torch.mean((self._forward(val_xy[0]) - val_xy[1]) ** 2)).cpu())
+            if getattr(self, "stability_checks", False) and not np.isfinite(value):
+                raise FloatingPointError("Nonfinite validation loss/output")
             if value < best_loss - 1e-8:
                 best_loss, best_state, stale, self.best_epoch = value, copy.deepcopy(self.model.state_dict()), 0, epoch
             else:
                 stale += 1
-                if stale >= patience:
-                    break
+            if checkpoint_path:
+                checkpoint_path.parent.mkdir(parents=True, exist_ok=True)
+                temporary = checkpoint_path.with_suffix(".tmp")
+                torch.save({"epoch": epoch, "model": self.model.state_dict(), "optimizer": optimizer.state_dict(),
+                            "best_epoch": self.best_epoch, "best_loss": best_loss, "best_state": best_state, "stale": stale}, temporary)
+                temporary.replace(checkpoint_path)
+            if stale >= patience:
+                break
         if best_state is not None:
             self.model.load_state_dict(best_state)
         self.model.to("cpu")

@@ -51,3 +51,7 @@ Excel은 표준 OOXML로 생성해 추가 Excel 라이브러리가 필요 없습
 ## 보고서의 짧은 ID
 
 Excel·CSV의 Experiment_ID는 EXP_001, 변수군은 VG_Flower_001 / VG_Fruit_001, 실행은 RUN_001, 범주는 CAT_001 형식으로 표시합니다. 숫자는 성능 순위가 아닙니다. display_id_registry.json이 원래 ID와 표시 ID의 연결을 보존하므로 보고서를 다시 생성해도 기존 번호는 바뀌지 않습니다. 이 파일을 삭제하지 마세요. ID_Mapping 시트에서 원래 실행 폴더·manifest ID를 찾을 수 있습니다. 모델·예측 Parquet·학습 결과 JSON은 원래 ID를 유지합니다.
+
+## 안정화 재실험 v2
+
+8개 타깃과 모든 기존 변수군을 평가하는 별도 실행 경로는 [stability/README.md](stability/README.md)를 참고하세요. 원시·제약 적용 예측을 구분하며 기존 결과와 관측 CSV를 보존합니다.
