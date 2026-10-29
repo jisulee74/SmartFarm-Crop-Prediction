@@ -1,0 +1,327 @@
+{
+  "overall": {
+    "tomato": "mlp",
+    "strawberry": "tabm"
+  },
+  "winners": [
+    {
+      "crop": "tomato",
+      "model": "poisson",
+      "combo": "COMBO_fb95adaa40bf",
+      "groups": [
+        "E1",
+        "E2",
+        "E4",
+        "E6"
+      ],
+      "status": "success",
+      "params": {
+        "alpha": 1.0,
+        "max_iter": 400,
+        "tol": 1e-05
+      },
+      "epochs": null,
+      "run_ids": [
+        "9c1f0b209078a1989dfeccf0"
+      ],
+      "rmse": 0.5839936186172644,
+      "mae": 0.2614810530634795,
+      "features": 81
+    },
+    {
+      "crop": "tomato",
+      "model": "random_forest",
+      "combo": "COMBO_0d89866b5a7a",
+      "groups": [
+        "E1",
+        "E2",
+        "E6"
+      ],
+      "status": "success",
+      "params": {
+        "n_estimators": 200,
+        "max_depth": 16,
+        "min_samples_leaf": 5,
+        "max_features": 0.8,
+        "n_jobs": 4
+      },
+      "epochs": null,
+      "run_ids": [
+        "7ba58bf2268923253376d0bd"
+      ],
+      "rmse": 0.440618389885128,
+      "mae": 0.14649204385279552,
+      "features": 58
+    },
+    {
+      "crop": "tomato",
+      "model": "catboost",
+      "combo": "COMBO_a0ebc4648e3e",
+      "groups": [
+        "E1",
+        "E7"
+      ],
+      "status": "success",
+      "params": {
+        "iterations": 500,
+        "depth": 6,
+        "learning_rate": 0.05,
+        "loss_function": "RMSE",
+        "early_stopping_rounds": 50,
+        "task_type": "GPU",
+        "devices": "0",
+        "thread_count": 4,
+        "gpu_ram_part": 0.15
+      },
+      "epochs": 330,
+      "run_ids": [
+        "34e638170592432c1de5dcab"
+      ],
+      "rmse": 0.44814121433786797,
+      "mae": 0.15116457676644618,
+      "features": 21
+    },
+    {
+      "crop": "tomato",
+      "model": "mlp",
+      "combo": "COMBO_b5b76a4693c1",
+      "groups": [
+        "E1"
+      ],
+      "status": "success",
+      "params": {
+        "hidden": [
+          128,
+          64
+        ],
+        "dropout": 0.1,
+        "learning_rate": 0.001,
+        "batch_size": 1024,
+        "max_epochs": 60,
+        "early_stopping_rounds": 10
+      },
+      "epochs": 10,
+      "run_ids": [
+        "195202daa92daafb0470cb4f"
+      ],
+      "rmse": 0.4398340486219928,
+      "mae": 0.15213752653019635,
+      "features": 18
+    },
+    {
+      "crop": "tomato",
+      "model": "tabm",
+      "combo": "COMBO_b5b76a4693c1",
+      "groups": [
+        "E1"
+      ],
+      "status": "success",
+      "params": {
+        "k": 8,
+        "n_blocks": 2,
+        "dropout": 0.1,
+        "learning_rate": 0.001,
+        "batch_size": 1024,
+        "max_epochs": 40,
+        "early_stopping_rounds": 10
+      },
+      "epochs": 15,
+      "run_ids": [
+        "660106064143a025ae8751ca"
+      ],
+      "rmse": 0.44225104119680914,
+      "mae": 0.1512084649511552,
+      "features": 18
+    },
+    {
+      "crop": "tomato",
+      "model": "tft",
+      "combo": "COMBO_a05167c66bed",
+      "groups": [
+        "E1",
+        "E2",
+        "E3",
+        "E5",
+        "E6",
+        "E7"
+      ],
+      "status": "success",
+      "params": {
+        "hidden_size": 16,
+        "attention_head_size": 2,
+        "hidden_continuous_size": 8,
+        "dropout": 0.1,
+        "learning_rate": 0.001,
+        "batch_size": 1024,
+        "max_epochs": 12
+      },
+      "epochs": 9,
+      "run_ids": [
+        "3935da54bd7bd3b31e336f9c"
+      ],
+      "rmse": 0.4415344067253569,
+      "mae": 0.1548184626153843,
+      "features": 91
+    },
+    {
+      "crop": "strawberry",
+      "model": "poisson",
+      "combo": "COMBO_4edf754d6b36",
+      "groups": [
+        "E1",
+        "E3",
+        "E4",
+        "E5"
+      ],
+      "status": "success",
+      "params": {
+        "alpha": 1.0,
+        "max_iter": 400,
+        "tol": 1e-05
+      },
+      "epochs": null,
+      "run_ids": [
+        "8ebf1cd9fa9d5656522391f3"
+      ],
+      "rmse": 1.4643123853180968,
+      "mae": 0.8651028532233483,
+      "features": 63
+    },
+    {
+      "crop": "strawberry",
+      "model": "random_forest",
+      "combo": "COMBO_a0ebc4648e3e",
+      "groups": [
+        "E1",
+        "E7"
+      ],
+      "status": "success",
+      "params": {
+        "n_estimators": 200,
+        "max_depth": 16,
+        "min_samples_leaf": 5,
+        "max_features": 0.8,
+        "n_jobs": 4
+      },
+      "epochs": null,
+      "run_ids": [
+        "5621e5597b6c6d74f67312da"
+      ],
+      "rmse": 1.1429199480739598,
+      "mae": 0.4711991146152921,
+      "features": 23
+    },
+    {
+      "crop": "strawberry",
+      "model": "catboost",
+      "combo": "COMBO_000eab9fb7bb",
+      "groups": [
+        "E1",
+        "E2"
+      ],
+      "status": "success",
+      "params": {
+        "iterations": 500,
+        "depth": 6,
+        "learning_rate": 0.05,
+        "loss_function": "RMSE",
+        "early_stopping_rounds": 50,
+        "task_type": "GPU",
+        "devices": "0",
+        "thread_count": 4,
+        "gpu_ram_part": 0.15
+      },
+      "epochs": 363,
+      "run_ids": [
+        "a549ad255a1c9cb9c4000871"
+      ],
+      "rmse": 1.1417944496962158,
+      "mae": 0.505659269551454,
+      "features": 38
+    },
+    {
+      "crop": "strawberry",
+      "model": "mlp",
+      "combo": "COMBO_6709b803b78a",
+      "groups": [
+        "E1",
+        "E2",
+        "E7"
+      ],
+      "status": "success",
+      "params": {
+        "hidden": [
+          128,
+          64
+        ],
+        "dropout": 0.1,
+        "learning_rate": 0.001,
+        "batch_size": 1024,
+        "max_epochs": 60,
+        "early_stopping_rounds": 10
+      },
+      "epochs": 17,
+      "run_ids": [
+        "4231fd2277851c7271e15b20"
+      ],
+      "rmse": 1.1044178888566036,
+      "mae": 0.4481568208097807,
+      "features": 42
+    },
+    {
+      "crop": "strawberry",
+      "model": "tabm",
+      "combo": "COMBO_4ccea3b19117",
+      "groups": [
+        "E1",
+        "E2",
+        "E6",
+        "E7"
+      ],
+      "status": "success",
+      "params": {
+        "k": 8,
+        "n_blocks": 2,
+        "dropout": 0.1,
+        "learning_rate": 0.001,
+        "batch_size": 1024,
+        "max_epochs": 40,
+        "early_stopping_rounds": 10
+      },
+      "epochs": 17,
+      "run_ids": [
+        "9d6686c65d56845d94c11c75"
+      ],
+      "rmse": 1.1013649227134577,
+      "mae": 0.48147647144584366,
+      "features": 45
+    },
+    {
+      "crop": "strawberry",
+      "model": "tft",
+      "combo": "COMBO_54566964639b",
+      "groups": [
+        "E1",
+        "E6",
+        "E7"
+      ],
+      "status": "success",
+      "params": {
+        "hidden_size": 16,
+        "attention_head_size": 2,
+        "hidden_continuous_size": 8,
+        "dropout": 0.1,
+        "learning_rate": 0.001,
+        "batch_size": 1024,
+        "max_epochs": 12
+      },
+      "epochs": 12,
+      "run_ids": [
+        "552f08d63318acb21c4c3fa4"
+      ],
+      "rmse": 1.1317474588635015,
+      "mae": 0.49588989726915755,
+      "features": 26
+    }
+  ]
+}

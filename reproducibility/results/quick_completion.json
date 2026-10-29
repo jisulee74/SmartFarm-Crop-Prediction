@@ -1,0 +1,11 @@
+{
+  "phase": "complete",
+  "validation_combinations": 1524,
+  "test_runs": 12,
+  "failed": 0,
+  "overall": {
+    "tomato": "mlp",
+    "strawberry": "tabm"
+  },
+  "completed_at": 1792660688.8605204
+}

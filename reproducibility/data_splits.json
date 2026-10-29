@@ -1,0 +1,70 @@
+{
+  "split_rule": "Frozen facility holdout; exact private memberships stay in backup manifest.",
+  "test_notice": "Previously inspected facility holdout; exploratory range decision; not new external validation",
+  "limits": {
+    "tomato": 20,
+    "strawberry": 5
+  },
+  "sensor_policy": "raw frozen snapshot, [date-window,date), 1/3/7 days; E6 semantic streams",
+  "crops": {
+    "tomato": {
+      "counts": {
+        "train": {
+          "rows": 30148,
+          "positive": 2304,
+          "facilities": 6
+        },
+        "validation": {
+          "rows": 6738,
+          "positive": 509,
+          "facilities": 2
+        },
+        "test": {
+          "rows": 5505,
+          "positive": 586,
+          "facilities": 2
+        }
+      },
+      "hashes": {
+        "train": "9e0d907ac214e61bce136f1903dd08d7b91427aaaa7e3af054878cd65e544e0c",
+        "validation": "7cc03f64218df9f1a8c093ebb56ad19d54c6bdfa0225887ad5e61ea747dd1139",
+        "test": "3bce497f61a95eaa7955bf65c2abc879c0d852543e152b7bfd33a58700eea69d"
+      },
+      "limit": 20,
+      "source_assignment_audit": {
+        "unmatched_or_ambiguous_crop_rows": 32658,
+        "tomato_vegetative_unmatched_or_ambiguous": 378,
+        "conflicting_observation_keys": 16
+      }
+    },
+    "strawberry": {
+      "counts": {
+        "train": {
+          "rows": 20234,
+          "positive": 5546,
+          "facilities": 14
+        },
+        "validation": {
+          "rows": 4339,
+          "positive": 948,
+          "facilities": 3
+        },
+        "test": {
+          "rows": 4149,
+          "positive": 901,
+          "facilities": 3
+        }
+      },
+      "hashes": {
+        "train": "b47ac92ec30eed678196d469409a4e3535f56d818be90eb77618885f8133bb22",
+        "validation": "fca88e644c8cdde8c75d06e13103fdecbdedff44aad67b6b1ff881c3c88cfa81",
+        "test": "6583ae9a76685ce892c5bbebe7a739579c4a20498ebb48af0c24797f119017ac"
+      },
+      "limit": 5,
+      "source_assignment_audit": {
+        "unmatched_or_ambiguous_crop_rows": 1246,
+        "conflicting_observation_keys": 9
+      }
+    }
+  }
+}

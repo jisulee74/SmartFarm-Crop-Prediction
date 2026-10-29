@@ -61,3 +61,7 @@ maintenance_backups/
 /AXData/catboost_info/
 
 # Dashboard cache directories contain deployed public assets: do not ignore them.
+
+# Private frozen source observations and audit inputs required by preprocessing.
+/AXData/diagnostics/
+/AXData/analysis/

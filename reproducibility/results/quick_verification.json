@@ -1,0 +1,7 @@
+{
+  "status": "passed",
+  "audited_prediction_rows": 8498598,
+  "validation_runs": 1524,
+  "test_runs": 12,
+  "summary_hash": "6bc284972e5983265f7aa39f5071183cf9e5d3585117f6a75a9c17a777450121"
+}

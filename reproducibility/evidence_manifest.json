@@ -1,0 +1,65 @@
+[
+  {
+    "published_file": "reproducibility/configs/quick_settings.json",
+    "source_member": "AXData/ax_catalog_experiments/outputs/upper_truss_full_20261020/quick/settings.json",
+    "source_sha256": "5362ade82c975b2584fb2cd507758fde854f9f68bd75b4b3fa301e3058644238",
+    "published_sha256": "5362ade82c975b2584fb2cd507758fde854f9f68bd75b4b3fa301e3058644238",
+    "transformed": false
+  },
+  {
+    "published_file": "reproducibility/configs/formal_settings.json",
+    "source_member": "AXData/ax_catalog_experiments/outputs/upper_truss_full_20261020/formal/settings.json",
+    "source_sha256": "36403c600a563ee3e6110b21c2e2c15c0730041e62e9493a2ce6e1500cbcb679",
+    "published_sha256": "36403c600a563ee3e6110b21c2e2c15c0730041e62e9493a2ce6e1500cbcb679",
+    "transformed": false
+  },
+  {
+    "published_file": "reproducibility/results/quick_frozen_winners.json",
+    "source_member": "AXData/ax_catalog_experiments/outputs/upper_truss_full_20261020/quick/frozen_winners.json",
+    "source_sha256": "57cc47857c252295268ae0067329d8073c67eccfcca1bcf591c7d5b7149cb99b",
+    "published_sha256": "57cc47857c252295268ae0067329d8073c67eccfcca1bcf591c7d5b7149cb99b",
+    "transformed": false
+  },
+  {
+    "published_file": "reproducibility/results/quick_validation_comparison.csv",
+    "source_member": "AXData/ax_catalog_experiments/outputs/upper_truss_full_20261020/quick/validation_comparison.csv",
+    "source_sha256": "3fe4cec2f52253b455eb32ba17a4441013dbe07be7f74b5ac5ed0fc4a2d08091",
+    "published_sha256": "3fe4cec2f52253b455eb32ba17a4441013dbe07be7f74b5ac5ed0fc4a2d08091",
+    "transformed": false
+  },
+  {
+    "published_file": "reproducibility/results/quick_verification.json",
+    "source_member": "AXData/ax_catalog_experiments/outputs/upper_truss_full_20261020/quick/verification.json",
+    "source_sha256": "16daf361b9db6aea49e44176af75aebec2a276b8364a1ea9b9768cce228ece42",
+    "published_sha256": "16daf361b9db6aea49e44176af75aebec2a276b8364a1ea9b9768cce228ece42",
+    "transformed": false
+  },
+  {
+    "published_file": "reproducibility/results/formal_progress_snapshot.json",
+    "source_member": "AXData/ax_catalog_experiments/outputs/upper_truss_full_20261020/formal/progress.json",
+    "source_sha256": "6052ec51522d5483c80c0bd6fa99ee7662a0e19fc8c5bc54b05f938e6857e3d4",
+    "published_sha256": "91ac505cca258c7bb71bca95790b93bf2339fa210267ae9a07cfae1778b9afd5",
+    "transformed": true
+  },
+  {
+    "published_file": "reproducibility/results/quick_completion.json",
+    "source_member": "AXData/ax_catalog_experiments/outputs/upper_truss_full_20261020/quick/progress.json",
+    "source_sha256": "e684e1dc58f04aaa6d359e08ea4160fb61b487a0ca695477eff4e08903df0b1b",
+    "published_sha256": "e684e1dc58f04aaa6d359e08ea4160fb61b487a0ca695477eff4e08903df0b1b",
+    "transformed": false
+  },
+  {
+    "published_file": "reproducibility/data_splits.json",
+    "source_member": "AXData/ax_catalog_experiments/outputs/upper_truss_full_20261020/manifest.json",
+    "source_sha256": "da856c4a33a98e84a7588af81fc4f62c402806765c915f0a66006c6b6f87c0ad",
+    "published_sha256": "8af34fedd29afb017d332056903c46d9ffd793ff1e30e1f3da361bdffca9fa13",
+    "transformed": true
+  },
+  {
+    "published_file": "reproducibility/configs/feature_groups.json",
+    "source_member": "AXData/ax_catalog_experiments/outputs/upper_truss_full_20261020/manifest.json",
+    "source_sha256": "da856c4a33a98e84a7588af81fc4f62c402806765c915f0a66006c6b6f87c0ad",
+    "published_sha256": "7c64de424adf556845bf153a279584a2ba5781f03cb455a041755155084e6c60",
+    "transformed": true
+  }
+]

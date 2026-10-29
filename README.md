@@ -34,3 +34,8 @@ python flower_fruit_prediction/server.py
 ```
 
 `main`에 push하면 기존 GitHub Pages workflow가 실행됩니다.
+
+## 실험 재현
+
+환경·입력·선정 근거와 재현 명령은 [재현 안내](reproducibility/README.md)를 확인하세요.
+`python scripts/reproduce.py smoke`는 실제 데이터 없이 합성 실험을 검증합니다.

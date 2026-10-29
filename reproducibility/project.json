@@ -1,0 +1,89 @@
+{
+  "working_directory": ".",
+  "python_paths": [
+    ".",
+    "AXData"
+  ],
+  "smoke_tests": [
+    "AXData/common_regression/tests",
+    "AXData/ax_catalog_experiments/tests",
+    "AXData/tomato_flower_count_prediction/tests",
+    "AXData/ax_catalog_experiments/exhaustive_e6_semantic/test_semantic.py",
+    "AXData/ax_catalog_experiments/exhaustive_e6_semantic_completion/test_completion.py",
+    "AXData/ax_catalog_experiments/exhaustive_e6_semantic_screening/test_finalize.py"
+  ],
+  "restore_mappings": [
+    {
+      "member_prefix": "AXData/ax_catalog_experiments/outputs/",
+      "restore_prefix": "AXData/ax_catalog_experiments/outputs/"
+    },
+    {
+      "member_prefix": "AXData/strawberry_fruit_set_prediction/data/",
+      "restore_prefix": "AXData/strawberry_fruit_set_prediction/data/"
+    },
+    {
+      "member_prefix": "AXData/strawberry_fruit_set_prediction/processed_data/",
+      "restore_prefix": "AXData/strawberry_fruit_set_prediction/processed_data/"
+    },
+    {
+      "member_prefix": "AXData/strawberry_fruit_set_prediction/source_processed_data/",
+      "restore_prefix": "AXData/strawberry_fruit_set_prediction/source_processed_data/"
+    },
+    {
+      "member_prefix": "AXData/strawberry_fruit_set_prediction/artifacts/",
+      "restore_prefix": "AXData/strawberry_fruit_set_prediction/artifacts/"
+    },
+    {
+      "member_prefix": "AXData/strawberry_fruit_set_prediction/data_audits/",
+      "restore_prefix": "AXData/strawberry_fruit_set_prediction/data_audits/"
+    },
+    {
+      "member_prefix": "AXData/strawberry_flower_cluster_prediction/data/",
+      "restore_prefix": "AXData/strawberry_flower_cluster_prediction/data/"
+    },
+    {
+      "member_prefix": "AXData/strawberry_flower_cluster_prediction/processed_data/",
+      "restore_prefix": "AXData/strawberry_flower_cluster_prediction/processed_data/"
+    },
+    {
+      "member_prefix": "AXData/strawberry_flower_cluster_prediction/source_processed_data/",
+      "restore_prefix": "AXData/strawberry_flower_cluster_prediction/source_processed_data/"
+    },
+    {
+      "member_prefix": "AXData/strawberry_flower_cluster_prediction/artifacts/",
+      "restore_prefix": "AXData/strawberry_flower_cluster_prediction/artifacts/"
+    },
+    {
+      "member_prefix": "AXData/strawberry_flower_cluster_prediction/data_audits/",
+      "restore_prefix": "AXData/strawberry_flower_cluster_prediction/data_audits/"
+    },
+    {
+      "member_prefix": "AXData/tomato_flower_count_prediction/data/",
+      "restore_prefix": "AXData/tomato_flower_count_prediction/data/"
+    },
+    {
+      "member_prefix": "AXData/tomato_flower_count_prediction/processed_data/",
+      "restore_prefix": "AXData/tomato_flower_count_prediction/processed_data/"
+    },
+    {
+      "member_prefix": "AXData/tomato_flower_count_prediction/source_processed_data/",
+      "restore_prefix": "AXData/tomato_flower_count_prediction/source_processed_data/"
+    },
+    {
+      "member_prefix": "AXData/tomato_flower_count_prediction/artifacts/",
+      "restore_prefix": "AXData/tomato_flower_count_prediction/artifacts/"
+    },
+    {
+      "member_prefix": "AXData/tomato_flower_count_prediction/data_audits/",
+      "restore_prefix": "AXData/tomato_flower_count_prediction/data_audits/"
+    },
+    {
+      "member_prefix": "AXData/diagnostics/20261020_upper_truss_audit/",
+      "restore_prefix": "AXData/diagnostics/20261020_upper_truss_audit/"
+    },
+    {
+      "member_prefix": "AXData/diagnostics/20261020_flower_cap_audit/",
+      "restore_prefix": "AXData/diagnostics/20261020_flower_cap_audit/"
+    }
+  ]
+}
