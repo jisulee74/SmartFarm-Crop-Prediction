@@ -18,16 +18,13 @@ document.getElementById('crop_advanced')?.addEventListener('toggle', event => {
 
 // Load the immutable publication summary relative to this module, not the shared page <base>.
 import { renderPooled, showUnavailable } from './presentation.js?v=20261027';
-import { renderTrussExplorers } from './truss_view.js?v=20261102';
 const summaryRoot = document.querySelector('.crop-summary');
 if (summaryRoot) {
   try {
     const response = await fetch(new URL('../summary.json', import.meta.url), { cache: 'no-store' });
     if (!response.ok) throw new Error('검증된 결과 파일을 불러오지 못했습니다.');
     const bundle = await response.json();
-    if (renderPooled(summaryRoot, bundle)) {
-      renderTrussExplorers(summaryRoot, bundle);
-    }
+    renderPooled(summaryRoot, bundle);
     document.querySelectorAll('[data-current-result-stage]').forEach(node => {
       node.textContent = `${bundle.seed_count}시드 결과와 구분한 발표자료 기준 목표`;
     });
