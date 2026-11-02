@@ -6,3 +6,18 @@
 .crop-kpi-policy .crop-table-scroll { margin-top: 16px; }
 .crop-kpi-policy .crop-explanation { margin-top: 12px; }
 .crop-kpi-policy .crop-caution { margin-top: 12px; }
+
+.truss-explorer{margin:24px 0;padding:24px;background:#f8fbf9;border:1px solid #cddfd4;border-radius:16px}
+.truss-selector-heading{display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap}
+.truss-selector-heading h3{margin:0;font-size:20px}.truss-selector-heading p{margin:8px 0;color:#53675c;font-size:14px}
+.truss-selector-field{display:flex;flex-direction:column;gap:8px;min-width:230px}.truss-selector-field label{font-size:14px;font-weight:700}
+.truss-selector-field select{width:100%;background:#fff}.truss-selector-field select:focus-visible,.truss-model-details summary:focus-visible{outline:3px solid #2689d3;outline-offset:3px}
+.truss-explorer h4{margin:22px 0 10px;font-size:16px}.truss-explorer [data-truss-counts]{font-size:14px;color:#53675c}
+.truss-metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.truss-metrics article{display:flex;flex-direction:column;gap:12px;background:#fff;border:1px solid #dce5e1;border-radius:12px;padding:16px}
+.truss-metrics span{font-size:13px;color:#53675c;font-weight:700}.truss-metrics strong{font-size:24px;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.truss-note{font-size:13px;color:#5c6f65}.truss-bars{display:grid;gap:10px;margin:16px 0 24px}
+.truss-bar-row{display:grid;grid-template-columns:105px minmax(0,1fr) 65px;gap:12px;align-items:center;font-size:13px;font-variant-numeric:tabular-nums}
+.truss-bar-row>span:last-child{text-align:right}.truss-bar-track{height:18px;background:#e8f0eb;border-radius:4px;overflow:hidden}.truss-bar{height:100%;background:#8da99a;border-radius:4px}.truss-bar.selected{background:#176349}
+.truss-model-details summary{cursor:pointer;font-weight:700;padding:8px 0}.truss-selected-model{background:#eaf4ee;font-weight:700}
+@media(max-width:760px){.truss-explorer{padding:16px}.truss-selector-field{min-width:0;width:100%}.truss-metrics{grid-template-columns:repeat(2,minmax(0,1fr))}.truss-metrics strong{font-size:21px}.truss-bar-row{grid-template-columns:85px minmax(0,1fr) 55px;gap:8px;font-size:12px}}
