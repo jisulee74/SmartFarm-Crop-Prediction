@@ -12,7 +12,7 @@ import {
   extractIndividualTrends
 } from '../../ax_data_validation/src/analytics.js';
 import { ChartManager, METRIC_CONFIGS } from '../../ax_data_validation/src/charts.js';
-import { ExperimentViewController } from './expanded_view.js?v=20261102b';
+import { ExperimentViewController } from './expanded_view.js?v=20261103';
 import { AnalysisViewController } from '../../ax_data_validation/src/analysis_view.js?v=9';
 
 // 전역 상태

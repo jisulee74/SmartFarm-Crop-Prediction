@@ -1,6 +1,7 @@
 // Reuse the existing selector, table, filters and modals at their original DOM locations.
 import { ExperimentViewController as OriginalView } from '../../ax_data_validation/src/experiment_view.js?v=11';
 import { ExpandedData, GROUP_NAMES, calculateMetrics } from './expanded_api.js?v=20261102b';
+import { featureSelectionDetail } from './feature_details.js?v=20261103';
 
 const fmt = value => Number.isFinite(value) ? value.toFixed(3) : '산출 불가';
 const LABELS = { tomato: '꽃수 (개화수)', strawberry: '착과수' };
@@ -224,25 +225,39 @@ export class ExperimentViewController extends OriginalView {
   openVariableModal() { return this.openFeatureSelectionModal(this.state.group_id); }
   async openFeatureSelectionModal(groupId) {
     const modal = document.getElementById('exp_selection_modal');
+    if (!modal || !groupId) return;
+    const request = this.selectionRequest = (this.selectionRequest || 0) + 1;
+    const { crop, model } = this.state;
     modal.style.display = 'flex';
     const content = document.getElementById('selection_modal_content'); content.textContent = '선택 변수 기록을 불러오는 중입니다.';
-    const data = await this.data.model(this.state.crop, this.state.model), item = data.combinations[groupId];
-    document.getElementById('selection_modal_title').textContent = `${item.groups.join('+')} · 실제 사용 변수`;
-    document.getElementById('selection_modal_subtitle').textContent = '작물별 공통 모델의 동결된 실제 입력 목록 · 화방 번호는 모든 조합의 공통 입력';
-    content.replaceChildren();
-    const note = document.createElement('p');
-    note.textContent = item.selected.length ? `최종 입력 ${item.selected.length}개. 학습·검증 때 저장한 변수 목록입니다. 화방별로 재선정하지 않습니다.` : '현재 결과에 대응하는 실제 선택 변수 상세 파일이 아직 게시되지 않았습니다.';
-    content.append(note);
-    const table = document.createElement('table'); table.className = 'variable-table';
-    const head = table.createTHead().insertRow();
-    for (const name of ['변수군', '실제 입력 변수 ID']) { const th = document.createElement('th'); th.textContent = name; head.append(th); }
-    const body = table.createTBody();
-    for (const name of item.selected) {
-      const row = body.insertRow();
-      const group = name === 'truss' ? '공통 화방 번호' : Object.entries(this.data.index.groups[this.state.crop]).find(([, names]) => names.includes(name))?.[0] || '확인 필요';
-      row.insertCell().textContent = group; row.insertCell().textContent = name;
+    content.scrollTop = 0;
+    document.getElementById('selection_modal_title').textContent = '실험 실제 사용 변수';
+    document.getElementById('selection_modal_subtitle').textContent = `${crop === 'tomato' ? '토마토 1~20화방' : '딸기 1~5화방'} · ${model.toUpperCase()} · 작물별 공통 모델`;
+    try {
+      const data = await this.data.model(crop, model), item = data.combinations[groupId];
+      if (request !== this.selectionRequest) return;
+      if (!item?.selected?.length) throw new Error('현재 결과에 대응하는 실제 선택 변수 상세 파일이 아직 게시되지 않았습니다.');
+      document.getElementById('selection_modal_title').textContent = `${item.groups.join('+')} · 실제 사용 변수`;
+      const detail = await featureSelectionDetail(crop, groupId, item, this.data.summaryHash);
+      if (request !== this.selectionRequest) return;
+      this.renderFeatureSelectionDetail(detail, content);
+      // Reuse the original seven-column layout, with the CURRENT pooled-truss scope.
+      const scope = Array.from(content.querySelectorAll('.selection-scope-note')).find(node => node.textContent.includes('표시 기준:'));
+      if (scope) scope.textContent = '표시 기준: Validation 평가 전 학습 데이터만으로 확정한 실제 입력입니다. 같은 작물·조합의 6개 모델이 공유하며 Test에도 동결해 사용합니다. 화방별로 재선정하지 않습니다. 화방 번호(truss)는 모든 조합의 공통 입력이며 아래 개수에 포함됩니다.';
+      const countLabel = content.querySelectorAll('.selection-context-row > div > span')[1];
+      if (countLabel) countLabel.textContent = '후보·공통 입력';
+    } catch (error) {
+      if (request !== this.selectionRequest) return;
+      content.replaceChildren();
+      const empty = document.createElement('div'); empty.className = 'selection-empty';
+      const title = document.createElement('strong'); title.textContent = '선택 변수 상세 정보를 표시할 수 없습니다.';
+      const note = document.createElement('p'); note.textContent = error.message;
+      empty.append(title, note); content.append(empty);
     }
-    content.append(table);
+  }
+  closeFeatureSelectionModal() {
+    this.selectionRequest = (this.selectionRequest || 0) + 1;
+    super.closeFeatureSelectionModal();
   }
   renderDiagnosis() {
     const pane = document.getElementById('model-subtab-diagnosis');

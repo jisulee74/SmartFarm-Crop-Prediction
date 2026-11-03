@@ -10,3 +10,5 @@
 #crop_advanced > summary { cursor:pointer; padding:18px 0; font-weight:700; }
 #expanded_scope_note { margin:16px 0 0; }
 .metric-stats-row { flex-wrap:wrap; }
+.experiment-selection-dialog .badge-vtype,
+.experiment-selection-dialog .combo-grp-tag { white-space: nowrap; }
